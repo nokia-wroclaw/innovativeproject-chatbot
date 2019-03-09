@@ -8,9 +8,18 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     volumes:
-      - './frontend:/usr/src/app'
-      - './frontend/usr/src/app/node_modules'
+      - './frontend:/usr/app'
+      - '/usr/app/node_modules'
     ports:
       - '5550:80'
     environment:
       - NODE_ENV=development
+
+  config-backend:
+    container_name: backend
+    image: "chatbox-backend:1.0.0"
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
