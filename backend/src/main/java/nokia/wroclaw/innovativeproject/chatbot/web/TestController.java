@@ -7,14 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
-@RequestMapping("/api/test/")
+@RequestMapping("/api/test")
 @CrossOrigin
 public class TestController {
 
     @GetMapping("/")
     public ResponseEntity<?> getTestResponse() {
-        return new ResponseEntity<String>("Hello Spring!", HttpStatus.OK);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("hello", "nokia :)");
+        return new ResponseEntity<HashMap>(map, HttpStatus.OK);
     }
 
 }
