@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  sample-app:
+    container_name: frontend
+    image: "chatbox-frontend:1.0.0"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/usr/src/app'
+      - './frontend/usr/src/app/node_modules'
+    ports:
+      - '5550:80'
+    environment:
+      - NODE_ENV=development
