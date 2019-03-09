@@ -6,7 +6,7 @@ services:
     image: "chatbox-frontend:1.0.0"
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.web
     volumes:
       - './frontend:/usr/app'
       - '/usr/app/node_modules'
@@ -20,6 +20,6 @@ services:
     image: "chatbox-backend:1.0.0"
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.server
     ports:
       - '8080:8080'
