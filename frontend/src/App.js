@@ -9,7 +9,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:8080/api/test/`)
+        axios.get(`https://murmuring-earth-40583.herokuapp.com/api/test/`)
           .then(res => {
             const response = res.data;
             this.setState({ hello: response.hello });
