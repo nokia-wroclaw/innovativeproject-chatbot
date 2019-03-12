@@ -17,7 +17,7 @@ public class TestController {
     @GetMapping("/")
     public ResponseEntity<?> getTestResponse() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("hello", "nokia :)");
+        map.put("hello", "nokia dev :)");
         return new ResponseEntity<HashMap>(map, HttpStatus.OK);
     }
 
