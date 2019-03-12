@@ -7,8 +7,6 @@ env:
  -TAG=test
 services:
   - docker
-before_install:
-  - npm install -g @angular/cli
 stages:
   - name: test
   - name: build
@@ -27,7 +25,7 @@ jobs:
         script:
          - cd frontend
          - npm i
-         - ng build --prod
+         - npm run build
          - cd ../backend/
          - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
       - stage: docker_build
@@ -53,7 +51,7 @@ jobs:
           - cd ../frontend
           - npm install
           - npm install @types/node --save-dev
-          - ng build --prod
+          - npm run build
           - docker build -t registry.heroku.com/innovativeproject-chatbot/web -f Dockerfile .
           - docker push registry.heroku.com/murmuring-earth-40583/web
           - docker push registry.heroku.com/innovativeproject-chatbot/web
