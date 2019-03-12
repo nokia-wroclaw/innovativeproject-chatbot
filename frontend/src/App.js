@@ -1,29 +1,24 @@
+import "./styles/App.css";
 import React, { Component } from "react";
-import axios from 'axios';
-import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Navbar from "./components/Navbar"
+import Home from "./components/Home"
+import About from "./components/About"
 
 class App extends Component {
-
-    state = {
-        hello: ""
-    }
-
-    componentDidMount() {
-        axios.get(`https://murmuring-earth-40583.herokuapp.com/api/test/`)
-          .then(res => {
-            const response = res.data;
-            this.setState({ hello: response.hello });
-          })
-      }
-
-    render() {
-        const name = (this.state.hello)? this.state.hello: "no connection :(";
-        return(
-            <div>
-            <h1 className="alert alert-warning">Hello {name}</h1>
-            </div>
-        )
-    }
+  render() {
+    return (
+      <BrowserRouter>
+        <div className="App">
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/about" component={About} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App
+export default App;
