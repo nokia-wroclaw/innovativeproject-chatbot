@@ -1,2 +1,64 @@
 language: java
-jdk: oraclejdk8
+jdk:
+  - oraclejdk8
+install: true
+env:
+ -HEROKU_API_KEY=$HEROKU_TOKEN
+ -TAG=test
+services:
+  - docker
+before_install:
+  - npm install -g @angular/cli
+stages:
+  - name: test
+  - name: build
+  - name: docker_build
+    if: branch = develop OR branch = develop
+  - name: deploy
+    if: branch = master
+jobs:
+  include:
+      - stage: test
+        script:
+         - cd backend/
+         - chmod +x mvnw
+         - mvn test
+      - stage: build
+        script:
+         - cd frontend
+         - npm i
+         - ng build --prod
+         - cd ../backend/
+         - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      - stage: docker_build
+        script:
+          - cd backend/
+          - mvn package
+          - docker build -t $DOCKER_USERNAME/spring-backend.be:$TAG .
+          - cd ../frontend
+          - npm install
+          - npm install @types/node --save-dev
+          - npm run build
+          - docker build -t $DOCKER_USERNAME/spring-backend.fe:$TAG .
+          - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+          - docker push $DOCKER_USERNAME/spring-backend.be:$TAG
+          - docker push $DOCKER_USERNAME/spring-backend.fe:$TAG
+      - stage: deploy
+        script:
+          - curl https://cli-assets.heroku.com/install-standalone.sh | sh
+          - docker login --username=_ --password=$HEROKU_TOKEN registry.heroku.com
+          - cd backend/
+          - mvn package -DskipTests
+          - docker build -t registry.heroku.com/murmuring-earth-40583/web -f Dockerfile .
+          - cd ../frontend
+          - npm install
+          - npm install @types/node --save-dev
+          - ng build --prod
+          - docker build -t registry.heroku.com/innovativeproject-chatbot/web -f Dockerfile .
+          - docker push registry.heroku.com/murmuring-earth-40583/web
+          - docker push registry.heroku.com/innovativeproject-chatbot/web
+          - /usr/local/bin/heroku container:release web -a murmuring-earth-40583
+          - /usr/local/bin/heroku container:release web -a innovativeproject-chatbot
+cache:
+   directories:
+    - $HOME/.m2
