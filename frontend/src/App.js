@@ -1,9 +1,9 @@
 import "./styles/App.css";
 import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Navbar from "./components/Navbar"
-import Home from "./components/Home"
-import About from "./components/About"
+import Navbar from "./components/Navbar";
+import About from "./components/About";
+import Landing from "./components/Layout/Landing"
 
 class App extends Component {
   render() {
@@ -12,8 +12,14 @@ class App extends Component {
         <div className="App">
           <Navbar />
           <Switch>
-            <Route exact path="/" component={Home} />
+            {
+              // Public Routes
+            }
+            <Route exact path="/" component={Landing} />
             <Route path="/about" component={About} />
+            {
+              // Private Routes
+            }
           </Switch>
         </div>
       </BrowserRouter>
