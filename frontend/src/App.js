@@ -3,7 +3,9 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import About from "./components/About";
-import Landing from "./components/Layout/Landing"
+import Landing from "./components/Layout/Landing";
+import Register from "./components/UserManagement/Register";
+import Login from "./components/UserManagement/Login";
 
 class App extends Component {
   render() {
@@ -16,6 +18,8 @@ class App extends Component {
               // Public Routes
             }
             <Route exact path="/" component={Landing} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
             <Route path="/about" component={About} />
             {
               // Private Routes

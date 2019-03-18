@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Footer from "./Footer";
+import { Link } from "react-router-dom";
 
 class Landing extends Component {
   render() {
@@ -20,22 +21,22 @@ class Landing extends Component {
             <div className="container">
               <div className="row">
                 <div className="col m6 s12">
-                  <a
-                    href="http://materializecss.com/getting-started.html"
+                  <Link
+                    to="/register"
                     id="download-button"
                     className="waves-effect waves-light btn-large green darken-2 col s12 btn-trial-consultor valign-wrapper"
                   >
                     Sign Up
-                  </a>
+                  </Link>
                 </div>
                 <div className="col m6 s12">
-                  <a
-                    href="http://materializecss.com/getting-started.html"
+                  <Link
+                    to="/login"
                     id="download-button"
                     className="waves-effect waves-light btn-large blue darken-4 col s12 btn-trial-consultor valign-wrapper"
                   >
                     Login
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
