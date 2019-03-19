@@ -15,10 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.xml.ws.Response;
@@ -27,6 +24,7 @@ import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin
 public class UserController {
 
     @Autowired
