@@ -14,7 +14,7 @@ class Navbar extends Component {
               <NavLink to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink to="/about">About</NavLink>
+              <NavLink to="/chatbot">Chatbot</NavLink>
             </li>
           </ul>
         </div>

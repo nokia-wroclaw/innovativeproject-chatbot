@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import { createNewUser } from "../../actions/securityActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import classnames from "classnames";
 
 class Register extends Component {
   state = {
@@ -68,6 +66,7 @@ class Register extends Component {
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
                       name="username"
+                      id="email"
                       type="email"
                       className="validate"
                       placeholder="Email"

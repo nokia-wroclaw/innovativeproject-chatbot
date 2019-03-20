@@ -1,7 +1,33 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { login } from "../../actions/securityActions";
 
 class Login extends Component {
+  state = {
+    username: "",
+    password: ""
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    const loginRequest = {
+      username: this.state.username,
+      password: this.state.password
+    };
+    this.props.login(loginRequest);
+  };
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.security.validToken) {
+      this.props.history.push("/chatbot")
+    }
+  }
+
   render() {
     return (
       <div>
@@ -15,13 +41,19 @@ class Login extends Component {
             </div>
             <div className="container">
               <div className="row">
-                <form className="col s12 m12 l12 xl8 offset-xl2">
+                <form
+                  onSubmit={this.onSubmit}
+                  className="col s12 m12 l12 xl8 offset-xl2"
+                >
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
+                      name="username"
                       id="email"
                       type="email"
                       className="validate"
                       placeholder="Email"
+                      value={this.state.username}
+                      onChange={this.onChange}
                     />
                     <span
                       className="helper-text"
@@ -33,10 +65,12 @@ class Login extends Component {
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
-                      id="password"
+                      name="password"
                       type="password"
                       className="validate"
                       placeholder="Password"
+                      value={this.state.password}
+                      onChange={this.onChange}
                     />
                     <span
                       className="helper-text"
@@ -47,13 +81,12 @@ class Login extends Component {
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
-                  <Link
-                    to="/register"
-                    id="download-button"
-                    className="waves-effect waves-light btn-large green darken-2 col col s12 m12 l12 xl8 offset-xl2 btn-trial-consultor valign-wrapper"
-                  >
-                    Log In
-                  </Link>
+                    <div className="input-field col s12 m12 l12 xl8 offset-xl2">
+                      <input
+                        className="waves-effect waves-light btn-large green darken-2 col col s12 m12 l12 xl8 offset-xl2 btn-trial-consultor valign-wrapper"
+                        type="submit"
+                      />
+                    </div>
                   </div>
                 </form>
               </div>
@@ -67,4 +100,17 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  security: state.security,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { login }
+)(Login);

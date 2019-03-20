@@ -4,10 +4,28 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import Navbar from "./components/Navbar";
-import About from "./components/About";
+import Chatbot from "./components/Chatbot";
 import Landing from "./components/Layout/Landing";
 import Register from "./components/UserManagement/Register";
 import Login from "./components/UserManagement/Login";
+import jwt_decode from "jwt-decode";
+import setJWTToken from "./securityUtils/setJWTToken";
+import { SET_CURRENT_USER } from "./actions/types";
+
+const jwtToken = localStorage.jwtToken;
+if (jwtToken) {
+  setJWTToken(jwtToken);
+  const decoded = jwt_decode(jwtToken);
+  store.dispatch({
+    type: SET_CURRENT_USER,
+    payload: decoded
+  });
+  const currentTime = Date.now()/1000;
+  if(decoded.exp < currentTime) {
+    // handle logout
+    //window.location.href="/";
+  }
+}
 
 class App extends Component {
   render() {
@@ -23,7 +41,7 @@ class App extends Component {
               <Route exact path="/" component={Landing} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <Route path="/about" component={About} />
+              <Route path="/chatbot" component={Chatbot} />
               {
                 // Private Routes
               }
