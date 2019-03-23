@@ -1,3 +1,4 @@
+
 #register-page {
     display: -webkit-box;
     display: -webkit-flex;
@@ -48,7 +49,6 @@ div.card p{
 }
 
 
-
 .box-shadow {
     -webkit-box-shadow: 2px 2px 3px 1px rgba(152,152,158,1);
     -moz-box-shadow: 2px 2px 3px 1px rgba(152,152,158,1);
@@ -64,3 +64,11 @@ div.text-wrap {
 form.submit-query {
     margin: 15px 10px;
 }
+
+.loading-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
