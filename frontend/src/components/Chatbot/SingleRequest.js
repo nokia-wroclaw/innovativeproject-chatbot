@@ -4,14 +4,24 @@ class SingleRequest extends Component {
   render() {
     const { request } = this.props;
     return (
-      <div className="card blue darken-4 text-wrap">
-        <p className="white-text">
+    <div>
+      <div className="card blue darken-3 text-wrap chat-right box-shadow">
+        <p className="black-text">
           query: {request.question}
         </p>
-        <p className="white-text">
+        <p className="black-text">
           date: {request.date}
         </p>
       </div>
+      <div className="card grey lighten-1 text-wrap chat-left box-shadow">
+        <p className="black-text">
+          Bot
+        </p>
+        <p className="black-text">
+          Bot
+        </p>
+      </div>
+    </div>
     );
   }
 }

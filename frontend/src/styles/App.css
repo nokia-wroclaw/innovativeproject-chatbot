@@ -29,14 +29,27 @@ div.chat-box {
     padding:0 20px;
   }
 
-div.row.chat-right {
-    width: 50%;
-    height: auto;
-    float:right;
+  div.card.blue.darken-3.text-wrap.chat-right {
+    float: right;
+    width: 60%;
+    clear: both;
 }
 
-div.card.blue.darken-4.text-wrap p{
+div.card.grey.lighten-1.text-wrap.chat-left {
+    float: left;
+    width: 60%;
+    clear: both;
+}
+
+div.card.blue.darken-3.text-wrap p{
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
+}
+
+.box-shadow {
+    -webkit-box-shadow: 2px 2px 5px 1px rgba(152,152,158,1);
+    -moz-box-shadow: 2px 2px 5px 1px rgba(152,152,158,1);
+    box-shadow: 2px 2px 5px 1px rgba(152,152,158,1);
+    border-radius: 15px;
 }

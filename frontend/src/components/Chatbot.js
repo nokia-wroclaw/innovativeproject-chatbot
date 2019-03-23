@@ -69,7 +69,7 @@ class Chatbot extends Component {
     <div className="container">
       <h4 className="center">Chatbot</h4>
       <div className="chat-box">
-        <div className="row chat-right">
+        <div className="row">
           {requests.map(request => (
             <SingleRequest key={request.id} request={request} />
           ))}
