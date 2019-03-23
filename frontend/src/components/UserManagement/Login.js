@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { login } from "../../actions/securityActions";
+import classnames from "classnames";
 
 class Login extends Component {
   state = {
     username: "",
-    password: ""
+    password: "",
+    errors: {}
   };
 
   onSubmit = e => {
@@ -24,11 +26,18 @@ class Login extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.security.validToken) {
-      this.props.history.push("/chatbot")
+      this.props.history.push("/chatbot");
+    }
+
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
     }
   }
 
   render() {
+    const { errors } = this.props;
     return (
       <div>
         <div className="section no-pad-bot" id="index-banner">
@@ -50,7 +59,9 @@ class Login extends Component {
                       name="username"
                       id="email"
                       type="email"
-                      className="validate"
+                      className={classnames("validate", {
+                        "is-invalid": errors.username
+                      })}
                       placeholder="Email"
                       value={this.state.username}
                       onChange={this.onChange}
@@ -60,14 +71,20 @@ class Login extends Component {
                       data-error="wrong"
                       data-success="right"
                     >
-                      Please enter Your e-mail
+                      {errors.username && (
+                        <div className="red-text text-darken-2">
+                          {errors.username}
+                        </div>
+                      )}
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
                       name="password"
                       type="password"
-                      className="validate"
+                      className={classnames("validate", {
+                        "is-invalid": errors.password
+                      })}
                       placeholder="Password"
                       value={this.state.password}
                       onChange={this.onChange}
@@ -77,7 +94,11 @@ class Login extends Component {
                       data-error="wrong"
                       data-success="right"
                     >
-                      Please enter Your password
+                    {errors.password && (
+                      <div className="red-text text-darken-2">
+                        {errors.password}
+                      </div>
+                    )}
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
@@ -102,7 +123,8 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  security: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

@@ -106,6 +106,7 @@ Chatbot.propTypes = {
   request: PropTypes.object.isRequired,
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 

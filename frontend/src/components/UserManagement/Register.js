@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { createNewUser } from "../../actions/securityActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import classnames from "classnames";
 
 class Register extends Component {
   state = {
@@ -28,6 +29,7 @@ class Register extends Component {
   };
 
   render() {
+    const { errors } = this.props;
     return (
       <div>
         <div className="section no-pad-bot" id="index-banner">
@@ -50,7 +52,9 @@ class Register extends Component {
                     <input
                       name="fullName"
                       type="text"
-                      className="validate"
+                      className={classnames("validate", {
+                        "is-invalid": errors.fullName
+                      })}
                       placeholder="Full Name"
                       value={this.state.fullName}
                       onChange={this.onChange}
@@ -60,15 +64,21 @@ class Register extends Component {
                       data-error="wrong"
                       data-success="right"
                     >
-                      Please enter Your full name
+                    {errors.fullName && (
+                      <div className="red-text text-darken-2">
+                        {errors.fullName}
+                      </div>
+                    )}
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
                       name="username"
                       id="email"
-                      type="email"
-                      className="validate"
+                      type="text"
+                      className={classnames("validate", {
+                        "is-invalid": errors.username
+                      })}
                       placeholder="Email"
                       value={this.state.username}
                       onChange={this.onChange}
@@ -78,14 +88,20 @@ class Register extends Component {
                       data-error="wrong"
                       data-success="right"
                     >
-                      Please enter Your e-mail
+                    {errors.username && (
+                      <div className="red-text text-darken-2">
+                        {errors.username}
+                      </div>
+                    )}
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
                       name="password"
                       type="password"
-                      className="validate"
+                      className={classnames("validate", {
+                        "is-invalid": errors.password
+                      })}
                       placeholder="Password"
                       value={this.state.password}
                       onChange={this.onChange}
@@ -95,14 +111,20 @@ class Register extends Component {
                       data-error="wrong"
                       data-success="right"
                     >
-                      Please enter Your password
+                    {errors.password && (
+                      <div className="red-text text-darken-2">
+                        {errors.password}
+                      </div>
+                    )}
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
                       name="confirmPassword"
                       type="password"
-                      className="validate"
+                      className={classnames("validate", {
+                        "is-invalid": errors.confirmPassword
+                      })}
                       placeholder="Confirm Password"
                       value={this.state.confirmPassword}
                       onChange={this.onChange}
@@ -112,7 +134,11 @@ class Register extends Component {
                       data-error="wrong"
                       data-success="right"
                     >
-                      Please confirm Your password
+                    {errors.confirmPassword && (
+                      <div className="red-text text-darken-2">
+                        {errors.confirmPassword}
+                      </div>
+                    )}
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
