@@ -3,12 +3,14 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { login } from "../../actions/securityActions";
 import classnames from "classnames";
+import LoadingSpinner from "../LoadingSpinner";
 
 class Login extends Component {
   state = {
     username: "",
     password: "",
-    errors: {}
+    errors: {},
+    loading: false
   };
 
   onSubmit = e => {
@@ -38,8 +40,11 @@ class Login extends Component {
 
   render() {
     const { errors } = this.props;
-    return (
-      <div>
+    let data;
+    if (this.state.loading) {
+      data = <LoadingSpinner />;
+    } else {
+      data = (
         <div className="section no-pad-bot" id="index-banner">
           <div className="container">
             <br />
@@ -94,11 +99,11 @@ class Login extends Component {
                       data-error="wrong"
                       data-success="right"
                     >
-                    {errors.password && (
-                      <div className="red-text text-darken-2">
-                        {errors.password}
-                      </div>
-                    )}
+                      {errors.password && (
+                        <div className="red-text text-darken-2">
+                          {errors.password}
+                        </div>
+                      )}
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
@@ -116,8 +121,9 @@ class Login extends Component {
             <br />
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return <div>{data}</div>;
   }
 }
 
