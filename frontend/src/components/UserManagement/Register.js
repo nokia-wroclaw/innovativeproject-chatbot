@@ -1,7 +1,32 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { createNewUser } from "../../actions/securityActions";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 class Register extends Component {
+  state = {
+    username: "",
+    fullName: "",
+    password: "",
+    confirmPassword: "",
+    errors: {}
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    const newUser = {
+      username: this.state.username,
+      fullName: this.state.fullName,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword
+    };
+    this.props.createNewUser(newUser, this.props.history);
+  };
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   render() {
     return (
       <div>
@@ -17,13 +42,36 @@ class Register extends Component {
             </div>
             <div className="container">
               <div className="row">
-                <form className="col s12 m12 l12 xl8 offset-xl2">
+                <form
+                  onSubmit={this.onSubmit}
+                  className="col s12 m12 l12 xl8 offset-xl2"
+                >
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
+                      name="fullName"
+                      type="text"
+                      className="validate"
+                      placeholder="Full Name"
+                      value={this.state.fullName}
+                      onChange={this.onChange}
+                    />
+                    <span
+                      className="helper-text"
+                      data-error="wrong"
+                      data-success="right"
+                    >
+                      Please enter Your full name
+                    </span>
+                  </div>
+                  <div className="input-field col s12 m12 l12 xl8 offset-xl2">
+                    <input
+                      name="username"
                       id="email"
                       type="email"
                       className="validate"
                       placeholder="Email"
+                      value={this.state.username}
+                      onChange={this.onChange}
                     />
                     <span
                       className="helper-text"
@@ -35,10 +83,12 @@ class Register extends Component {
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
-                      id="password"
+                      name="password"
                       type="password"
                       className="validate"
                       placeholder="Password"
+                      value={this.state.password}
+                      onChange={this.onChange}
                     />
                     <span
                       className="helper-text"
@@ -50,10 +100,12 @@ class Register extends Component {
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
                     <input
-                      id="password"
+                      name="confirmPassword"
                       type="password"
                       className="validate"
                       placeholder="Confirm Password"
+                      value={this.state.confirmPassword}
+                      onChange={this.onChange}
                     />
                     <span
                       className="helper-text"
@@ -64,13 +116,10 @@ class Register extends Component {
                     </span>
                   </div>
                   <div className="input-field col s12 m12 l12 xl8 offset-xl2">
-                    <Link
-                      to="/register"
-                      id="download-button"
+                    <input
                       className="waves-effect waves-light btn-large green darken-2 col col s12 m12 l12 xl8 offset-xl2 btn-trial-consultor valign-wrapper"
-                    >
-                      Sign Up
-                    </Link>
+                      type="submit"
+                    />
                   </div>
                 </form>
               </div>
@@ -84,4 +133,16 @@ class Register extends Component {
   }
 }
 
-export default Register;
+Register.propTypes = {
+  createNewUser: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { createNewUser }
+)(Register);
