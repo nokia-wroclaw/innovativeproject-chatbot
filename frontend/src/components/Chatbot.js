@@ -68,7 +68,7 @@ class Chatbot extends Component {
     return (
     <div className="container">
       <h4 className="center">Chatbot</h4>
-      <div className="chat-box">
+      <div className="chat-box scrollbar grey lighten-2">
         <div className="row">
           {requests.map(request => (
             <SingleRequest key={request.id} request={request} />
@@ -76,7 +76,7 @@ class Chatbot extends Component {
         </div>
       </div>
       <div>
-        <form onSubmit={this.onSubmit} className="row">
+        <form onSubmit={this.onSubmit} className="row submit-query">
             <input
               className="col s10"
               name="question"

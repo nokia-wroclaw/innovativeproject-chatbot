@@ -22,34 +22,45 @@
 }
 
 div.chat-box {
-    background-color: #eeeeee;
     display:block;
     height:500px;
     overflow:auto;
-    padding:0 20px;
+    padding: 10px 20px;
+    border-radius: 15px;
   }
 
-  div.card.blue.darken-3.text-wrap.chat-right {
+  div.card.indigo.lighten-5.text-wrap.chat-right {
     float: right;
     width: 60%;
     clear: both;
 }
 
-div.card.grey.lighten-1.text-wrap.chat-left {
+div.card.grey.lighten-3.text-wrap.chat-left {
     float: left;
     width: 60%;
     clear: both;
 }
 
-div.card.blue.darken-3.text-wrap p{
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
+div.card p{
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
+
+
 .box-shadow {
-    -webkit-box-shadow: 2px 2px 5px 1px rgba(152,152,158,1);
-    -moz-box-shadow: 2px 2px 5px 1px rgba(152,152,158,1);
-    box-shadow: 2px 2px 5px 1px rgba(152,152,158,1);
+    -webkit-box-shadow: 2px 2px 3px 1px rgba(152,152,158,1);
+    -moz-box-shadow: 2px 2px 3px 1px rgba(152,152,158,1);
+    box-shadow: 2px 2px 3px 1px rgba(152,152,158,1);
     border-radius: 15px;
+}
+
+div.text-wrap {
+    padding: 10px;
+    font-size: 16px;
+}
+
+form.submit-query {
+    margin: 15px 10px;
 }

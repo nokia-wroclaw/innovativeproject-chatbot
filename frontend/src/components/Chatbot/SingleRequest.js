@@ -1,26 +1,20 @@
 import React, { Component } from "react";
+import BotResponse from "./BotResponse";
 
 class SingleRequest extends Component {
   render() {
     const { request } = this.props;
     return (
     <div>
-      <div className="card blue darken-3 text-wrap chat-right box-shadow">
+      <div className="card indigo lighten-5 text-wrap chat-right box-shadow">
         <p className="black-text">
-          query: {request.question}
+          User query: {request.question}
         </p>
         <p className="black-text">
-          date: {request.date}
-        </p>
-      </div>
-      <div className="card grey lighten-1 text-wrap chat-left box-shadow">
-        <p className="black-text">
-          Bot
-        </p>
-        <p className="black-text">
-          Bot
+          Date: {request.date}
         </p>
       </div>
+      <BotResponse request={request}/>
     </div>
     );
   }
