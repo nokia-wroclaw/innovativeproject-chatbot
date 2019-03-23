@@ -66,15 +66,17 @@ class Chatbot extends Component {
   render() {
     const { requests } = this.props.request;
     return (
-      <div className="container">
-        <h4 className="center">Chatbot</h4>
-        <div className="row">
+    <div className="container">
+      <h4 className="center">Chatbot</h4>
+      <div className="chat-box">
+        <div className="row chat-right">
           {requests.map(request => (
             <SingleRequest key={request.id} request={request} />
           ))}
         </div>
-        <div>
-          <form onSubmit={this.onSubmit} className="row">
+      </div>
+      <div>
+        <form onSubmit={this.onSubmit} className="row">
             <input
               className="col s10"
               name="question"
@@ -88,16 +90,16 @@ class Chatbot extends Component {
               className="waves-effect waves-light btn-small green darken-2 btn-trial-consultor col s2"
               type="submit"
             />
-          </form>
-        </div>
+        </form>
+      </div>
         <form onSubmit={this.logout} className="row center">
-        <input
+            <input
               className="waves-effect waves-light btn-small red darken-2 btn-trial-consultor"
               type="submit"
               value="logout"
             />
         </form>
-      </div>
+    </div>
     );
   }
 }

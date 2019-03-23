@@ -20,3 +20,23 @@
 #register-page .card-panel.border-radius-6.register-card {
     margin-left: 0 !important;
 }
+
+div.chat-box {
+    background-color: #eeeeee;
+    display:block;
+    height:500px;
+    overflow:auto;
+    padding:0 20px;
+  }
+
+div.row.chat-right {
+    width: 50%;
+    height: auto;
+    float:right;
+}
+
+div.card.blue.darken-4.text-wrap p{
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}

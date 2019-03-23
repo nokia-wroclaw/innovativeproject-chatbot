@@ -4,18 +4,12 @@ class SingleRequest extends Component {
   render() {
     const { request } = this.props;
     return (
-      <div className="card blue darken-4">
-      <p className="white-text">
-          <b>query ID:</b> {request.id}
+      <div className="card blue darken-4 text-wrap">
+        <p className="white-text">
+          query: {request.question}
         </p>
         <p className="white-text">
-          <b>username:</b> {request.requestOwner}
-        </p>
-        <p className="white-text">
-        <b>query:</b> {request.question}
-        </p>
-        <p className="white-text">
-          <b>date:</b> {request.date}
+          date: {request.date}
         </p>
       </div>
     );
