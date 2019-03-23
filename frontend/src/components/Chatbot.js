@@ -27,7 +27,7 @@ class Chatbot extends Component {
       this.setState({ errors: nextProps.errors });
     }
     this.setState({
-      loading: true
+      loading: false
     });
   }
 
