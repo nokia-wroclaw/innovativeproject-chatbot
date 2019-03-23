@@ -1,39 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
-import { logout } from "../actions/securityActions"
+import { logout } from "../actions/securityActions";
 import PropTypes from "prop-types";
 import SingleRequest from "./Chatbot/SingleRequest";
-
-import setJWTToken from "../securityUtils/setJWTToken";
-import jwt_decode from "jwt-decode";
-import { SET_CURRENT_USER } from "../actions/types";
-import store from "../store";
+import LoadingSpinner from "./LoadingSpinner";
 
 class Chatbot extends Component {
   state = {
     question: "",
-    message: ""
+    message: "",
+    loading: true
   };
 
   componentDidMount() {
     this.props.getRequests();
 
-    // temporary logout handler
-    const jwtToken = localStorage.jwtToken;
-    if (jwtToken) {
-      setJWTToken(jwtToken);
-      const decoded = jwt_decode(jwtToken);
-      store.dispatch({
-        type: SET_CURRENT_USER,
-        payload: decoded
-      });
-      const currentTime = Date.now() / 1000;
-      if (decoded.exp < currentTime) {
-        // handle logout
-        console.log("you're logged out")
-        window.location.href="/login";
-      }
+    // if not logged in redirect to login page
+    if (!this.props.security.validToken) {
+      window.location.href = "/login";
     }
   }
 
@@ -41,6 +26,9 @@ class Chatbot extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+    this.setState({
+      loading: true
+    });
   }
 
   onSubmit = e => {
@@ -57,7 +45,7 @@ class Chatbot extends Component {
   logout = e => {
     this.props.logout();
     window.location.href = "/";
-  }
+  };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -65,40 +53,46 @@ class Chatbot extends Component {
 
   render() {
     const { requests } = this.props.request;
-    return (
-      <div className="container">
-        <h4 className="center">Chatbot</h4>
-        <div className="row">
-          {requests.map(request => (
-            <SingleRequest key={request.id} request={request} />
-          ))}
-        </div>
-        <div>
-          <form onSubmit={this.onSubmit} className="row">
+    let data;
+    if (this.state.loading) {
+      data = <LoadingSpinner />;
+    } else {
+      data = (
+        <div className="container">
+          <h4 className="center">Chatbot</h4>
+           <div className="chat-box grey lighten-2">
+            {requests.map(request => (
+              <SingleRequest key={request.id} request={request} />
+            ))}
+          </div>
+          <div>
+            <form onSubmit={this.onSubmit} className="row submit-query">
+              <input
+                className="col s10"
+                name="question"
+                id="text"
+                type="text"
+                placeholder="Your message"
+                value={this.state.username}
+                onChange={this.onChange}
+              />
+              <input
+                className="waves-effect waves-light btn-small green darken-2 btn-trial-consultor col s2"
+                type="submit"
+              />
+            </form>
+          </div>
+          <form onSubmit={this.logout} className="row center">
             <input
-              className="col s10"
-              name="question"
-              id="text"
-              type="text"
-              placeholder="Your message"
-              value={this.state.username}
-              onChange={this.onChange}
-            />
-            <input
-              className="waves-effect waves-light btn-small green darken-2 btn-trial-consultor col s2"
-              type="submit"
-            />
-          </form>
-        </div>
-        <form onSubmit={this.logout} className="row center">
-        <input
               className="waves-effect waves-light btn-small red darken-2 btn-trial-consultor"
               type="submit"
               value="logout"
             />
-        </form>
-      </div>
-    );
+          </form>
+        </div>
+      );
+    }
+    return <div>{data}</div>;
   }
 }
 
@@ -106,12 +100,14 @@ Chatbot.propTypes = {
   request: PropTypes.object.isRequired,
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   request: state.request,
-  errors: state.errors
+  errors: state.errors,
+  security: state.security
 });
 
 export default connect(
