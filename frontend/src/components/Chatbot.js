@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
-import { logout } from "../actions/securityActions";
 import PropTypes from "prop-types";
 import SingleRequest from "./Chatbot/SingleRequest";
 import LoadingSpinner from "./LoadingSpinner";
@@ -10,7 +9,7 @@ class Chatbot extends Component {
   state = {
     question: "",
     message: "",
-    loading: true
+    loading: false
   };
 
   componentDidMount() {
@@ -26,9 +25,6 @@ class Chatbot extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
-    this.setState({
-      loading: false
-    });
   }
 
   onSubmit = e => {
@@ -82,13 +78,6 @@ class Chatbot extends Component {
               />
             </form>
           </div>
-          <form onSubmit={this.logout} className="row center">
-            <input
-              className="waves-effect waves-light btn-small red darken-2 btn-trial-consultor"
-              type="submit"
-              value="logout"
-            />
-          </form>
         </div>
       );
     }
@@ -100,7 +89,6 @@ Chatbot.propTypes = {
   request: PropTypes.object.isRequired,
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
@@ -112,5 +100,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getRequests, createRequest, logout }
+  { getRequests, createRequest }
 )(Chatbot);
