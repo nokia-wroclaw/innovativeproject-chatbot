@@ -14,7 +14,7 @@ class Chatbot extends Component {
 
   componentDidMount() {
     this.props.getRequests();
-
+    this.scrollToBottom();
     // if not logged in redirect to login page
     if (!this.props.security.validToken) {
       window.location.href = "/login";
@@ -25,6 +25,17 @@ class Chatbot extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+  }
+
+  scrollToBottom = () => {
+    const scrollHeight = this.messageList.scrollHeight;
+    const height = this.messageList.clientHeight;
+    const maxScrollTop = scrollHeight - height;
+    this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+  };
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   onSubmit = e => {
@@ -56,7 +67,12 @@ class Chatbot extends Component {
       data = (
         <div className="container">
           <h4 className="center">Chatbot</h4>
-           <div className="chat-box grey lighten-2">
+          <div
+            className="chat-box grey lighten-2 MessageList"
+            ref={div => {
+              this.messageList = div;
+            }}
+          >
             {requests.map(request => (
               <SingleRequest key={request.id} request={request} />
             ))}

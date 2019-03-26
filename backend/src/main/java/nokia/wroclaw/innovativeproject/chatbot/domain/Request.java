@@ -19,7 +19,7 @@ public class Request {
     @NotBlank(message = "Question is required.")
     private String question;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyy HH:mm")
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
