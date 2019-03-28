@@ -36,6 +36,7 @@ class Chatbot extends Component {
 
   componentDidUpdate() {
     this.scrollToBottom();
+    document.getElementById("text").focus();
   }
 
   onSubmit = e => {
