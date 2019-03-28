@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
-import { logout } from "../actions/securityActions";
 import PropTypes from "prop-types";
 import SingleRequest from "./Chatbot/SingleRequest";
 import LoadingSpinner from "./LoadingSpinner";
@@ -10,12 +9,12 @@ class Chatbot extends Component {
   state = {
     question: "",
     message: "",
-    loading: true
+    loading: false
   };
 
   componentDidMount() {
     this.props.getRequests();
-
+    this.scrollToBottom();
     // if not logged in redirect to login page
     if (!this.props.security.validToken) {
       window.location.href = "/login";
@@ -26,9 +25,17 @@ class Chatbot extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
-    this.setState({
-      loading: false
-    });
+  }
+
+  scrollToBottom = () => {
+    const scrollHeight = this.messageList.scrollHeight;
+    const height = this.messageList.clientHeight;
+    const maxScrollTop = scrollHeight - height;
+    this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+  };
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   onSubmit = e => {
@@ -60,7 +67,12 @@ class Chatbot extends Component {
       data = (
         <div className="container">
           <h4 className="center">Chatbot</h4>
-           <div className="chat-box grey lighten-2">
+          <div
+            className="chat-box grey lighten-2 MessageList"
+            ref={div => {
+              this.messageList = div;
+            }}
+          >
             {requests.map(request => (
               <SingleRequest key={request.id} request={request} />
             ))}
@@ -82,13 +94,6 @@ class Chatbot extends Component {
               />
             </form>
           </div>
-          <form onSubmit={this.logout} className="row center">
-            <input
-              className="waves-effect waves-light btn-small red darken-2 btn-trial-consultor"
-              type="submit"
-              value="logout"
-            />
-          </form>
         </div>
       );
     }
@@ -100,7 +105,6 @@ Chatbot.propTypes = {
   request: PropTypes.object.isRequired,
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
@@ -112,5 +116,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getRequests, createRequest, logout }
+  { getRequests, createRequest }
 )(Chatbot);

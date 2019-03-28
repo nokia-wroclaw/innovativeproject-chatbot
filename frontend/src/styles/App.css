@@ -1,30 +1,6 @@
-
-#register-page {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: flex;
-    height: 100vh;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -moz-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -moz-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
-
-#register-page .card-panel.border-radius-6.register-card {
-    margin-left: 0 !important;
-}
-
 div.chat-box {
     display:block;
-    height:500px;
+    height: 600px;
     overflow:auto;
     padding: 10px 20px;
     border-radius: 15px;
@@ -71,4 +47,3 @@ form.submit-query {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
