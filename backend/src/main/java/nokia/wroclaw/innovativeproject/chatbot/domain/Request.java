@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Request {
@@ -17,7 +19,7 @@ public class Request {
     @NotBlank(message = "Question is required.")
     private String question;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm a z")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyy HH:mm")
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,16 +28,19 @@ public class Request {
 
     private String requestOwner;
 
+    private String responseText;
+
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText) {
         this.id = id;
         this.question = question;
         this.date = date;
         this.user = user;
         this.requestOwner = requestOwner;
+        this.responseText = responseText;
     }
 
     public Long getId() {
@@ -76,6 +81,14 @@ public class Request {
 
     public void setRequestOwner(String requestOwner) {
         this.requestOwner = requestOwner;
+    }
+
+    public String getResponseText() {
+        return responseText;
+    }
+
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 
     @PrePersist

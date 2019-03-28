@@ -8,7 +8,7 @@ class SingleRequest extends Component {
     <div>
       <div className="card indigo lighten-5 text-wrap chat-right box-shadow">
         <p className="black-text">
-          User query: {request.question}
+          {request.requestOwner}: {request.question}
         </p>
         <p className="black-text">
           Date: {request.date}

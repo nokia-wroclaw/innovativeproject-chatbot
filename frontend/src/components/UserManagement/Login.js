@@ -15,11 +15,17 @@ class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    this.setState({
+      loading: true
+    })
     const loginRequest = {
       username: this.state.username,
       password: this.state.password
     };
     this.props.login(loginRequest);
+    this.setState({
+      loading: false
+    })
   };
 
   onChange = e => {
