@@ -6,8 +6,10 @@ import com.ibm.watson.developer_cloud.service.exception.NotFoundException;
 import com.ibm.watson.developer_cloud.service.exception.RequestTooLargeException;
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
 import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
+import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.service.MapValidationErrorService;
 import nokia.wroclaw.innovativeproject.chatbot.service.RequestService;
+import nokia.wroclaw.innovativeproject.chatbot.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/request")
@@ -44,51 +46,20 @@ public class RequestController {
     private RequestService requestService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
     private Assistant service;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private Context context;
-
+    private Map<String, Context> contextMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
         service = new Assistant(assistantVersionDate);
         service.setUsernameAndPassword(assistantUser, assistantPass);
         service.setEndPoint("https://gateway-lon.watsonplatform.net/assistant/api");
-    }
-
-    @PostMapping("/message")
-    public MessageResponse postMessage(@RequestBody Request request) {
-        try {
-
-            String text = (request.getQuestion() == null) ? "" : request.getQuestion();
-            InputData input = new InputData.Builder(text).build();
-
-            Context conversationContext = (context == null)? new Context(): context;
-
-            MessageOptions options =
-                    new MessageOptions.Builder(assistantWorkspace)
-                            .context(conversationContext)
-                            .input(input)
-                            .build();
-
-            MessageResponse response = service.message(options).execute();
-            response.getOutput().getText();
-            context = response.getContext();
-
-            return response;
-
-        } catch (NotFoundException e) {
-            log.error("NotFoundException", e);
-            throw e;
-        } catch (RequestTooLargeException e) {
-            log.error("RequestTooLargeException", e);
-            throw e;
-        } catch (ServiceResponseException e) {
-            log.error("ServiceResponseException", e);
-            throw e;
-        }
     }
 
     @PostMapping("")
@@ -98,29 +69,36 @@ public class RequestController {
         if (errorMap != null) return errorMap;
 
         // get answer
+        Context conversationContext;
+        MessageResponse response;
         try {
-
-            // get question (query)
+            // get input data (question)
             String text = (request.getQuestion() == null) ? "" : request.getQuestion();
             InputData input = new InputData.Builder(text).build();
 
-            // get conversation context or create new there's no context
-            Context conversationContext = (context == null)? new Context(): context;
+            // get current user and set context
+            User currentUser = userService.getUser(principal.getName());
+            conversationContext = (contextMap.get(currentUser.getCurrentConversationId()) == null) ? new Context() : contextMap.get(currentUser.getCurrentConversationId());
 
+            // message builder
             MessageOptions options =
                     new MessageOptions.Builder(assistantWorkspace)
                             .context(conversationContext)
                             .input(input)
                             .build();
 
-            // get response
-            MessageResponse response = service.message(options).execute();
+            // get response & save new context
+            response = service.message(options).execute();
+            conversationContext = response.getContext();
 
-            // add response details to request
+            // add the response to the current request
             String data = response.getOutput().getText().toString();
-
             request.setResponseText(data.substring(1, data.length() - 1)); // text
-            request.setSessionId(response.getContext().getConversationId()); // conversation ID
+            request.setConversationId(conversationContext.getConversationId()); // conversation ID
+            userService.updateCurrentConversationId(principal.getName(), conversationContext.getConversationId());
+
+            // save context to context map
+            contextMap.put(conversationContext.getConversationId(), conversationContext);
 
         } catch (NotFoundException e) {
             log.error("NotFoundException", e);
@@ -135,7 +113,8 @@ public class RequestController {
 
         // save request
         Request request1 = requestService.saveOrUpdateRequest(request, principal.getName());
-        return new ResponseEntity<Request>(request1, HttpStatus.CREATED);
+        //return new ResponseEntity<Request>(request1, HttpStatus.CREATED);
+         return new ResponseEntity<MessageResponse>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/all")

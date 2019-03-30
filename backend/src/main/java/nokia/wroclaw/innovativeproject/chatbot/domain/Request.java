@@ -29,20 +29,20 @@ public class Request {
     private String requestOwner;
 
     private String responseText;
-    private String sessionId;
+    private String conversationId;
 
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String sessionId) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String conversationId) {
         this.id = id;
         this.question = question;
         this.date = date;
         this.user = user;
         this.requestOwner = requestOwner;
         this.responseText = responseText;
-        this.sessionId = sessionId;
+        this.conversationId = conversationId;
     }
 
     public Long getId() {
@@ -93,12 +93,12 @@ public class Request {
         this.responseText = responseText;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getConversationId() {
+        return conversationId;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
     }
 
     @PrePersist

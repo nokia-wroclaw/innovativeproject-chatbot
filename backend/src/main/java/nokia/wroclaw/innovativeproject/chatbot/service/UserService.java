@@ -36,6 +36,17 @@ public class UserService {
         }
     }
 
+    public User getUser(String username) {
+        User user = userRepository.findByUsername(username);
+        return user;
+    }
+
+    public void updateCurrentConversationId(String username, String conversationId) {
+        User user = userRepository.findByUsername(username);
+        user.setCurrentConversationId(conversationId);
+        userRepository.save(user);
+    }
+
     // { User management stuff will be here }
 
 }
