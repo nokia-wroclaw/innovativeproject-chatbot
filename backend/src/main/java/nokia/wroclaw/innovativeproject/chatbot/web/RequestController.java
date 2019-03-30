@@ -48,6 +48,7 @@ public class RequestController {
 
     private Assistant service;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private Context context;
 
 
     @PostConstruct
@@ -64,13 +65,18 @@ public class RequestController {
             String text = (request.getQuestion() == null) ? "" : request.getQuestion();
             InputData input = new InputData.Builder(text).build();
 
+            Context conversationContext = (context == null)? new Context(): context;
+
             MessageOptions options =
                     new MessageOptions.Builder(assistantWorkspace)
+                            .context(conversationContext)
                             .input(input)
                             .build();
 
             MessageResponse response = service.message(options).execute();
             response.getOutput().getText();
+            context = response.getContext();
+
             return response;
 
         } catch (NotFoundException e) {
@@ -93,17 +99,28 @@ public class RequestController {
 
         // get answer
         try {
+
+            // get question (query)
             String text = (request.getQuestion() == null) ? "" : request.getQuestion();
             InputData input = new InputData.Builder(text).build();
 
+            // get conversation context or create new there's no context
+            Context conversationContext = (context == null)? new Context(): context;
+
             MessageOptions options =
                     new MessageOptions.Builder(assistantWorkspace)
+                            .context(conversationContext)
                             .input(input)
                             .build();
 
+            // get response
             MessageResponse response = service.message(options).execute();
+
+            // add response details to request
             String data = response.getOutput().getText().toString();
-            request.setResponseText(data.substring(1, data.length() - 1)); // change it to list maybe?
+
+            request.setResponseText(data.substring(1, data.length() - 1)); // text
+            request.setSessionId(response.getContext().getConversationId()); // conversation ID
 
         } catch (NotFoundException e) {
             log.error("NotFoundException", e);
