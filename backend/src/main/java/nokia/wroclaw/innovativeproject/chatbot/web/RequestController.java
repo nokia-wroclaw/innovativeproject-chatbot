@@ -97,8 +97,13 @@ public class RequestController {
             request.setConversationId(conversationContext.getConversationId()); // conversation ID
             userService.updateCurrentConversationId(principal.getName(), conversationContext.getConversationId());
 
-            // save context to context map
-            contextMap.put(conversationContext.getConversationId(), conversationContext);
+            // if context's state is not in progress clear the context
+            // & save context to context map
+            if(response.getContext().getSystem().get("dialog_stack").toString().contains("in_progress")) {
+                contextMap.put(conversationContext.getConversationId(), conversationContext);
+            } else {
+                contextMap.put(conversationContext.getConversationId(), new Context());
+            }
 
         } catch (NotFoundException e) {
             log.error("NotFoundException", e);
@@ -113,8 +118,8 @@ public class RequestController {
 
         // save request
         Request request1 = requestService.saveOrUpdateRequest(request, principal.getName());
-        //return new ResponseEntity<Request>(request1, HttpStatus.CREATED);
-         return new ResponseEntity<MessageResponse>(response, HttpStatus.CREATED);
+        return new ResponseEntity<Request>(request1, HttpStatus.CREATED);
+        //return new ResponseEntity<MessageResponse>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/all")

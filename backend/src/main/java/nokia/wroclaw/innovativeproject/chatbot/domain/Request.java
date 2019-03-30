@@ -29,19 +29,21 @@ public class Request {
     private String requestOwner;
 
     private String responseText;
+    private String responseType; // "" means text
     private String conversationId;
 
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String conversationId) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, String conversationId) {
         this.id = id;
         this.question = question;
         this.date = date;
         this.user = user;
         this.requestOwner = requestOwner;
         this.responseText = responseText;
+        this.responseType = responseType;
         this.conversationId = conversationId;
     }
 
@@ -99,6 +101,14 @@ public class Request {
 
     public void setConversationId(String conversationId) {
         this.conversationId = conversationId;
+    }
+
+    public String getResponseType() {
+        return responseType;
+    }
+
+    public void setResponseType(String responseType) {
+        this.responseType = responseType;
     }
 
     @PrePersist
