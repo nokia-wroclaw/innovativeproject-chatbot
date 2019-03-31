@@ -2,13 +2,12 @@ package nokia.wroclaw.innovativeproject.chatbot.service;
 
 import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
-import nokia.wroclaw.innovativeproject.chatbot.exceptions.RequestIdException;
+import nokia.wroclaw.innovativeproject.chatbot.exceptions.request.RequestIdException;
 import nokia.wroclaw.innovativeproject.chatbot.repository.RequestRepository;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

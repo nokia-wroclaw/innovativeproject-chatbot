@@ -1,7 +1,7 @@
 package nokia.wroclaw.innovativeproject.chatbot.security;
 
 import com.google.gson.Gson;
-import nokia.wroclaw.innovativeproject.chatbot.exceptions.InvalidLoginResponse;
+import nokia.wroclaw.innovativeproject.chatbot.exceptions.authentication.InvalidLoginResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

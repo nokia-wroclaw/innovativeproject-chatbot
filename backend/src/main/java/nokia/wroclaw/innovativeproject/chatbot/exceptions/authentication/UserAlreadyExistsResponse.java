@@ -1,4 +1,4 @@
-package nokia.wroclaw.innovativeproject.chatbot.exceptions;
+package nokia.wroclaw.innovativeproject.chatbot.exceptions.authentication;
 
 public class UserAlreadyExistsResponse {
 
