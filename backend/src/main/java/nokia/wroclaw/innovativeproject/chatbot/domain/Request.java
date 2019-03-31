@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Request {
@@ -28,15 +26,24 @@ public class Request {
 
     private String requestOwner;
 
+    // response
     private String responseText;
     private String responseType; // "" means text
+
+    @ElementCollection
+    @JoinTable(name="RESPONSE_PARAMS", joinColumns=@JoinColumn(name="ID"))
+    @MapKeyColumn (name="VALUE")
+    @Column(name="KEY")
+    Map<String, String> responseParams = new HashMap<String, String>();
+
+    // conversation id
     private String conversationId;
 
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, String conversationId) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, Map<String, String> responseParams, String conversationId) {
         this.id = id;
         this.question = question;
         this.date = date;
@@ -44,6 +51,7 @@ public class Request {
         this.requestOwner = requestOwner;
         this.responseText = responseText;
         this.responseType = responseType;
+        this.responseParams = responseParams;
         this.conversationId = conversationId;
     }
 
@@ -109,6 +117,14 @@ public class Request {
 
     public void setResponseType(String responseType) {
         this.responseType = responseType;
+    }
+
+    public Map<String, String> getResponseParams() {
+        return responseParams;
+    }
+
+    public void setResponseParams(Map<String, String> responseParams) {
+        this.responseParams = responseParams;
     }
 
     @PrePersist

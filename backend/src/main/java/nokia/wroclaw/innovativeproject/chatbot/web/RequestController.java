@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/request")
@@ -115,6 +117,18 @@ public class RequestController {
             log.error("ServiceResponseException", e);
             throw e;
         }
+
+        // create map and save all entities from context
+        Map<String, String> map = new HashMap<>();
+        for(Map.Entry<String, Object> entry: response.getContext().entrySet()) {
+            if((!entry.getKey().equals("system")) && (!entry.getKey().equals("conversation_id"))) {
+                map.put(entry.getKey(), entry.getValue().toString());
+            }
+        }
+        request.setResponseParams(map);
+
+        // get response type
+        request.setResponseType(requestService.getResponseType(map));
 
         // save request
         Request request1 = requestService.saveOrUpdateRequest(request, principal.getName());

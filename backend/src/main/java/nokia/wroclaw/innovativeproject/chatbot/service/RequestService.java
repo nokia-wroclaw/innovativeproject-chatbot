@@ -8,6 +8,10 @@ import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 @Service
 public class RequestService {
 
@@ -30,5 +34,15 @@ public class RequestService {
 
     public Iterable<Request> findAllRequests() {
         return requestRepository.findAll();
+    }
+
+    public String getResponseType(Map<String, String> responseParams) {
+        Set<String> keys = responseParams.keySet();
+
+        // weather case
+        if(keys.contains("date") && keys.contains("location") && keys.contains("time")) return "weather";
+
+        // nothing case
+        else return "";
     }
 }
