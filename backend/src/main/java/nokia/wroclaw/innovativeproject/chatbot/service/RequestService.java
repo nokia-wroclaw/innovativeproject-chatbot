@@ -40,6 +40,7 @@ public class RequestService {
 
         // weather case
         if(keys.contains("date") && keys.contains("location") && keys.contains("time")) return "weather";
+        else if(keys.contains("bottom_text") && keys.contains("top_text")) return "meme";
 
         // nothing case
         else return "";
