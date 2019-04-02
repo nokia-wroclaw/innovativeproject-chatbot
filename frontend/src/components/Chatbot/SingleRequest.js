@@ -10,9 +10,6 @@ class SingleRequest extends Component {
         <p className="black-text">
           {request.requestOwner}: {request.question}
         </p>
-        <p className="black-text">
-          Date: {request.date}
-        </p>
       </div>
       <BotResponse request={request}/>
     </div>

@@ -1,7 +1,7 @@
 package nokia.wroclaw.innovativeproject.chatbot.service;
 
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
-import nokia.wroclaw.innovativeproject.chatbot.exceptions.UsernameAlreadyExistsException;
+import nokia.wroclaw.innovativeproject.chatbot.exceptions.authentication.UsernameAlreadyExistsException;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,6 +34,17 @@ public class UserService {
         } catch (Exception e) {
             throw new UsernameAlreadyExistsException("Username '" + newUser.getUsername() + "' already exists.");
         }
+    }
+
+    public User getUser(String username) {
+        User user = userRepository.findByUsername(username);
+        return user;
+    }
+
+    public void updateCurrentConversationId(String username, String conversationId) {
+        User user = userRepository.findByUsername(username);
+        user.setCurrentConversationId(conversationId);
+        userRepository.save(user);
     }
 
     // { User management stuff will be here }
