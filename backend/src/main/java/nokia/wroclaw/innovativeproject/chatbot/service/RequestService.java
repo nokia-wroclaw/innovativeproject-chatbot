@@ -2,11 +2,14 @@ package nokia.wroclaw.innovativeproject.chatbot.service;
 
 import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
-import nokia.wroclaw.innovativeproject.chatbot.exceptions.RequestIdException;
+import nokia.wroclaw.innovativeproject.chatbot.exceptions.request.RequestIdException;
 import nokia.wroclaw.innovativeproject.chatbot.repository.RequestRepository;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class RequestService {
@@ -30,5 +33,16 @@ public class RequestService {
 
     public Iterable<Request> findAllRequests() {
         return requestRepository.findAll();
+    }
+
+    public String getResponseType(Map<String, String> responseParams) {
+        Set<String> keys = responseParams.keySet();
+
+        // weather case
+        if(keys.contains("date") && keys.contains("location") && keys.contains("time")) return "weather";
+        else if(keys.contains("bottom_text") && keys.contains("top_text")) return "meme";
+
+        // nothing case
+        else return "";
     }
 }

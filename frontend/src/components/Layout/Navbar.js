@@ -16,9 +16,6 @@ class Navbar extends Component {
     const userIsAuthenticated = (
       <ul className="right">
         <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
-        <li>
           <NavLink to="/chatbot">Chatbot</NavLink>
         </li>
         <li>
