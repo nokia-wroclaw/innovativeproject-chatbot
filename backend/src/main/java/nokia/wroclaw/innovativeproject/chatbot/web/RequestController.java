@@ -99,9 +99,8 @@ public class RequestController {
             request.setConversationId(conversationContext.getConversationId()); // conversation ID
             userService.updateCurrentConversationId(principal.getName(), conversationContext.getConversationId());
 
-            // if context's state is not in progress clear the context
-            // & save context to context map
-            if(response.getContext().getSystem().get("dialog_stack").toString().contains("in_progress")) {
+            // save context to context map
+            if(!response.getContext().getSystem().containsKey("branch_exited")) {
                 contextMap.put(conversationContext.getConversationId(), conversationContext);
             } else {
                 contextMap.put(conversationContext.getConversationId(), new Context());

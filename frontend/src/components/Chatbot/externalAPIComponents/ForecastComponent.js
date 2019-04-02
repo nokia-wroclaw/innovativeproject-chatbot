@@ -14,15 +14,22 @@ class ForecastComponent extends Component {
     const params = this.props.params;
     console.log(forecast);
 
+    let icon;
+    if(forecast.main === "Clear") {
+      icon = (<i className="large material-icons icon-sun">wb_sunny</i>)
+    } else {
+      icon = (<i className="large material-icons icon-cloud">cloud</i>)
+    }
+
     let data;
     if (forecast.length !== 0) {
       data = (
-        <div class="card horizontal">
-          <div class="card-stacked">
-            <div class="card-content">
+        <div className="card horizontal">
+          <div className="card-stacked">
+            <div className="card-content">
               <div className="row">
                 <div className="col">
-                  <i className="large material-icons icon-sun">wb_sunny</i>
+                  {icon}
                 </div>
                 <div className="col">
                   <h5>{params.location}</h5>
