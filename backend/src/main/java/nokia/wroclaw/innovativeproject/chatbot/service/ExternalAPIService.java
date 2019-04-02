@@ -39,7 +39,7 @@ public class ExternalAPIService {
                 .append("http://api.openweathermap.org/data/2.5/forecast?q=")
                 .append(params.get("location"))
                 .append("&units=metric")
-                .append("&APPID=f3f662619d991e9dc1b0343af9cd83ac");
+                .append("&APPID=a42f7d9a9412365b7145d185054b1700");
 
         // get data from API
         JSONObject response = new JSONObject();

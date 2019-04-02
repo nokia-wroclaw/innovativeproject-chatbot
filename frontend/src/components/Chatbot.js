@@ -3,18 +3,20 @@ import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
 import PropTypes from "prop-types";
 import SingleRequest from "./Chatbot/SingleRequest";
-import LoadingSpinner from "./LoadingSpinner";
+import BotResponse from "./Chatbot/BotResponse";
 
 class Chatbot extends Component {
   state = {
     question: "",
     message: "",
-    loading: false
+    loading: false,
+    currentQuestion: ""
   };
 
   componentDidMount() {
     this.props.getRequests();
     this.scrollToBottom();
+    this.nameInput.focus();
     // if not logged in redirect to login page
     if (!this.props.security.validToken) {
       window.location.href = "/login";
@@ -40,12 +42,16 @@ class Chatbot extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    this.setState({ currentQuestion: "siema" });
+    this.forceUpdate();
+    this.getRequest();
+  };
+
+  getRequest = () => {
     const newRequest = {
       question: this.state.question
     };
     this.props.createRequest(newRequest, this.props.history);
-
-    // temporary refresh update
     this.forceUpdate();
   };
 
@@ -60,11 +66,27 @@ class Chatbot extends Component {
 
   render() {
     const { requests } = this.props.request;
-    let data;
-    if (this.state.loading) {
-      data = <LoadingSpinner />;
+
+    let temporaryQuestion;
+    if (this.state.currentQuestion === "") {
+      temporaryQuestion = "";
     } else {
-      data = (
+      const tempRequest = {
+        requestOwner: "User",
+        question: this.state.question,
+        responseText: "",
+        responseType: ""
+      };
+      temporaryQuestion = (
+        <div>
+          <SingleRequest key={"temp"} request={tempRequest} showBotAnswer={false} />
+          <BotResponse request={tempRequest} />
+        </div>
+      );
+    }
+
+    return (
+      <div>
         <div className="container">
           <h4 className="center">Chatbot</h4>
           <div
@@ -74,18 +96,24 @@ class Chatbot extends Component {
             }}
           >
             {requests.map(request => (
-              <SingleRequest key={request.id} request={request} />
+              <SingleRequest
+                key={request.id}
+                request={request}
+                showBotAnswer={true}
+              />
             ))}
+            {temporaryQuestion}
           </div>
           <div>
             <form onSubmit={this.onSubmit} className="row submit-query">
               <input
+                ref={(input) => { this.nameInput = input; }}
                 className="col s10"
                 name="question"
                 id="text"
                 type="text"
                 placeholder="Your message"
-                value={this.state.username}
+                value={this.state.question}
                 onChange={this.onChange}
               />
               <input
@@ -95,9 +123,8 @@ class Chatbot extends Component {
             </form>
           </div>
         </div>
-      );
-    }
-    return <div>{data}</div>;
+      </div>
+    );
   }
 }
 
