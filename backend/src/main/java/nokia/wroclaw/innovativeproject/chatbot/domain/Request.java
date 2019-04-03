@@ -39,11 +39,14 @@ public class Request {
     // conversation id
     private String conversationId;
 
+    // response rating
+    private int responseRating;
+
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, Map<String, String> responseParams, String conversationId) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, Map<String, String> responseParams, String conversationId, int responseRating) {
         this.id = id;
         this.question = question;
         this.date = date;
@@ -53,6 +56,7 @@ public class Request {
         this.responseType = responseType;
         this.responseParams = responseParams;
         this.conversationId = conversationId;
+        this.responseRating = responseRating;
     }
 
     public Long getId() {
@@ -125,6 +129,14 @@ public class Request {
 
     public void setResponseParams(Map<String, String> responseParams) {
         this.responseParams = responseParams;
+    }
+
+    public int getResponseRating() {
+        return responseRating;
+    }
+
+    public void setResponseRating(int responseRating) {
+        this.responseRating = responseRating;
     }
 
     @PrePersist

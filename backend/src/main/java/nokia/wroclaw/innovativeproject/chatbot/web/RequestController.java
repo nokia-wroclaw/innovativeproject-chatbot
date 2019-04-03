@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/request")
@@ -138,6 +135,12 @@ public class RequestController {
     @GetMapping("/all")
     public Iterable<Request> getAllRequests() {
         return requestService.findAllRequests();
+    }
+
+    @GetMapping("/userRequests")
+    public Iterable<Request> getUserRequests(Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return requestService.findAllUserRequests(currentUser.getUsername());
     }
 
 }

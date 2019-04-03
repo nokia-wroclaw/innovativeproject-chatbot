@@ -8,6 +8,9 @@ import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,6 +36,16 @@ public class RequestService {
 
     public Iterable<Request> findAllRequests() {
         return requestRepository.findAll();
+    }
+
+    public Iterable<Request> findAllUserRequests(String username) {
+        Iterable<Request> allRequests = requestRepository.findAll();
+        List<Request> userRequests = new ArrayList<>();
+        for(Request request: allRequests) {
+            if(request.getUser().getUsername().equals(username))
+                userRequests.add(request);
+        }
+        return userRequests;
     }
 
     public String getResponseType(Map<String, String> responseParams) {
