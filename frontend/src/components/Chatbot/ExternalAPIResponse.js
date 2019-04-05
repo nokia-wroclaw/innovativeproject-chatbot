@@ -8,13 +8,13 @@ class ExternalAPIResponse extends Component {
     var displayedComponent = "";
 
     switch (request.responseType) {
-      case "weather":
+      case "General_Weather":
         displayedComponent = (
           <ForecastComponent params={request.responseParams} />
         );
         break;
 
-      case "meme":
+      case "Memes":
         displayedComponent = <MemeComponent params={request.responseParams} />;
         break;
 

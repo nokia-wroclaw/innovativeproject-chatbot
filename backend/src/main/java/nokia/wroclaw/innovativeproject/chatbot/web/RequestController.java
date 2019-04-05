@@ -123,8 +123,22 @@ public class RequestController {
         }
         request.setResponseParams(map);
 
-        // get response type
-        request.setResponseType(requestService.getResponseType(map));
+        // set intent
+        String conversationIntent = requestService.getMessageIntent(principal.getName(), conversationContext.getConversationId());
+        if(!conversationIntent.equals("")) // if this conversation had an intent
+            request.setIntent(conversationIntent); // set this intent on request
+        else { // if not
+            if(!response.getIntents().isEmpty()) // if there is intent in current response
+                request.setIntent(response.getIntents().get(0).getIntent());
+            else request.setIntent(conversationIntent);
+        }
+
+        // get response type (if node exited)
+        if(response.getContext().getSystem().containsKey("branch_exited")) {
+            request.setResponseType(request.getIntent());
+        } else {
+            request.setResponseType("");
+        }
 
         // save request
         Request request1 = requestService.saveOrUpdateRequest(request, principal.getName());

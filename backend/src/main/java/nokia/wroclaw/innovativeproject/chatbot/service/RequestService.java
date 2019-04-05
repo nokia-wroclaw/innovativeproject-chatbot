@@ -48,14 +48,13 @@ public class RequestService {
         return userRequests;
     }
 
-    public String getResponseType(Map<String, String> responseParams) {
-        Set<String> keys = responseParams.keySet();
-
-        // weather case
-        if(keys.contains("date") && keys.contains("location") && keys.contains("time")) return "weather";
-        else if(keys.contains("bottom_text") && keys.contains("top_text")) return "meme";
-
-        // nothing case
-        else return "";
+    public String getMessageIntent(String username, String conversationId) {
+        Iterable<Request> userRequests = findAllUserRequests(username);
+        for(Request userRequest: userRequests) {
+            if((userRequest.getConversationId().equals(conversationId)) && (!userRequest.getIntent().equals("")))
+                    return userRequest.getIntent();
+        }
+        return "";
     }
+
 }

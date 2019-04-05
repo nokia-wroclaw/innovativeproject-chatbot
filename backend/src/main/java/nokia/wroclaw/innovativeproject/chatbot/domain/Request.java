@@ -29,6 +29,7 @@ public class Request {
     // response
     private String responseText;
     private String responseType; // "" means text
+    private String intent;
 
     @ElementCollection
     @JoinTable(name="RESPONSE_PARAMS", joinColumns=@JoinColumn(name="ID"))
@@ -46,7 +47,7 @@ public class Request {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, Map<String, String> responseParams, String conversationId, int responseRating) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, String intent, Map<String, String> responseParams, String conversationId, int responseRating) {
         this.id = id;
         this.question = question;
         this.date = date;
@@ -54,6 +55,7 @@ public class Request {
         this.requestOwner = requestOwner;
         this.responseText = responseText;
         this.responseType = responseType;
+        this.intent = intent;
         this.responseParams = responseParams;
         this.conversationId = conversationId;
         this.responseRating = responseRating;
@@ -137,6 +139,14 @@ public class Request {
 
     public void setResponseRating(int responseRating) {
         this.responseRating = responseRating;
+    }
+
+    public String getIntent() {
+        return intent;
+    }
+
+    public void setIntent(String intent) {
+        this.intent = intent;
     }
 
     @PrePersist
