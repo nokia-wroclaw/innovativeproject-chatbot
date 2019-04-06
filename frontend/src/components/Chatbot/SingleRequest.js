@@ -11,8 +11,9 @@ class SingleRequest extends Component {
       data = (
         <div>
           <div className="card indigo lighten-5 text-wrap chat-right box-shadow">
-            <p className="black-text">{request.question}</p>
-            <p className="black-text">{request.date}</p>
+            <p className="black-text">
+              User: {request.question}
+            </p>
           </div>
           <BotResponse request={request} />
         </div>
@@ -20,8 +21,9 @@ class SingleRequest extends Component {
     } else {
       data = (<div>
         <div className="card indigo lighten-5 text-wrap chat-right box-shadow">
-          <p className="black-text">{request.question}</p>
-          <p className="black-text">{request.date}</p>
+          <p className="black-text">
+            User: {request.question}
+          </p>
         </div>
       </div>)
     }
