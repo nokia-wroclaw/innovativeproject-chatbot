@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RequestService {
@@ -57,4 +54,21 @@ public class RequestService {
         return "";
     }
 
+    public Map<String, String> setAnswerRating(Map<String, String> rating) {
+        Iterable<Request> userRequests = findAllUserRequests(rating.get("username"));
+        Map<String, String> status = new HashMap<>();
+        Request ratedRequest;
+        for(Request userRequest: userRequests) {
+            if (userRequest.getId().equals(Long.parseLong(rating.get("id")))) {
+                ratedRequest = userRequest;
+                ratedRequest.setResponseRating(rating.get("rating"));
+                requestRepository.save(ratedRequest);
+                status.put("status", "ok");
+                return status;
+            }
+        }
+
+        status.put("status", "error");
+        return status;
+    }
 }

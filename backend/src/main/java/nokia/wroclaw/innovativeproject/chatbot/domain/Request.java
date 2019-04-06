@@ -41,13 +41,13 @@ public class Request {
     private String conversationId;
 
     // response rating
-    private int responseRating;
+    private String responseRating;
 
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, String intent, Map<String, String> responseParams, String conversationId, int responseRating) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, String intent, Map<String, String> responseParams, String conversationId, String responseRating) {
         this.id = id;
         this.question = question;
         this.date = date;
@@ -133,11 +133,11 @@ public class Request {
         this.responseParams = responseParams;
     }
 
-    public int getResponseRating() {
+    public String getResponseRating() {
         return responseRating;
     }
 
-    public void setResponseRating(int responseRating) {
+    public void setResponseRating(String responseRating) {
         this.responseRating = responseRating;
     }
 

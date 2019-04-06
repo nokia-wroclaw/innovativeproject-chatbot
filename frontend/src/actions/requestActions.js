@@ -25,3 +25,20 @@ export const getRequests = () => async dispatch => {
     payload: res.data
   });
 };
+
+export const rateResponse = rating => async dispatch => {
+  console.log(rating)
+  try {
+    const res = await axios.post(baseUrl + "/api/request/rateAnswer", rating);
+    console.log(res)
+    dispatch({
+      type: GET_ERRORS,
+      payload: {}
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
+};

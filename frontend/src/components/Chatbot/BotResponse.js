@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import ExternalAPIResponse from "./ExternalAPIResponse";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { rateResponse } from "../../actions/requestActions";
+
 
 class BotResponse extends Component {
   state = {
@@ -7,10 +11,13 @@ class BotResponse extends Component {
   };
 
   handleBtnClick = id => {
-    this.setState({
-      responseRating: id
-    });
-    console.log(this.state.responseRating);
+    var ratingNumb = id === "liked" ? 1 : -1;
+    var rating = {
+      id: this.props.request.id,
+      username: this.props.request.requestOwner,
+      rating: ratingNumb
+    };
+    this.props.rateResponse(rating);
   };
 
   render() {
@@ -39,12 +46,18 @@ class BotResponse extends Component {
           <div className="card grey lighten-3 text-wrap chat-left box-shadow">
             <div className="like-icons">
               <div className="row">
-                <span onClick={() => this.handleBtnClick("like")}>
-                  <i className="tiny material-icons icon-green">thumb_up</i>
-                </span>
-                <span onClick={() => this.handleBtnClick("dislike")}>
-                  <i className="tiny material-icons icon-red">thumb_down</i>
-                </span>
+                <div
+                  onClick={() => this.handleBtnClick("liked")}
+                  className="btn-floating btn waves-effect waves-light green"
+                >
+                  <i className="material-icons">thumb_up</i>
+                </div>
+                <div
+                  onClick={() => this.handleBtnClick("disliked")}
+                  className="btn-floating btn waves-effect waves-light red"
+                >
+                  <i className="material-icons">thumb_down</i>
+                </div>
               </div>
             </div>
             <p className="black-text">Bot: {request.responseText}</p>
@@ -58,4 +71,16 @@ class BotResponse extends Component {
   }
 }
 
-export default BotResponse;
+BotResponse.propTypes = {
+  rateResponse: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { rateResponse }
+)(BotResponse);

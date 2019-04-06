@@ -140,6 +140,9 @@ public class RequestController {
             request.setResponseType("");
         }
 
+        // no rating yet
+        request.setResponseRating("0");
+
         // save request
         Request request1 = requestService.saveOrUpdateRequest(request, principal.getName());
         return new ResponseEntity<Request>(request1, HttpStatus.CREATED);
@@ -155,6 +158,16 @@ public class RequestController {
     public Iterable<Request> getUserRequests(Principal principal) {
         User currentUser = userService.getUser(principal.getName());
         return requestService.findAllUserRequests(currentUser.getUsername());
+    }
+
+    @PostMapping("/rateAnswer")
+    public ResponseEntity<?> rateAnswer(@RequestBody Map<String, String> rating, BindingResult result) {
+        // check for errors
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Map<String, String> map = requestService.setAnswerRating(rating);
+        return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
 
 }
