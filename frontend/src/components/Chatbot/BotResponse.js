@@ -27,6 +27,9 @@ class BotResponse extends Component {
     ) : (
       ""
     );
+    const responseText = request.responseText;
+    const responseDate = request.date;
+    console.log(responseText);
 
     let data;
     if (request.responseText === "") {
@@ -60,8 +63,8 @@ class BotResponse extends Component {
                 </div>
               </div>
             </div>
-            <p className="black-text">{request.responseText}</p>
-            <p className="black-text">{request.date}</p>
+            <p className="black-text">{responseText}</p>
+            <p className="black-text">{responseDate}</p>
             <div>{externalAPIResponse}</div>
           </div>
         </div>

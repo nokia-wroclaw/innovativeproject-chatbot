@@ -10,7 +10,6 @@ class Chatbot extends Component {
     question: "",
     message: "",
     loading: false,
-    isCreatingRequest: false,
     currentQuestion: ""
   };
 
@@ -39,20 +38,13 @@ class Chatbot extends Component {
 
   componentDidUpdate() {
     this.scrollToBottom();
-    document.getElementById("text").focus();
   }
 
   onSubmit = e => {
     e.preventDefault();
-    if (this.state.question && !this.state.isCreatingRequest)
-    {
-      this.setState({
-        isCreatingRequest: true
-      });
-      this.setState({ currentQuestion: "siema" });
-      this.forceUpdate();
-      this.getRequest();
-    }
+    this.setState({ currentQuestion: this.state.question });
+    this.forceUpdate();
+    this.getRequest();
   };
 
   getRequest = () => {
