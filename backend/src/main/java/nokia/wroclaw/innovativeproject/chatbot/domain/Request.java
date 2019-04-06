@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class Request {
@@ -28,19 +26,39 @@ public class Request {
 
     private String requestOwner;
 
+    // response
     private String responseText;
+    private String responseType; // "" means text
+    private String intent;
+
+    @ElementCollection
+    @JoinTable(name="RESPONSE_PARAMS", joinColumns=@JoinColumn(name="ID"))
+    @MapKeyColumn (name="VALUE")
+    @Column(name="KEY")
+    Map<String, String> responseParams = new HashMap<String, String>();
+
+    // conversation id
+    private String conversationId;
+
+    // response rating
+    private int responseRating;
 
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, String intent, Map<String, String> responseParams, String conversationId, int responseRating) {
         this.id = id;
         this.question = question;
         this.date = date;
         this.user = user;
         this.requestOwner = requestOwner;
         this.responseText = responseText;
+        this.responseType = responseType;
+        this.intent = intent;
+        this.responseParams = responseParams;
+        this.conversationId = conversationId;
+        this.responseRating = responseRating;
     }
 
     public Long getId() {
@@ -89,6 +107,46 @@ public class Request {
 
     public void setResponseText(String responseText) {
         this.responseText = responseText;
+    }
+
+    public String getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
+    }
+
+    public String getResponseType() {
+        return responseType;
+    }
+
+    public void setResponseType(String responseType) {
+        this.responseType = responseType;
+    }
+
+    public Map<String, String> getResponseParams() {
+        return responseParams;
+    }
+
+    public void setResponseParams(Map<String, String> responseParams) {
+        this.responseParams = responseParams;
+    }
+
+    public int getResponseRating() {
+        return responseRating;
+    }
+
+    public void setResponseRating(int responseRating) {
+        this.responseRating = responseRating;
+    }
+
+    public String getIntent() {
+        return intent;
+    }
+
+    public void setIntent(String intent) {
+        this.intent = intent;
     }
 
     @PrePersist

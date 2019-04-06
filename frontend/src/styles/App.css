@@ -1,6 +1,6 @@
 div.chat-box {
     display:block;
-    height: 600px;
+    height: 70vmin;
     overflow:auto;
     padding: 10px 20px;
     border-radius: 15px;
@@ -46,4 +46,18 @@ form.submit-query {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.like-icons {
+    float: right;
+}
+
+i.icon-green {
+    color: #1b5e20;
+    padding: 5px;
+}
+
+i.icon-red {
+    color: #b71c1c;
+    padding: 5px;
 }

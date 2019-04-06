@@ -19,7 +19,7 @@ export const createRequest = (request, history) => async dispatch => {
 };
 
 export const getRequests = () => async dispatch => {
-  const res = await axios.get(baseUrl + "/api/request/all");
+  const res = await axios.get(baseUrl + "/api/request/userRequests");
   dispatch({
     type: GET_REQUESTS,
     payload: res.data

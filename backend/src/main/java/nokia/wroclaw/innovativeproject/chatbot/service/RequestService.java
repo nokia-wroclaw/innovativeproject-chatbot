@@ -2,11 +2,17 @@ package nokia.wroclaw.innovativeproject.chatbot.service;
 
 import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
-import nokia.wroclaw.innovativeproject.chatbot.exceptions.RequestIdException;
+import nokia.wroclaw.innovativeproject.chatbot.exceptions.request.RequestIdException;
 import nokia.wroclaw.innovativeproject.chatbot.repository.RequestRepository;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class RequestService {
@@ -31,4 +37,24 @@ public class RequestService {
     public Iterable<Request> findAllRequests() {
         return requestRepository.findAll();
     }
+
+    public Iterable<Request> findAllUserRequests(String username) {
+        Iterable<Request> allRequests = requestRepository.findAll();
+        List<Request> userRequests = new ArrayList<>();
+        for(Request request: allRequests) {
+            if(request.getUser().getUsername().equals(username))
+                userRequests.add(request);
+        }
+        return userRequests;
+    }
+
+    public String getMessageIntent(String username, String conversationId) {
+        Iterable<Request> userRequests = findAllUserRequests(username);
+        for(Request userRequest: userRequests) {
+            if((userRequest.getConversationId().equals(conversationId)) && (!userRequest.getIntent().equals("")))
+                    return userRequest.getIntent();
+        }
+        return "";
+    }
+
 }
