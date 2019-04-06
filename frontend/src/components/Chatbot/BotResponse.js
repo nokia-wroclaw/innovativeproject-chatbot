@@ -60,7 +60,8 @@ class BotResponse extends Component {
                 </div>
               </div>
             </div>
-            <p className="black-text">Bot: {request.responseText}</p>
+            <p className="black-text">{request.responseText}</p>
+            <p className="black-text">{request.date}</p>
             <div>{externalAPIResponse}</div>
           </div>
         </div>
