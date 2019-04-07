@@ -31,11 +31,14 @@ public class Request {
     private String responseType; // "" means text
     private String intent;
 
+//    @ElementCollection
+//    @JoinTable(name="RESPONSE_PARAMS", joinColumns=@JoinColumn(name="ID"))
+//    @MapKeyColumn (name="VALUE")
+//    @Column(name="KEY")
     @ElementCollection
-    @JoinTable(name="RESPONSE_PARAMS", joinColumns=@JoinColumn(name="ID"))
-    @MapKeyColumn (name="VALUE")
-    @Column(name="KEY")
-    Map<String, String> responseParams = new HashMap<String, String>();
+    @CollectionTable(name="RESPONSE_PARAMS")
+    @MapKeyColumn(name="PARAMS")
+    private Map<String, String> responseParams = new HashMap<>();
 
     // conversation id
     private String conversationId;
