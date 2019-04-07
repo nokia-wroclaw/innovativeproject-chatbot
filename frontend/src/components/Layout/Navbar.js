@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logout } from "../../actions/securityActions";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 class Navbar extends Component {
   logout = e => {
@@ -25,7 +26,7 @@ class Navbar extends Component {
           </NavLink>
         </li>
         <li>  
-          <FontAwesomeIcon icon="user" /> {this.props.security.user.fullName}
+          <FontAwesomeIcon icon={faUser} /> {this.props.security.user.fullName}
         </li>
       </ul>
     );

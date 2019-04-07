@@ -8,10 +8,6 @@ import Chatbot from "./components/Chatbot";
 import Landing from "./components/Layout/Landing";
 import Register from "./components/UserManagement/Register";
 import Login from "./components/UserManagement/Login";
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
-
-library.add(faUser);
 
 class App extends Component {
   render() {

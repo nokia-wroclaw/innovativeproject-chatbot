@@ -62,6 +62,17 @@ i.icon-red {
     padding: 5px;
 }
 
+div.btn {
+    margin-left: 5px;
+    font-size: 12px;
+    -webkit-transition: font-size 0.2s; /* For Safari 3.1 to 6.0 */
+    transition: font-size 0.2s;
+}
+
+div.btn:hover {
+    font-size: 18px;
+}
+
 div#wave {
 	position:relative;
 	text-align:center;

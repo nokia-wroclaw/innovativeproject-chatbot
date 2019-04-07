@@ -3,7 +3,8 @@ import ExternalAPIResponse from "./ExternalAPIResponse";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { rateResponse } from "../../actions/requestActions";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsDown,faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 class BotResponse extends Component {
   state = {
@@ -36,7 +37,7 @@ class BotResponse extends Component {
       data = (
         <div>
           <div className="card grey lighten-3 text-wrap chat-left box-shadow">
-            IBM is thinking...
+            IBM Watson is thinking...
             <div id="wave">
               <span class="dot"></span>
               <span class="dot"></span>
@@ -53,15 +54,15 @@ class BotResponse extends Component {
               <div className="row">
                 <div
                   onClick={() => this.handleBtnClick("liked")}
-                  className="btn-floating btn waves-effect waves-light green"
+                  className="btn-floating btn blue"
                 >
-                  <i className="material-icons">thumb_up</i>
+                  <FontAwesomeIcon icon={faThumbsUp} />
                 </div>
                 <div
                   onClick={() => this.handleBtnClick("disliked")}
-                  className="btn-floating btn waves-effect waves-light red"
+                  className="btn-floating btn red"
                 >
-                  <i className="material-icons">thumb_down</i>
+                 <FontAwesomeIcon icon={faThumbsDown} />
                 </div>
               </div>
             </div>
