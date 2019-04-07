@@ -36,9 +36,11 @@ class BotResponse extends Component {
       data = (
         <div>
           <div className="card grey lighten-3 text-wrap chat-left box-shadow">
-            bot is thinking...
-            <div className="progress">
-              <div className="indeterminate" />
+            IBM is thinking...
+            <div id="wave">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
             </div>
           </div>
         </div>

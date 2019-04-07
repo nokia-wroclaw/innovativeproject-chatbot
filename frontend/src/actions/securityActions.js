@@ -24,6 +24,7 @@ export const login = LoginRequest => async dispatch => {
   try {
     // post -> login request
     const res = await axios.post(baseUrl + "/api/users/login", LoginRequest);
+    console.log(LoginRequest);
     // extract token from res.data
     const { token } = res.data;
     // store token in the localStorage

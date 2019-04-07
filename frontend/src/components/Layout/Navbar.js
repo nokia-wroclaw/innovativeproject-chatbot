@@ -3,6 +3,7 @@ import { NavLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logout } from "../../actions/securityActions";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class Navbar extends Component {
   logout = e => {
@@ -22,6 +23,9 @@ class Navbar extends Component {
           <NavLink to="/logout" onClick={this.logout.bind(this)}>
             Logout
           </NavLink>
+        </li>
+        <li>  
+          <FontAwesomeIcon icon="user" /> {this.props.security.user.fullName}
         </li>
       </ul>
     );
