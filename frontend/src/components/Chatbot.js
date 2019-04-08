@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
 import { logout } from "../actions/securityActions";
 import PropTypes from "prop-types";
-import SingleRequest from "./Chatbot/SingleRequest";
+import UserRequest from "./Chatbot/UserRequest";
 import BotResponse from "./Chatbot/BotResponse";
 import IdleTimer from "react-idle-timer";
 
@@ -50,7 +50,6 @@ class Chatbot extends Component {
   onSubmit = e => {
     e.preventDefault();
     this.setState({ currentQuestion: this.state.question });
-    this.forceUpdate();
     this.getRequest();
   };
 
@@ -59,7 +58,6 @@ class Chatbot extends Component {
       question: this.state.question
     };
     this.props.createRequest(newRequest, this.props.history);
-    this.forceUpdate();
   };
 
   logout = e => {
@@ -86,12 +84,8 @@ class Chatbot extends Component {
       };
       temporaryQuestion = (
         <div>
-          <SingleRequest
-            key={"temp"}
-            request={tempRequest}
-            showBotAnswer={false}
-          />
-          <BotResponse request={tempRequest} />
+          <UserRequest key={"temp"} request={tempRequest} />
+          <BotResponse key={"tempbot"} request={tempRequest} />
         </div>
       );
     }
@@ -116,11 +110,10 @@ class Chatbot extends Component {
             }}
           >
             {requests.map(request => (
-              <SingleRequest
-                key={request.id}
-                request={request}
-                showBotAnswer={true}
-              />
+              <div key={request.id}>
+                <UserRequest request={request} />
+                <BotResponse request={request} />
+              </div>
             ))}
             {temporaryQuestion}
           </div>
@@ -155,7 +148,7 @@ Chatbot.propTypes = {
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

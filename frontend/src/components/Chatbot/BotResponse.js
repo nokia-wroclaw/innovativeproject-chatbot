@@ -42,9 +42,9 @@ class BotResponse extends Component {
           <div className="card grey lighten-3 text-wrap chat-left box-shadow">
             IBM Watson is thinking...
             <div id="wave">
-              <span class="dot" />
-              <span class="dot" />
-              <span class="dot" />
+              <span className="dot" />
+              <span className="dot" />
+              <span className="dot" />
             </div>
           </div>
         </div>
