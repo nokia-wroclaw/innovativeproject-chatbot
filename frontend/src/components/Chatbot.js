@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
+import { logout } from "../actions/securityActions";
 import PropTypes from "prop-types";
 import SingleRequest from "./Chatbot/SingleRequest";
 import BotResponse from "./Chatbot/BotResponse";
+import IdleTimer from "react-idle-timer";
 
 class Chatbot extends Component {
   state = {
@@ -11,6 +13,11 @@ class Chatbot extends Component {
     message: "",
     loading: false,
     currentQuestion: ""
+  };
+
+  onIdle = e => {
+    this.props.logout();
+    window.location.href = "/login";
   };
 
   componentDidMount() {
@@ -56,7 +63,7 @@ class Chatbot extends Component {
   };
 
   logout = e => {
-    this.props.logout();
+    this.logout.bind(this);
     window.location.href = "/";
   };
 
@@ -79,7 +86,11 @@ class Chatbot extends Component {
       };
       temporaryQuestion = (
         <div>
-          <SingleRequest key={"temp"} request={tempRequest} showBotAnswer={false} />
+          <SingleRequest
+            key={"temp"}
+            request={tempRequest}
+            showBotAnswer={false}
+          />
           <BotResponse request={tempRequest} />
         </div>
       );
@@ -87,6 +98,15 @@ class Chatbot extends Component {
 
     return (
       <div>
+        <IdleTimer
+          ref={ref => {
+            this.idleTimer = ref;
+          }}
+          element={document}
+          onIdle={this.onIdle}
+          debounce={250}
+          timeout={1000 * 60 * 5}
+        />
         <div className="container">
           <h4 className="center">Chatbot</h4>
           <div
@@ -107,7 +127,9 @@ class Chatbot extends Component {
           <div>
             <form onSubmit={this.onSubmit} className="row submit-query">
               <input
-                ref={(input) => { this.nameInput = input; }}
+                ref={input => {
+                  this.nameInput = input;
+                }}
                 className="col s10"
                 name="question"
                 id="text"
@@ -132,7 +154,8 @@ Chatbot.propTypes = {
   request: PropTypes.object.isRequired,
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -143,5 +166,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getRequests, createRequest }
+  { getRequests, createRequest, logout }
 )(Chatbot);

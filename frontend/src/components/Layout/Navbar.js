@@ -28,7 +28,7 @@ class Navbar extends Component {
         <li>
           <NavLink to="/chatbot">
             <FontAwesomeIcon icon={faUser} />
-            {this.props.security.user.fullName}
+            {" "}{this.props.security.user.fullName}
           </NavLink>
         </li>
       </ul>

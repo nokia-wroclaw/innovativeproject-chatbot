@@ -69,9 +69,9 @@ class BotResponse extends Component {
                 </div>
               </div>
             </div>
-            <div dangerouslySetInnerHTML={this.createMarkup(responseText)} />
+            <div className="message-text"><div dangerouslySetInnerHTML={this.createMarkup(responseText)} /></div>
             <div>{externalAPIResponse}</div>
-            <div className="like-icons">{responseDate}</div>
+            <div className="message-date">{responseDate}</div>
           </div>
         </div>
       );
