@@ -3,8 +3,8 @@ import ExternalAPIResponse from "./ExternalAPIResponse";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { rateResponse } from "../../actions/requestActions";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsDown,faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 class BotResponse extends Component {
   state = {
@@ -22,8 +22,8 @@ class BotResponse extends Component {
   };
 
   createMarkup = msg => {
-    return {__html: msg};
-  }
+    return { __html: msg };
+  };
 
   render() {
     const { request } = this.props;
@@ -42,9 +42,9 @@ class BotResponse extends Component {
           <div className="card grey lighten-3 text-wrap chat-left box-shadow">
             IBM Watson is thinking...
             <div id="wave">
-              <span class="dot"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
+              <span class="dot" />
+              <span class="dot" />
+              <span class="dot" />
             </div>
           </div>
         </div>
@@ -65,13 +65,13 @@ class BotResponse extends Component {
                   onClick={() => this.handleBtnClick("disliked")}
                   className="btn-floating btn red"
                 >
-                 <FontAwesomeIcon icon={faThumbsDown} />
+                  <FontAwesomeIcon icon={faThumbsDown} />
                 </div>
               </div>
             </div>
-            <div dangerouslySetInnerHTML={this.createMarkup(responseText)}/>
-            <p className="black-text">{responseDate}</p>
+            <div dangerouslySetInnerHTML={this.createMarkup(responseText)} />
             <div>{externalAPIResponse}</div>
+            <div className="like-icons">{responseDate}</div>
           </div>
         </div>
       );

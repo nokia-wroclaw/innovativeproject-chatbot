@@ -12,7 +12,7 @@ class SingleRequest extends Component {
         <div>
           <div className="card indigo lighten-5 text-wrap chat-right box-shadow">
             <p className="black-text">{request.question}</p>
-            <p className="black-text">{request.date}</p>
+            <div className="like-icons">{request.date}</div>
           </div>
           <BotResponse request={request} />
         </div>
@@ -21,7 +21,7 @@ class SingleRequest extends Component {
       data = (<div>
         <div className="card indigo lighten-5 text-wrap chat-right box-shadow">
           <p className="black-text">{request.question}</p>
-          <p className="black-text">{request.date}</p>
+          <div className="like-icons">{request.date}</div>
         </div>
       </div>)
     }
