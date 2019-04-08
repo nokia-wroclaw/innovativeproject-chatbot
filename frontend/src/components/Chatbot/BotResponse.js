@@ -21,6 +21,10 @@ class BotResponse extends Component {
     this.props.rateResponse(rating);
   };
 
+  createMarkup = msg => {
+    return {__html: msg};
+  }
+
   render() {
     const { request } = this.props;
     const externalAPIResponse = request.responseType ? (
@@ -30,7 +34,6 @@ class BotResponse extends Component {
     );
     const responseText = request.responseText;
     const responseDate = request.date;
-    console.log(responseText);
 
     let data;
     if (request.responseText === "") {
@@ -66,7 +69,7 @@ class BotResponse extends Component {
                 </div>
               </div>
             </div>
-            <p className="black-text">{responseText}</p>
+            <div dangerouslySetInnerHTML={this.createMarkup(responseText)}/>
             <p className="black-text">{responseDate}</p>
             <div>{externalAPIResponse}</div>
           </div>
