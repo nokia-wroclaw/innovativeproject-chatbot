@@ -8,8 +8,8 @@ import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.Set;
+import java.security.Principal;
+import java.util.*;
 
 @Service
 public class RequestService {
@@ -35,14 +35,40 @@ public class RequestService {
         return requestRepository.findAll();
     }
 
-    public String getResponseType(Map<String, String> responseParams) {
-        Set<String> keys = responseParams.keySet();
+    public Iterable<Request> findAllUserRequests(String username) {
+        Iterable<Request> allRequests = requestRepository.findAll();
+        List<Request> userRequests = new ArrayList<>();
+        for(Request request: allRequests) {
+            if(request.getUser().getUsername().equals(username))
+                userRequests.add(request);
+        }
+        return userRequests;
+    }
 
-        // weather case
-        if(keys.contains("date") && keys.contains("location") && keys.contains("time")) return "weather";
-        else if(keys.contains("bottom_text") && keys.contains("top_text")) return "meme";
+    public String getMessageIntent(String username, String conversationId) {
+        Iterable<Request> userRequests = findAllUserRequests(username);
+        for(Request userRequest: userRequests) {
+            if((userRequest.getConversationId().equals(conversationId)) && (!userRequest.getIntent().equals("")))
+                    return userRequest.getIntent();
+        }
+        return "";
+    }
 
-        // nothing case
-        else return "";
+    public Map<String, String> setAnswerRating(Map<String, String> rating) {
+        Iterable<Request> userRequests = findAllUserRequests(rating.get("username"));
+        Map<String, String> status = new HashMap<>();
+        Request ratedRequest;
+        for(Request userRequest: userRequests) {
+            if (userRequest.getId().equals(Long.parseLong(rating.get("id")))) {
+                ratedRequest = userRequest;
+                ratedRequest.setResponseRating(rating.get("rating"));
+                requestRepository.save(ratedRequest);
+                status.put("status", "ok");
+                return status;
+            }
+        }
+
+        status.put("status", "error");
+        return status;
     }
 }

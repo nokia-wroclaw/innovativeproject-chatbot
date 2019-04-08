@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/request")
@@ -126,8 +123,25 @@ public class RequestController {
         }
         request.setResponseParams(map);
 
-        // get response type
-        request.setResponseType(requestService.getResponseType(map));
+        // set intent
+        String conversationIntent = requestService.getMessageIntent(principal.getName(), conversationContext.getConversationId());
+        if(!conversationIntent.equals("")) // if this conversation had an intent
+            request.setIntent(conversationIntent); // set this intent on request
+        else { // if not
+            if(!response.getIntents().isEmpty()) // if there is intent in current response
+                request.setIntent(response.getIntents().get(0).getIntent());
+            else request.setIntent(conversationIntent);
+        }
+
+        // get response type (if node exited)
+        if(response.getContext().getSystem().containsKey("branch_exited")) {
+            request.setResponseType(request.getIntent());
+        } else {
+            request.setResponseType("");
+        }
+
+        // no rating yet
+        request.setResponseRating("0");
 
         // save request
         Request request1 = requestService.saveOrUpdateRequest(request, principal.getName());
@@ -138,6 +152,22 @@ public class RequestController {
     @GetMapping("/all")
     public Iterable<Request> getAllRequests() {
         return requestService.findAllRequests();
+    }
+
+    @GetMapping("/userRequests")
+    public Iterable<Request> getUserRequests(Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return requestService.findAllUserRequests(currentUser.getUsername());
+    }
+
+    @PostMapping("/rateAnswer")
+    public ResponseEntity<?> rateAnswer(@RequestBody Map<String, String> rating, BindingResult result) {
+        // check for errors
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Map<String, String> map = requestService.setAnswerRating(rating);
+        return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
 
 }
