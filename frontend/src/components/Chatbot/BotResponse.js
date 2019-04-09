@@ -3,7 +3,8 @@ import ExternalAPIResponse from "./ExternalAPIResponse";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { rateResponse } from "../../actions/requestActions";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 class BotResponse extends Component {
   state = {
@@ -20,6 +21,10 @@ class BotResponse extends Component {
     this.props.rateResponse(rating);
   };
 
+  createMarkup = msg => {
+    return { __html: msg };
+  };
+
   render() {
     const { request } = this.props;
     const externalAPIResponse = request.responseType ? (
@@ -29,16 +34,17 @@ class BotResponse extends Component {
     );
     const responseText = request.responseText;
     const responseDate = request.date;
-    console.log(responseText);
 
     let data;
     if (request.responseText === "") {
       data = (
         <div>
           <div className="card grey lighten-3 text-wrap chat-left box-shadow">
-            bot is thinking...
-            <div className="progress">
-              <div className="indeterminate" />
+            IBM Watson is thinking...
+            <div id="wave">
+              <span className="dot" />
+              <span className="dot" />
+              <span className="dot" />
             </div>
           </div>
         </div>
@@ -51,21 +57,21 @@ class BotResponse extends Component {
               <div className="row">
                 <div
                   onClick={() => this.handleBtnClick("liked")}
-                  className="btn-floating btn waves-effect waves-light green"
+                  className="btn-floating btn blue"
                 >
-                  <i className="material-icons">thumb_up</i>
+                  <FontAwesomeIcon icon={faThumbsUp} />
                 </div>
                 <div
                   onClick={() => this.handleBtnClick("disliked")}
-                  className="btn-floating btn waves-effect waves-light red"
+                  className="btn-floating btn red"
                 >
-                  <i className="material-icons">thumb_down</i>
+                  <FontAwesomeIcon icon={faThumbsDown} />
                 </div>
               </div>
             </div>
-            <p className="black-text">{responseText}</p>
-            <p className="black-text">{responseDate}</p>
+            <div className="message-text"><div dangerouslySetInnerHTML={this.createMarkup(responseText)} /></div>
             <div>{externalAPIResponse}</div>
+            <div className="message-date">{responseDate}</div>
           </div>
         </div>
       );
