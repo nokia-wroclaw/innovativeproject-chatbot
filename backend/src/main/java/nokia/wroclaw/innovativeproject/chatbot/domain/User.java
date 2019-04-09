@@ -90,7 +90,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, Date created_At, Date updated_At, List<Request> requests, String currentConversationId, boolean isAdmin) {
+    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, Date created_At, Date updated_At, List<Request> requests, String currentConversationId) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
@@ -101,6 +101,19 @@ public class User implements UserDetails {
         this.requests = requests;
         this.currentConversationId = currentConversationId;
         this.isAdmin = false;
+    }
+
+    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, Date created_At, Date updated_At, List<Request> requests, String currentConversationId, boolean isAdmin) {
+        this.id = id;
+        this.username = username;
+        this.fullName = fullName;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.created_At = created_At;
+        this.updated_At = updated_At;
+        this.requests = requests;
+        this.currentConversationId = currentConversationId;
+        this.isAdmin = isAdmin;
     }
 
     public Long getId() {
