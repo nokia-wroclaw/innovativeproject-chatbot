@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logout } from "../../actions/securityActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
+import { Dropdown, Divider } from "react-materialize";
 
 class Navbar extends Component {
   logout = e => {
@@ -18,19 +19,32 @@ class Navbar extends Component {
     const userIsAuthenticated = (
       <ul className="right">
         <li>
-          <NavLink to="/chatbot">Chatbot</NavLink>
+          <NavLink to="/chatbot">
+            <FontAwesomeIcon icon={faUser} />{" "}
+            {this.props.security.user.fullName}
+          </NavLink>
         </li>
-        <li>
-          <NavLink to="/logout" onClick={this.logout.bind(this)}>
+        <Dropdown
+          trigger={
+            <li>
+              <NavLink to="/chatbot">
+                <FontAwesomeIcon icon={faBars} />{" "}
+              </NavLink>
+            </li>
+          }
+        >
+          <NavLink className="blue-text text-darken-4" to="/chatbot">
+            Chatbot
+          </NavLink>
+          <Divider />
+          <NavLink
+            className="blue-text text-darken-4"
+            to="/logout"
+            onClick={this.logout.bind(this)}
+          >
             Logout
           </NavLink>
-        </li>
-        <li>
-          <NavLink to="/chatbot">
-            <FontAwesomeIcon icon={faUser} />
-            {" "}{this.props.security.user.fullName}
-          </NavLink>
-        </li>
+        </Dropdown>
       </ul>
     );
 
@@ -53,14 +67,16 @@ class Navbar extends Component {
     }
 
     return (
-      <nav className="nav-wrapper blue darken-4">
-        <div className="container">
-          <NavLink to="/" className="brand-logo left">
-            Nokia Chatbot
-          </NavLink>
-          {headerLinks}
-        </div>
-      </nav>
+      <div>
+        <nav className="nav-wrapper blue darken-4">
+          <div className="container">
+            <NavLink to="/" className="brand-logo left">
+              Nokia Chatbot
+            </NavLink>
+            {headerLinks}
+          </div>
+        </nav>
+      </div>
     );
   }
 }
