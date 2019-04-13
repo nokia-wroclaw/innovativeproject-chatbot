@@ -14,8 +14,11 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // request
     @NotBlank(message = "Question is required.")
     private String question;
+    private String questionIntent;
+    private double questionConfidence;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyy HH:mm")
     private Date date;
@@ -29,39 +32,35 @@ public class Request {
     // response
     private String responseText;
     private String responseType; // "" means text
-    private String intent;
+    private String responseRating;
 
-//    @ElementCollection
-//    @JoinTable(name="RESPONSE_PARAMS", joinColumns=@JoinColumn(name="ID"))
-//    @MapKeyColumn (name="VALUE")
-//    @Column(name="KEY")
     @ElementCollection
     @CollectionTable(name="RESPONSE_PARAMS")
     @MapKeyColumn(name="PARAMS")
     private Map<String, String> responseParams = new HashMap<>();
 
-    // conversation id
+    // conversation
     private String conversationId;
-
-    // response rating
-    private String responseRating;
+    private String conversationIntent;
 
     public Request() {
 
     }
 
-    public Request(Long id, @NotBlank(message = "Question is required.") String question, Date date, User user, String requestOwner, String responseText, String responseType, String intent, Map<String, String> responseParams, String conversationId, String responseRating) {
+    public Request(Long id, @NotBlank(message = "Question is required.") String question, String questionIntent, double questionConfidence, Date date, User user, String requestOwner, String responseText, String responseType, String responseRating, Map<String, String> responseParams, String conversationId, String conversationIntent) {
         this.id = id;
         this.question = question;
+        this.questionIntent = questionIntent;
+        this.questionConfidence = questionConfidence;
         this.date = date;
         this.user = user;
         this.requestOwner = requestOwner;
         this.responseText = responseText;
         this.responseType = responseType;
-        this.intent = intent;
+        this.responseRating = responseRating;
         this.responseParams = responseParams;
         this.conversationId = conversationId;
-        this.responseRating = responseRating;
+        this.conversationIntent = conversationIntent;
     }
 
     public Long getId() {
@@ -144,12 +143,28 @@ public class Request {
         this.responseRating = responseRating;
     }
 
-    public String getIntent() {
-        return intent;
+    public String getConversationIntent() {
+        return conversationIntent;
     }
 
-    public void setIntent(String intent) {
-        this.intent = intent;
+    public void setConversationIntent(String conversationIntent) {
+        this.conversationIntent = conversationIntent;
+    }
+
+    public String getQuestionIntent() {
+        return questionIntent;
+    }
+
+    public void setQuestionIntent(String questionIntent) {
+        this.questionIntent = questionIntent;
+    }
+
+    public double getQuestionConfidence() {
+        return questionConfidence;
+    }
+
+    public void setQuestionConfidence(double questionConfidence) {
+        this.questionConfidence = questionConfidence;
     }
 
     @PrePersist

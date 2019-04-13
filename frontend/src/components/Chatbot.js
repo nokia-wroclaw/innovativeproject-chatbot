@@ -12,7 +12,8 @@ class Chatbot extends Component {
     question: "",
     message: "",
     loading: false,
-    currentQuestion: ""
+    currentQuestion: "",
+    requestsLength: ""
   };
 
   onIdle = e => {
@@ -47,17 +48,24 @@ class Chatbot extends Component {
     this.scrollToBottom();
   }
 
-  onSubmit = e => {
+  onSubmit = length => e => {
     e.preventDefault();
-    this.setState({ currentQuestion: this.state.question });
-    this.getRequest();
+    const len = length + 1;
+    this.setState({
+      currentQuestion: this.state.question,
+      requestsLength: len
+    });
+    this.getRequest(len);
   };
 
-  getRequest = () => {
+  getRequest = (len) => {
     const newRequest = {
       question: this.state.question
     };
     this.props.createRequest(newRequest, this.props.history);
+    this.setState({
+      requestsLength: len
+    });
   };
 
   logout = e => {
@@ -71,14 +79,18 @@ class Chatbot extends Component {
 
   render() {
     const { requests } = this.props.request;
+    let length = Object.keys(requests).length;
+    let stateLength = this.state.requestsLength;
+    console.log("render: " + length);
+    console.log("state: " + stateLength);
 
     let temporaryQuestion;
-    if (this.state.currentQuestion === "") {
+    if (length >= this.state.requestsLength) {
       temporaryQuestion = "";
     } else {
       const tempRequest = {
         requestOwner: "User",
-        question: this.state.question,
+        question: this.state.currentQuestion,
         responseText: "",
         responseType: ""
       };
@@ -118,7 +130,7 @@ class Chatbot extends Component {
             {temporaryQuestion}
           </div>
           <div>
-            <form onSubmit={this.onSubmit} className="row submit-query">
+            <form onSubmit={this.onSubmit(length)} className="row submit-query">
               <input
                 ref={input => {
                   this.nameInput = input;
