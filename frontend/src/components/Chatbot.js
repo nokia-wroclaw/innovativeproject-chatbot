@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
-import { logout } from "../actions/securityActions";
+import { logout, getAvatar } from "../actions/securityActions";
 import PropTypes from "prop-types";
 import UserRequest from "./Chatbot/UserRequest";
 import BotResponse from "./Chatbot/BotResponse";
@@ -28,6 +28,11 @@ class Chatbot extends Component {
     // if not logged in redirect to login page
     if (!this.props.security.validToken) {
       window.location.href = "/login";
+    }
+
+    // set user avatar (if not set)
+    if (this.props.security.avatar === "") {
+      this.props.getAvatar();
     }
   }
 
@@ -58,7 +63,7 @@ class Chatbot extends Component {
     this.getRequest(len);
   };
 
-  getRequest = (len) => {
+  getRequest = len => {
     const newRequest = {
       question: this.state.question
     };
@@ -160,7 +165,8 @@ Chatbot.propTypes = {
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  getAvatar: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -171,5 +177,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getRequests, createRequest, logout }
+  { getRequests, createRequest, logout, getAvatar }
 )(Chatbot);

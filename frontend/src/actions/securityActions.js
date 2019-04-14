@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, GET_USER_AVATAR } from "./types";
 import { baseUrl } from "../config";
 import setJWTToken from "../securityUtils/setJWTToken";
 import jwt_decode from "jwt-decode";
@@ -52,4 +52,12 @@ export const logout = () => dispatch => {
     type: SET_CURRENT_USER,
     payload: {}
   })
+}
+
+export const getAvatar = () => async dispatch => {
+  const res = await axios.get(baseUrl + "/api/users/getAvatar");
+  dispatch({
+    type: GET_USER_AVATAR,
+    payload: res.data
+  });
 }

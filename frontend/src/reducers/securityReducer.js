@@ -1,8 +1,9 @@
-import { SET_CURRENT_USER } from "../actions/types";
+import { SET_CURRENT_USER, GET_USER_AVATAR } from "../actions/types";
 
 const initialState = {
   user: {},
-  validToken: false
+  validToken: false,
+  avatar: ""
 };
 
 const booleandActionPayload = payload => {
@@ -21,6 +22,11 @@ export default function(state = initialState, action) {
         validToken: booleandActionPayload(action.payload),
         user: action.payload
       };
+    case GET_USER_AVATAR:
+      return {
+        ...state,
+        avatar: action.payload
+      }
     default:
       return state;
   }

@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.xml.ws.Response;
 
+import java.security.Principal;
+import java.util.Map;
+
 import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
@@ -70,6 +73,21 @@ public class UserController {
 
         User newUser = userService.saveUser(user);
         return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/setAvatar")
+    public ResponseEntity<?> setUserAvatar(@RequestBody Map<String, String> image, Principal principal, BindingResult result) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null) return errorMap;
+
+        Map<String, String> response = userService.setUserAvatar(principal.getName(), image);
+        return new ResponseEntity<Map>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAvatar")
+    public String getUserRequests(Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return userService.getUserAvatar(currentUser.getUsername());
     }
 
 }

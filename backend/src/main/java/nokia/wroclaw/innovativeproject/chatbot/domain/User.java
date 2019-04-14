@@ -31,6 +31,8 @@ public class User implements UserDetails {
     @NotBlank(message = "Password field is required")
     private String password;
 
+    private String avatar;
+
     @Transient
     private String confirmPassword;
 
@@ -89,11 +91,12 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, Date created_At, Date updated_At, List<Request> requests, String currentConversationId) {
+    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String avatar, String confirmPassword, Date created_At, Date updated_At, List<Request> requests, String currentConversationId) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
         this.password = password;
+        this.avatar = avatar;
         this.confirmPassword = confirmPassword;
         this.created_At = created_At;
         this.updated_At = updated_At;
@@ -163,6 +166,14 @@ public class User implements UserDetails {
 
     public void setRequests(List<Request> requests) {
         this.requests = requests;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getCurrentConversationId() {

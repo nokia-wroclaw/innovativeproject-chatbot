@@ -1,6 +1,7 @@
 // security actions
 export const GET_ERRORS = "GET_ERRORS";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const GET_USER_AVATAR = "GET_USER_AVATAR";
 
 // request actions
 export const GET_REQUESTS = "GET_REQUESTS";

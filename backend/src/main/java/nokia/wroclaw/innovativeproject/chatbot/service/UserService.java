@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class UserService {
 
@@ -45,6 +48,29 @@ public class UserService {
         User user = userRepository.findByUsername(username);
         user.setCurrentConversationId(conversationId);
         userRepository.save(user);
+    }
+
+    public Map<String, String> setUserAvatar(String username, Map<String, String> image) {
+        User user = userRepository.findByUsername(username);
+        Map<String, String> response = new HashMap<>();
+
+        String base64Image = image.get("image");
+        if(base64Image == null) {
+            base64Image = "";
+            response.put("status", "Cannot upload image!");
+        } else {
+            response.put("status", "Image has been uploaded successfully!");
+        }
+
+        user.setAvatar(base64Image);
+        userRepository.save(user);
+
+        return response;
+    }
+
+    public String getUserAvatar(String username) {
+        User user = getUser(username);
+        return user.getAvatar();
     }
 
     // { User management stuff will be here }
