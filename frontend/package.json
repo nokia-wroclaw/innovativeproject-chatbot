@@ -13,6 +13,7 @@
     "materialize-css": "^1.0.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-file-picker": "0.0.6",
     "react-idle": "^3.0.0",
     "react-idle-timer": "^4.2.5",
     "react-materialize": "^3.0.5",

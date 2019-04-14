@@ -37,6 +37,14 @@ class Navbar extends Component {
             Chatbot
           </NavLink>
           <Divider />
+          <NavLink className="blue-text text-darken-4" to="/chatbot">
+            Dashboard
+          </NavLink>
+          <Divider />
+          <NavLink className="blue-text text-darken-4" to="/settings">
+            Settings
+          </NavLink>
+          <Divider />
           <NavLink
             className="blue-text text-darken-4"
             to="/logout"
@@ -44,6 +52,7 @@ class Navbar extends Component {
           >
             Logout
           </NavLink>
+          <Divider />
         </Dropdown>
       </ul>
     );
