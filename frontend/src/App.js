@@ -13,6 +13,7 @@ import jwt_decode from "jwt-decode";
 import setJWTToken from "./securityUtils/setJWTToken";
 import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityActions";
+import Dashboard from "./components/UserManagement/Dashboard";
 
 const jwtToken = localStorage.jwtToken;
 if (jwtToken) {
@@ -45,6 +46,7 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route path="/chatbot" component={Chatbot} />
               <Route path="/settings" component={Settings} />
+              <Route path="/dashboard" component={Dashboard} />
               {
                 // Private Routes
               }

@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -74,6 +76,19 @@ public class UserService {
     public String getUserAvatar(String username) {
         User user = getUser(username);
         return user.getAvatar();
+    }
+
+    public Map<Object, String> getAllUsernames(User currentUser) {
+        Map<Object, String> usernames = new HashMap<>();
+
+        // check if current user is admin & if user exists
+        if(currentUser != null) {
+            Iterable<User> allUsers = userRepository.findAll();
+            for(User user: allUsers) {
+                usernames.put(user.getUsername(), user.getUsername());
+            }
+        }
+        return usernames;
     }
 
     // { User management stuff will be here }

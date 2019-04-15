@@ -37,7 +37,7 @@ class Navbar extends Component {
             Chatbot
           </NavLink>
           <Divider />
-          <NavLink className="blue-text text-darken-4" to="/chatbot">
+          <NavLink className="blue-text text-darken-4" to="/dashboard">
             Dashboard
           </NavLink>
           <Divider />

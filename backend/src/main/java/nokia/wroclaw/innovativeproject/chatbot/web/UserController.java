@@ -1,5 +1,6 @@
 package nokia.wroclaw.innovativeproject.chatbot.web;
 
+import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.payload.JWTLoginSucessResponse;
 import nokia.wroclaw.innovativeproject.chatbot.payload.LoginRequest;
@@ -21,6 +22,8 @@ import javax.validation.Valid;
 import javax.xml.ws.Response;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.TOKEN_PREFIX;
@@ -88,6 +91,21 @@ public class UserController {
     public String getUserRequests(Principal principal) {
         User currentUser = userService.getUser(principal.getName());
         return userService.getUserAvatar(currentUser.getUsername());
+    }
+
+    @GetMapping("/getAllUsernames")
+    public ResponseEntity<?> getAllUsernames(Principal principal) {
+        User currentUser;
+        Map<Object, String> userList = new HashMap<>();
+
+        if (principal == null) {
+            userList.put("You do not have permission to see this information!", "error");
+        } else {
+            currentUser = userService.getUser(principal.getName());
+            userList = userService.getAllUsernames(currentUser);
+        }
+
+        return new ResponseEntity<Map>(userList, HttpStatus.OK);
     }
 
 }
