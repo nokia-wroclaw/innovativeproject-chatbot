@@ -9,7 +9,9 @@ import watsonAvatar from "../../assets/avatars/watson.png";
 
 class BotResponse extends Component {
   state = {
-    responseRating: ""
+    responseRating: "",
+    classButtonUp: "btn-floating btn blue",
+    classButtonDown: "btn-floating btn red"
   };
 
   handleBtnClick = id => {
@@ -20,6 +22,17 @@ class BotResponse extends Component {
       rating: ratingNumb
     };
     this.props.rateResponse(rating);
+    if(ratingNumb === 1){
+      this.setState({
+        classButtonUp: "btn-floating btn green",
+        classButtonDown: "btn-floating btn red"
+      })
+      } else{
+      this.setState({ 
+        classButtonUp: "btn-floating btn blue",
+        classButtonDown: "btn-floating btn green"
+      })
+    }
   };
 
   createMarkup = msg => {
@@ -62,18 +75,22 @@ class BotResponse extends Component {
           <div className="card grey lighten-3 text-wrap chat-left box-shadow">
             <div className="like-icons">
               <div className="row">
-                <div
-                  onClick={() => this.handleBtnClick("liked")}
-                  className="btn-floating btn blue"
+                <button
+                  onClick={(e) => {
+                    this.handleBtnClick("liked");
+                    e.preventDefault()
+                  }}
+                  className={this.state.classButtonUp}
+                  id={request.id}
                 >
                   <FontAwesomeIcon icon={faThumbsUp} />
-                </div>
-                <div
+                </button>
+                <button
                   onClick={() => this.handleBtnClick("disliked")}
-                  className="btn-floating btn red"
+                  className={this.state.classButtonDown}
                 >
                   <FontAwesomeIcon icon={faThumbsDown} />
-                </div>
+                </button>
               </div>
             </div>
             {avatar}
