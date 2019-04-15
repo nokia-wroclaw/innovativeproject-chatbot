@@ -31,9 +31,8 @@ class Chatbot extends Component {
     }
 
     // set user avatar (if not set)
-    if (this.props.security.avatar === "") {
-      this.props.getAvatar();
-    }
+    this.props.getAvatar();
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,9 +84,7 @@ class Chatbot extends Component {
   render() {
     const { requests } = this.props.request;
     let length = Object.keys(requests).length;
-    let stateLength = this.state.requestsLength;
-    console.log("render: " + length);
-    console.log("state: " + stateLength);
+    //let stateLength = this.state.requestsLength;
 
     let temporaryQuestion;
     if (length >= this.state.requestsLength) {

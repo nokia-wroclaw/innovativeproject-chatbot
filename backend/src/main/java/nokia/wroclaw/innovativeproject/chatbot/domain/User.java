@@ -31,6 +31,7 @@ public class User implements UserDetails {
     @NotBlank(message = "Password field is required")
     private String password;
 
+    @Column(columnDefinition = "TEXT")
     private String avatar;
 
     @Transient

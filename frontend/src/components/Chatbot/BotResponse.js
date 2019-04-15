@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { rateResponse } from "../../actions/requestActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import watsonAvatar from "../../assets/avatars/watson.png";
 
 class BotResponse extends Component {
   state = {
@@ -26,6 +27,12 @@ class BotResponse extends Component {
   };
 
   render() {
+    const avatar = (
+      <div className="avatar-bg">
+        <img src={watsonAvatar} alt="watson-avatar" className="avatar-image" />
+      </div>
+    );
+
     const { request } = this.props;
     const externalAPIResponse = request.responseType ? (
       <ExternalAPIResponse request={request} />
@@ -69,7 +76,10 @@ class BotResponse extends Component {
                 </div>
               </div>
             </div>
-            <div className="message-text"><div dangerouslySetInnerHTML={this.createMarkup(responseText)} /></div>
+            {avatar}
+            <div className="message-text">
+              <div dangerouslySetInnerHTML={this.createMarkup(responseText)} />
+            </div>
             <div>{externalAPIResponse}</div>
             <div className="message-date">{responseDate}</div>
           </div>

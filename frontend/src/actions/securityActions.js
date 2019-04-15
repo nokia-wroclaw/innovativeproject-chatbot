@@ -51,8 +51,8 @@ export const logout = () => dispatch => {
   dispatch({
     type: SET_CURRENT_USER,
     payload: {}
-  })
-}
+  });
+};
 
 export const getAvatar = () => async dispatch => {
   const res = await axios.get(baseUrl + "/api/users/getAvatar");
@@ -60,4 +60,20 @@ export const getAvatar = () => async dispatch => {
     type: GET_USER_AVATAR,
     payload: res.data
   });
-}
+};
+
+export const setAvatar = base64img => async dispatch => {
+  try {
+    // set new avatar and save it to store
+    const res = await axios.post(baseUrl + "/api/users/setAvatar", base64img);
+    dispatch({
+      type: GET_USER_AVATAR,
+      payload: res.data
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
+};

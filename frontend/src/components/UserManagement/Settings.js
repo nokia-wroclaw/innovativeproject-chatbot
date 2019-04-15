@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Button, Icon } from "react-materialize";
 import { ImagePicker } from "react-file-picker";
+import { setAvatar } from "../../actions/securityActions";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class Settings extends Component {
   state = {
@@ -10,7 +13,10 @@ class Settings extends Component {
   };
 
   handleBase64 = base64 => {
-    console.log(base64);
+    const avatarImg = {
+      image: base64
+    };
+    this.props.setAvatar(avatarImg);
     this.setState({
       showErrorMessage: false,
       errorMessage: "",
@@ -29,14 +35,20 @@ class Settings extends Component {
   render() {
     let errorMessage;
     if (this.state.showErrorMessage === true) {
-      errorMessage = <p className="red-text text-darken-4">{this.state.errorMessage}</p>;
+      errorMessage = (
+        <p className="red-text text-darken-4">{this.state.errorMessage}</p>
+      );
     } else {
       errorMessage = "";
     }
 
     let imageLoadedMessage;
-    if(this.state.imageLoadedSuccessfully === true) {
-        imageLoadedMessage = <p className="green-text text-darken-4">Image has been loaded successfully!</p>
+    if (this.state.imageLoadedSuccessfully === true) {
+      imageLoadedMessage = (
+        <p className="green-text text-darken-4">
+          Image has been loaded successfully!
+        </p>
+      );
     }
 
     return (
@@ -78,4 +90,17 @@ class Settings extends Component {
   }
 }
 
-export default Settings;
+Settings.propTypes = {
+  errors: PropTypes.object.isRequired,
+  setAvatar: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors,
+  security: state.security
+});
+
+export default connect(
+  mapStateToProps,
+  { setAvatar }
+)(Settings);

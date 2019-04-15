@@ -28,8 +28,10 @@ public class UserService {
             newUser.setUsername(newUser.getUsername());
 
             // Make sure that password and confirmPassword match
-
             // We don't persist or show the confirmPassword
+
+            // set default avatar;
+            newUser.setAvatar("");
 
             newUser.setConfirmPassword("");
             return userRepository.save(newUser);
@@ -55,13 +57,14 @@ public class UserService {
         Map<String, String> response = new HashMap<>();
 
         String base64Image = image.get("image");
-        if(base64Image == null) {
+        if (base64Image == null) {
             base64Image = "";
             response.put("status", "Cannot upload image!");
         } else {
             response.put("status", "Image has been uploaded successfully!");
         }
 
+        response.put("image", base64Image);
         user.setAvatar(base64Image);
         userRepository.save(user);
 
