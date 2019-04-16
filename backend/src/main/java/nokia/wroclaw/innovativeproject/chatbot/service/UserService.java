@@ -36,6 +36,9 @@ public class UserService {
             newUser.setAvatar("");
 
             newUser.setConfirmPassword("");
+
+            newUser.setIsAdmin(false);
+
             return userRepository.save(newUser);
 
         } catch (Exception e) {
@@ -82,15 +85,34 @@ public class UserService {
         Map<Object, String> usernames = new HashMap<>();
 
         // check if current user is admin & if user exists
-        if(currentUser != null) {
+        if ((currentUser != null) && (currentUser.getIsAdmin())) {
             Iterable<User> allUsers = userRepository.findAll();
-            for(User user: allUsers) {
+            for (User user : allUsers) {
                 usernames.put(user.getUsername(), user.getUsername());
             }
         }
         return usernames;
     }
 
-    // { User management stuff will be here }
+    public Map<String, String> giveAdminPermissions(User fromUser, Map<String, String> toUsername) {
+        Map<String, String> response = new HashMap<>();
+        User toUser;
 
+        if(fromUser.getIsAdmin()) {
+            toUser = userRepository.findByUsername(toUsername.get("username"));
+            if(toUser != null) {
+                toUser.setIsAdmin(true);
+                userRepository.save(toUser);
+                String message = "User " + toUser.getUsername() + " is now admin!";
+                response.put("status", message);
+                return response;
+            } else {
+                response.put("status", "Cannot find user with this username!");
+                return response;
+            }
+        }
+
+        response.put("status", "Only admin is able to change user's permissions!");
+        return response;
+    }
 }

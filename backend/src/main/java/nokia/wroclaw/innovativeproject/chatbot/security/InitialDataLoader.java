@@ -28,23 +28,31 @@ public class InitialDataLoader implements ApplicationListener<SpringApplicationE
     @Transactional
     public void onApplicationEvent(SpringApplicationEvent springApplicationEvent) {
 
-        if(alreadySetup || (userRepository.findByUsername("admin@gmail.com") != null))
-        {
+        String email = "admin@admin.com";
+        String fullName = "admin";
+        String password = "admin1";
+
+        if (alreadySetup || (userRepository.findByUsername(email) != null)) {
             return;
         }
 
+        // create new user
         User user = new User();
-        user.setUsername("admin@gmail.com");
-        user.setFullName("admin");
-        user.setPassword("admin1");
-        user.setConfirmPassword("admin1");
+        user.setUsername(email);
+        user.setFullName(fullName);
+        user.setPassword(password);
+        user.setConfirmPassword(password);
         user.setCreated_At(null);
         user.setUpdated_At(null);
         user.setRequests(null);
         user.setCurrentConversationId(null);
-        user.setIsAdmin(true);
 
         userService.saveUser(user);
+
+        // give admin permissions
+        User adminUser = userRepository.findByUsername(email);
+        adminUser.setIsAdmin(true);
+        userRepository.save(adminUser);
 
         alreadySetup = true;
     }

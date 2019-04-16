@@ -99,13 +99,29 @@ public class UserController {
         Map<Object, String> userList = new HashMap<>();
 
         if (principal == null) {
-            userList.put("You do not have permission to see this information!", "error");
+            userList.put("status", "You do not have permission to see this information!");
         } else {
             currentUser = userService.getUser(principal.getName());
             userList = userService.getAllUsernames(currentUser);
         }
 
         return new ResponseEntity<Map>(userList, HttpStatus.OK);
+    }
+
+    @PostMapping("/giveAdmin")
+    public ResponseEntity<?> giveAdminPermissions(@RequestBody Map<String, String> user, Principal principal) {
+        User fromUser;
+        Map<String, String> response = new HashMap<>();
+
+        if (principal == null) {
+            response.put("status", "You do not have permission to see this information!");
+            return new ResponseEntity<Map>(response, HttpStatus.OK);
+        } else {
+            fromUser = userService.getUser(principal.getName());
+            response = userService.giveAdminPermissions(fromUser, user);
+        }
+
+        return new ResponseEntity<Map>(response, HttpStatus.OK);
     }
 
 }

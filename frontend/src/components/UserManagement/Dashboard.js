@@ -9,7 +9,8 @@ class Dashboard extends Component {
   state = {
     usernames: {},
     selectedOption: null,
-    adminAdded: false
+    adminAdded: false,
+    adminAddedResponse: ""
   };
 
   componentDidMount() {
@@ -28,6 +29,23 @@ class Dashboard extends Component {
   };
 
   handleChange = selectedOption => {
+    const toUsername = selectedOption.value;
+    const toUser = {
+      username: toUsername
+    };
+    axios
+      .post(baseUrl + "/api/users/giveAdmin", toUser)
+      .then(response => {
+        this.setState({
+          adminAddedResponse: response.data.status
+        });
+      })
+      .catch(function(error) {
+        this.setState({
+          adminAddedResponse: error
+        });
+      });
+
     this.setState({ selectedOption });
     this.setState({
       adminAdded: true
@@ -37,7 +55,7 @@ class Dashboard extends Component {
   render() {
     let options = [];
     const names = this.state.usernames;
-    
+
     for (let name in names) {
       let newItem = {
         value: name,
@@ -49,7 +67,9 @@ class Dashboard extends Component {
     let adminAddedMessage;
     if (this.state.adminAdded === true && this.state.selectedOption != null) {
       adminAddedMessage = (
-        <p className="green-text text-darken-4">New admin has been added!</p>
+        <p className="green-text text-darken-4">
+          {this.state.adminAddedResponse}
+        </p>
       );
     }
 
