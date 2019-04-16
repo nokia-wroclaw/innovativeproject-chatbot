@@ -1,7 +1,6 @@
 package nokia.wroclaw.innovativeproject.chatbot.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ibm.watson.developer_cloud.assistant.v1.model.Context;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -36,6 +35,8 @@ public class User implements UserDetails {
 
     @Transient
     private String confirmPassword;
+
+    private boolean isAdmin;
 
     private Date created_At;
     private Date updated_At;
@@ -103,6 +104,20 @@ public class User implements UserDetails {
         this.updated_At = updated_At;
         this.requests = requests;
         this.currentConversationId = currentConversationId;
+        this.isAdmin = false;
+    }
+
+    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String confirmPassword, Date created_At, Date updated_At, List<Request> requests, String currentConversationId, boolean isAdmin) {
+        this.id = id;
+        this.username = username;
+        this.fullName = fullName;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.created_At = created_At;
+        this.updated_At = updated_At;
+        this.requests = requests;
+        this.currentConversationId = currentConversationId;
+        this.isAdmin = isAdmin;
     }
 
     public Long getId() {
@@ -184,4 +199,8 @@ public class User implements UserDetails {
     public void setCurrentConversationId(String currentConversationId) {
         this.currentConversationId = currentConversationId;
     }
+
+    public void setIsAdmin(boolean permission) { this.isAdmin = permission; }
+
+    public boolean getIsAdmin() { return this.isAdmin; }
 }
