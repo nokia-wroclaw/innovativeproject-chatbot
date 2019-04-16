@@ -2,6 +2,7 @@
 export const GET_ERRORS = "GET_ERRORS";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const GET_USER_AVATAR = "GET_USER_AVATAR";
+export const GET_IS_ADMIN = "GET_IS_ADMIN";
 
 // request actions
 export const GET_REQUESTS = "GET_REQUESTS";

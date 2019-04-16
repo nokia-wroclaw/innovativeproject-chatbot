@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER, GET_USER_AVATAR } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, GET_USER_AVATAR, GET_IS_ADMIN } from "./types";
 import { baseUrl } from "../config";
 import setJWTToken from "../securityUtils/setJWTToken";
 import jwt_decode from "jwt-decode";
@@ -76,4 +76,12 @@ export const setAvatar = base64img => async dispatch => {
       payload: error.response.data
     });
   }
+};
+
+export const getIsAdmin = () => async dispatch => {
+  const res = await axios.get(baseUrl + "/api/users/getIsAdmin");
+  dispatch({
+    type: GET_IS_ADMIN,
+    payload: res.data
+  });
 };

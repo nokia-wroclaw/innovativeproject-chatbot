@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER, GET_USER_AVATAR } from "../actions/types";
+import { SET_CURRENT_USER, GET_USER_AVATAR, GET_IS_ADMIN } from "../actions/types";
 
 const initialState = {
   user: {},
@@ -26,6 +26,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         avatar: action.payload
+      }
+      case GET_IS_ADMIN:
+      return {
+        ...state,
+        isAdmin: action.payload
       }
     default:
       return state;

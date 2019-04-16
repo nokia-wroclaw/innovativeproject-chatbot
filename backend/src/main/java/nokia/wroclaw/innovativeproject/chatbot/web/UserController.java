@@ -124,4 +124,10 @@ public class UserController {
         return new ResponseEntity<Map>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/getIsAdmin")
+    public boolean getIsAdmin(Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return userService.getIsAdmin(currentUser.getUsername());
+    }
+
 }

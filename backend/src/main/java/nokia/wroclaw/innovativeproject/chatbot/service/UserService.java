@@ -115,4 +115,9 @@ public class UserService {
         response.put("status", "Only admin is able to change user's permissions!");
         return response;
     }
+
+    public boolean getIsAdmin(String username) {
+        User user = getUser(username);
+        return user.getIsAdmin();
+    }
 }
