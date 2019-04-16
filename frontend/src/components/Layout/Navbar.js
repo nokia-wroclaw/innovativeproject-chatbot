@@ -6,6 +6,7 @@ import { logout } from "../../actions/securityActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import { Dropdown, Divider } from "react-materialize";
+import { Modal, Button } from 'react-materialize';
 
 class Navbar extends Component {
   logout = e => {
@@ -15,27 +16,39 @@ class Navbar extends Component {
 
   render() {
     const { validToken, user } = this.props.security;
-
+   
+   const trigger =
+       <div className="blue-text text-darken-4">
+          Chatbot
+       </div>
+    
     const userIsAuthenticated = (
       <ul className="right">
         <li>
           <NavLink to="/chatbot">
             <FontAwesomeIcon icon={faUser} />{" "}
-            {this.props.security.user.fullName}
+            {this.props.security.user.fullName} 
           </NavLink>
         </li>
         <Dropdown
           trigger={
             <li>
-              <NavLink to="/chatbot">
-                <FontAwesomeIcon icon={faBars} />{" "}
-              </NavLink>
+                <NavLink to="/chatbot">
+                  <FontAwesomeIcon icon={faBars} />{" "}
+                </NavLink>
             </li>
           }
         >
           <NavLink className="blue-text text-darken-4" to="/chatbot">
-            Chatbot
+            <Modal trigger={trigger}>
+              <p>
+                Do you want to create a new conversation with IBM Watson?
+              </p>
+              <Button>Yes</Button>
+            </Modal>
           </NavLink>
+
+          
           <Divider />
           <NavLink className="blue-text text-darken-4" to="/dashboard">
             Dashboard
