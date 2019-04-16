@@ -173,8 +173,8 @@ public class RequestController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        Map<String, String> map = requestService.setAnswerRating(rating);
-        return new ResponseEntity<Map>(map, HttpStatus.OK);
+        Request request = requestService.setAnswerRating(rating);
+        return new ResponseEntity<Request>(request, HttpStatus.OK);
     }
 
 }

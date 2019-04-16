@@ -22,17 +22,6 @@ class BotResponse extends Component {
       rating: ratingNumb
     };
     this.props.rateResponse(rating);
-    if(ratingNumb === 1){
-      this.setState({
-        classButtonUp: "btn-floating btn green",
-        classButtonDown: "btn-floating btn red"
-      })
-      } else{
-      this.setState({ 
-        classButtonUp: "btn-floating btn blue",
-        classButtonDown: "btn-floating btn green"
-      })
-    }
   };
 
   createMarkup = msg => {
@@ -54,6 +43,24 @@ class BotResponse extends Component {
     );
     const responseText = request.responseText;
     const responseDate = request.date;
+
+    // like button colors
+    let thumbUpClass = "";
+    let thumbDownClass = "";
+    console.log(request.responseRating)
+    if(request.responseRating === "0") {
+      // no rating
+      thumbUpClass = "btn-floating btn green";
+      thumbDownClass = "btn-floating btn red"
+    } else if (request.responseRating === "1") {
+      // thumb up
+      thumbUpClass = "btn-floating btn green";
+      thumbDownClass = "btn-floating btn grey"
+    } else {
+      // thumb down
+      thumbUpClass = "btn-floating btn grey";
+      thumbDownClass = "btn-floating btn red"
+    }
 
     let data;
     if (request.responseText === "") {
@@ -80,14 +87,14 @@ class BotResponse extends Component {
                     this.handleBtnClick("liked");
                     e.preventDefault()
                   }}
-                  className={this.state.classButtonUp}
+                  className={thumbUpClass}
                   id={request.id}
                 >
                   <FontAwesomeIcon icon={faThumbsUp} />
                 </button>
                 <button
                   onClick={() => this.handleBtnClick("disliked")}
-                  className={this.state.classButtonDown}
+                  className={thumbDownClass}
                 >
                   <FontAwesomeIcon icon={faThumbsDown} />
                 </button>

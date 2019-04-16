@@ -54,21 +54,17 @@ public class RequestService {
         return "";
     }
 
-    public Map<String, String> setAnswerRating(Map<String, String> rating) {
+    public Request setAnswerRating(Map<String, String> rating) {
         Iterable<Request> userRequests = findAllUserRequests(rating.get("username"));
-        Map<String, String> status = new HashMap<>();
-        Request ratedRequest;
+        Request ratedRequest = new Request();
         for(Request userRequest: userRequests) {
             if (userRequest.getId().equals(Long.parseLong(rating.get("id")))) {
                 ratedRequest = userRequest;
                 ratedRequest.setResponseRating(rating.get("rating"));
                 requestRepository.save(ratedRequest);
-                status.put("status", "ok");
-                return status;
             }
         }
 
-        status.put("status", "error");
-        return status;
+        return ratedRequest;
     }
 }
