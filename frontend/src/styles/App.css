@@ -70,14 +70,14 @@ i.icon-red {
     padding: 5px;
 }
 
-div.btn {
+button.btn {
     margin-left: 5px;
     font-size: 12px;
     -webkit-transition: font-size 0.2s; /* For Safari 3.1 to 6.0 */
     transition: font-size 0.2s;
 }
 
-div.btn:hover {
+button.btn:hover {
     font-size: 18px;
 }
 
@@ -116,3 +116,19 @@ div#wave {
 		transform: translateY(-15px);
 	}
 }
+
+.avatar-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.avatar-bg {
+    height: 40px;
+    width: 40px;
+    background-color: rgb(175, 175, 175);
+    border-radius: 50%;
+    display: inline-block;
+    -webkit-filter: drop-shadow(1px 1px 1px rgb(126, 126, 126));
+    filter: drop-shadow(1px 1px 1px rgb(126, 126, 126));
+  }

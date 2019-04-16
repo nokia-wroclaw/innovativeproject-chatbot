@@ -8,10 +8,12 @@ import Chatbot from "./components/Chatbot";
 import Landing from "./components/Layout/Landing";
 import Register from "./components/UserManagement/Register";
 import Login from "./components/UserManagement/Login";
+import Settings from "./components/UserManagement/Settings";
 import jwt_decode from "jwt-decode";
 import setJWTToken from "./securityUtils/setJWTToken";
 import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityActions";
+import Dashboard from "./components/UserManagement/Dashboard";
 
 const jwtToken = localStorage.jwtToken;
 if (jwtToken) {
@@ -21,9 +23,9 @@ if (jwtToken) {
     type: SET_CURRENT_USER,
     payload: decoded
   });
-  const currentTime = Date.now()/1000;
-  if(decoded.exp < currentTime) {
-    store.dispatch(logout())
+  const currentTime = Date.now() / 1000;
+  if (decoded.exp < currentTime) {
+    store.dispatch(logout());
     window.location.href = "/login";
   }
 }
@@ -43,6 +45,8 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route path="/chatbot" component={Chatbot} />
+              <Route path="/settings" component={Settings} />
+              <Route path="/dashboard" component={Dashboard} />
               {
                 // Private Routes
               }

@@ -1,5 +1,6 @@
 package nokia.wroclaw.innovativeproject.chatbot.web;
 
+import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.payload.JWTLoginSucessResponse;
 import nokia.wroclaw.innovativeproject.chatbot.payload.LoginRequest;
@@ -19,6 +20,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.xml.ws.Response;
+
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.TOKEN_PREFIX;
 
@@ -70,6 +76,58 @@ public class UserController {
 
         User newUser = userService.saveUser(user);
         return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/setAvatar")
+    public ResponseEntity<?> setUserAvatar(@RequestBody Map<String, String> image, Principal principal, BindingResult result) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null) return errorMap;
+
+        Map<String, String> response = userService.setUserAvatar(principal.getName(), image);
+        return new ResponseEntity<Map>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAvatar")
+    public String getUserRequests(Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return userService.getUserAvatar(currentUser.getUsername());
+    }
+
+    @GetMapping("/getAllUsernames")
+    public ResponseEntity<?> getAllUsernames(Principal principal) {
+        User currentUser;
+        Map<Object, String> userList = new HashMap<>();
+
+        if (principal == null) {
+            userList.put("status", "You do not have permission to see this information!");
+        } else {
+            currentUser = userService.getUser(principal.getName());
+            userList = userService.getAllUsernames(currentUser);
+        }
+
+        return new ResponseEntity<Map>(userList, HttpStatus.OK);
+    }
+
+    @PostMapping("/giveAdmin")
+    public ResponseEntity<?> giveAdminPermissions(@RequestBody Map<String, String> user, Principal principal) {
+        User fromUser;
+        Map<String, String> response = new HashMap<>();
+
+        if (principal == null) {
+            response.put("status", "You do not have permission to see this information!");
+            return new ResponseEntity<Map>(response, HttpStatus.OK);
+        } else {
+            fromUser = userService.getUser(principal.getName());
+            response = userService.giveAdminPermissions(fromUser, user);
+        }
+
+        return new ResponseEntity<Map>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/getIsAdmin")
+    public boolean getIsAdmin(Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return userService.getIsAdmin(currentUser.getUsername());
     }
 
 }

@@ -12,7 +12,6 @@ class ForecastComponent extends Component {
   render() {
     const forecast = this.props.externalData.data;
     const params = this.props.params;
-    console.log(forecast);
 
     let icon;
     if(forecast.main === "Clear") {

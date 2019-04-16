@@ -1,4 +1,4 @@
-import { GET_REQUESTS } from "../actions/types";
+import { GET_REQUESTS, SET_RESPONSE_RATING } from "../actions/types";
 
 const initialState = {
   requests: [],
@@ -11,6 +11,17 @@ export default function(state = initialState, action) {
       return {
         ...state,
         requests: action.payload
+      };
+    case SET_RESPONSE_RATING:
+      return {
+        ...state,
+        requests: state.requests.map(todo =>
+          todo.id === action.payload.id
+            ? // transform the one with a matching id
+              { ...todo, responseRating: action.payload.responseRating }
+            : // otherwise return original todo
+              todo
+        )
       };
     default:
       return state;

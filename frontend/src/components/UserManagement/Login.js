@@ -79,8 +79,6 @@ class Login extends Component {
                     />
                     <span
                       className="helper-text"
-                      data-error="wrong"
-                      data-success="right"
                     >
                       {errors.username && (
                         <div className="red-text text-darken-2">
@@ -102,8 +100,6 @@ class Login extends Component {
                     />
                     <span
                       className="helper-text"
-                      data-error="wrong"
-                      data-success="right"
                     >
                       {errors.password && (
                         <div className="red-text text-darken-2">
@@ -136,7 +132,7 @@ class Login extends Component {
 Login.propTypes = {
   login: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-  security: PropTypes.object.isRequired
+  security: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getRequests, createRequest } from "../actions/requestActions";
-import { logout } from "../actions/securityActions";
+import { logout, getAvatar } from "../actions/securityActions";
 import PropTypes from "prop-types";
 import UserRequest from "./Chatbot/UserRequest";
 import BotResponse from "./Chatbot/BotResponse";
@@ -12,7 +12,8 @@ class Chatbot extends Component {
     question: "",
     message: "",
     loading: false,
-    currentQuestion: ""
+    currentQuestion: "",
+    requestsLength: ""
   };
 
   onIdle = e => {
@@ -28,6 +29,10 @@ class Chatbot extends Component {
     if (!this.props.security.validToken) {
       window.location.href = "/login";
     }
+
+    // set user avatar (if not set)
+    this.props.getAvatar();
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,17 +52,24 @@ class Chatbot extends Component {
     this.scrollToBottom();
   }
 
-  onSubmit = e => {
+  onSubmit = length => e => {
     e.preventDefault();
-    this.setState({ currentQuestion: this.state.question });
-    this.getRequest();
+    const len = length + 1;
+    this.setState({
+      currentQuestion: this.state.question,
+      requestsLength: len
+    });
+    this.getRequest(len);
   };
 
-  getRequest = () => {
+  getRequest = len => {
     const newRequest = {
       question: this.state.question
     };
     this.props.createRequest(newRequest, this.props.history);
+    this.setState({
+      requestsLength: len
+    });
   };
 
   logout = e => {
@@ -71,14 +83,16 @@ class Chatbot extends Component {
 
   render() {
     const { requests } = this.props.request;
+    let length = Object.keys(requests).length;
+    //let stateLength = this.state.requestsLength;
 
     let temporaryQuestion;
-    if (this.state.currentQuestion === "") {
+    if (length >= this.state.requestsLength) {
       temporaryQuestion = "";
     } else {
       const tempRequest = {
         requestOwner: "User",
-        question: this.state.question,
+        question: this.state.currentQuestion,
         responseText: "",
         responseType: ""
       };
@@ -118,7 +132,7 @@ class Chatbot extends Component {
             {temporaryQuestion}
           </div>
           <div>
-            <form onSubmit={this.onSubmit} className="row submit-query">
+            <form onSubmit={this.onSubmit(length)} className="row submit-query">
               <input
                 ref={input => {
                   this.nameInput = input;
@@ -148,7 +162,8 @@ Chatbot.propTypes = {
   getRequests: PropTypes.func.isRequired,
   createRequest: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  getAvatar: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -159,5 +174,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getRequests, createRequest, logout }
+  { getRequests, createRequest, logout, getAvatar }
 )(Chatbot);

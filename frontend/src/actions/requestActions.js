@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, GET_REQUESTS } from "./types";
+import { GET_ERRORS, GET_REQUESTS, SET_RESPONSE_RATING } from "./types";
 import { baseUrl } from "../config";
 
 export const createRequest = (request, history) => async dispatch => {
@@ -27,13 +27,12 @@ export const getRequests = () => async dispatch => {
 };
 
 export const rateResponse = rating => async dispatch => {
-  console.log(rating)
   try {
     const res = await axios.post(baseUrl + "/api/request/rateAnswer", rating);
-    console.log(res)
+    //console.log(res.data)
     dispatch({
-      type: GET_ERRORS,
-      payload: {}
+      type: SET_RESPONSE_RATING,
+      payload: res.data
     });
   } catch (error) {
     dispatch({

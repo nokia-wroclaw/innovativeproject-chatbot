@@ -72,8 +72,6 @@ class Register extends Component {
                     />
                     <span
                       className="helper-text"
-                      data-error="wrong"
-                      data-success="right"
                     >
                       {errors.fullName && (
                         <div className="red-text text-darken-2">
@@ -96,8 +94,6 @@ class Register extends Component {
                     />
                     <span
                       className="helper-text"
-                      data-error="wrong"
-                      data-success="right"
                     >
                       {errors.username && (
                         <div className="red-text text-darken-2">
@@ -119,8 +115,6 @@ class Register extends Component {
                     />
                     <span
                       className="helper-text"
-                      data-error="wrong"
-                      data-success="right"
                     >
                       {errors.password && (
                         <div className="red-text text-darken-2">
@@ -142,8 +136,6 @@ class Register extends Component {
                     />
                     <span
                       className="helper-text"
-                      data-error="wrong"
-                      data-success="right"
                     >
                       {errors.confirmPassword && (
                         <div className="red-text text-darken-2">

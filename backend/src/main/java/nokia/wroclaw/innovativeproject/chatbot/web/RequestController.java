@@ -123,19 +123,26 @@ public class RequestController {
         }
         request.setResponseParams(map);
 
-        // set intent
+        // set question intent and confidence (one for request)
+        if(!response.getIntents().isEmpty()) {
+            request.setQuestionIntent(response.getIntents().get(0).getIntent());
+            request.setQuestionConfidence(response.getIntents().get(0).getConfidence());
+        }
+        else request.setQuestionIntent("");
+
+        // set conversation intent (one for context)
         String conversationIntent = requestService.getMessageIntent(principal.getName(), conversationContext.getConversationId());
         if(!conversationIntent.equals("")) // if this conversation had an intent
-            request.setIntent(conversationIntent); // set this intent on request
+            request.setConversationIntent(conversationIntent); // set this intent on request
         else { // if not
             if(!response.getIntents().isEmpty()) // if there is intent in current response
-                request.setIntent(response.getIntents().get(0).getIntent());
-            else request.setIntent(conversationIntent);
+                request.setConversationIntent(response.getIntents().get(0).getIntent());
+            else request.setConversationIntent(conversationIntent);
         }
 
         // get response type (if node exited)
         if(response.getContext().getSystem().containsKey("branch_exited")) {
-            request.setResponseType(request.getIntent());
+            request.setResponseType(request.getConversationIntent());
         } else {
             request.setResponseType("");
         }
@@ -166,8 +173,8 @@ public class RequestController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        Map<String, String> map = requestService.setAnswerRating(rating);
-        return new ResponseEntity<Map>(map, HttpStatus.OK);
+        Request request = requestService.setAnswerRating(rating);
+        return new ResponseEntity<Request>(request, HttpStatus.OK);
     }
 
 }
