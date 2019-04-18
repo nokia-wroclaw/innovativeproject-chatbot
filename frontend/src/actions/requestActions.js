@@ -18,12 +18,31 @@ export const createRequest = (request, history) => async dispatch => {
   }
 };
 
-export const getRequests = () => async dispatch => {
-  const res = await axios.get(baseUrl + "/api/request/userRequests");
-  dispatch({
-    type: GET_REQUESTS,
-    payload: res.data
-  });
+// export const getRequests = () => async dispatch => {
+//   const res = await axios.get(baseUrl + "/api/request/userRequests");
+//   dispatch({
+//     type: GET_REQUESTS,
+//     payload: res.data
+//   });
+// };
+
+export const getRequests = pages => async dispatch => {
+  try {
+    const res = await axios.post(
+      baseUrl + "/api/request/userRequestsPagination",
+      pages
+    );
+    
+    dispatch({
+      type: GET_REQUESTS,
+      payload: res.data
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
 };
 
 export const rateResponse = rating => async dispatch => {

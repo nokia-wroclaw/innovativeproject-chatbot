@@ -14,7 +14,8 @@ class Chatbot extends Component {
     message: "",
     loading: false,
     currentQuestion: "",
-    requestsLength: ""
+    requestsLength: "",
+    getRequestPages: 0
   };
 
   onIdle = e => {
@@ -22,8 +23,22 @@ class Chatbot extends Component {
     window.location.href = "/login";
   };
 
+  getUserRequestsPages = numbOfPages => {
+    let pages = {
+      page: numbOfPages
+    };
+    this.props.getRequests(pages);
+  };
+
+  loadMoreMessagesAction = () => {
+    this.setState((prevState, props) => ({
+      getRequestPages: prevState.getRequestPages + 1
+    }));
+    this.getUserRequestsPages(this.state.getRequestPages + 1);
+  };
+
   componentDidMount() {
-    this.props.getRequests();
+    this.getUserRequestsPages(this.state.getRequestPages);
     this.scrollToBottom();
     this.nameInput.focus();
     // if not logged in redirect to login page
@@ -49,10 +64,13 @@ class Chatbot extends Component {
   };
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    
   }
 
   onSubmit = length => e => {
+    this.setState({
+      getRequestPages: 0
+    });
     e.preventDefault();
     const len = length + 1;
     this.setState({
@@ -60,6 +78,7 @@ class Chatbot extends Component {
       requestsLength: len
     });
     this.getRequest(len);
+    this.scrollToBottom();
   };
 
   getRequest = len => {
@@ -125,9 +144,13 @@ class Chatbot extends Component {
           >
             <div className="col s12">
               <div className="center">
-              <Button flat waves="light">
-                load more messages...
-              </Button>
+                <Button
+                  flat
+                  waves="light"
+                  onClick={this.loadMoreMessagesAction}
+                >
+                  load more messages...
+                </Button>
               </div>
             </div>
             {requests.map(request => (
