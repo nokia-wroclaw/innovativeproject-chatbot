@@ -167,6 +167,12 @@ public class RequestController {
         return requestService.findAllUserRequests(currentUser.getUsername());
     }
 
+    @PostMapping("/userRequestsPagination")
+    public Iterable<Request> getNextUserRequestsPage(@RequestBody Map<String, String> pages, Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return requestService.findNextUserRequestsPage(currentUser.getUsername(), pages);
+    }
+
     @PostMapping("/rateAnswer")
     public ResponseEntity<?> rateAnswer(@RequestBody Map<String, String> rating, BindingResult result) {
         // check for errors
@@ -176,5 +182,7 @@ public class RequestController {
         Request request = requestService.setAnswerRating(rating);
         return new ResponseEntity<Request>(request, HttpStatus.OK);
     }
+
+
 
 }

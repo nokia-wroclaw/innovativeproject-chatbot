@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import UserRequest from "./Chatbot/UserRequest";
 import BotResponse from "./Chatbot/BotResponse";
 import IdleTimer from "react-idle-timer";
+import { Button } from "react-materialize";
 
 class Chatbot extends Component {
   state = {
@@ -32,7 +33,6 @@ class Chatbot extends Component {
 
     // set user avatar (if not set)
     this.props.getAvatar();
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -123,6 +123,13 @@ class Chatbot extends Component {
               this.messageList = div;
             }}
           >
+            <div className="col s12">
+              <div className="center">
+              <Button flat waves="light">
+                load more messages...
+              </Button>
+              </div>
+            </div>
             {requests.map(request => (
               <div key={request.id}>
                 <UserRequest request={request} />
