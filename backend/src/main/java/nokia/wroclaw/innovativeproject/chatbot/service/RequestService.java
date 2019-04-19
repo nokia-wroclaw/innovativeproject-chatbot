@@ -6,6 +6,9 @@ import nokia.wroclaw.innovativeproject.chatbot.exceptions.request.RequestIdExcep
 import nokia.wroclaw.innovativeproject.chatbot.repository.RequestRepository;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -38,8 +41,8 @@ public class RequestService {
     public Iterable<Request> findAllUserRequests(String username) {
         Iterable<Request> allRequests = requestRepository.findAll();
         List<Request> userRequests = new ArrayList<>();
-        for(Request request: allRequests) {
-            if(request.getUser().getUsername().equals(username))
+        for (Request request : allRequests) {
+            if (request.getUser().getUsername().equals(username))
                 userRequests.add(request);
         }
         return userRequests;
@@ -47,9 +50,9 @@ public class RequestService {
 
     public String getMessageIntent(String username, String conversationId) {
         Iterable<Request> userRequests = findAllUserRequests(username);
-        for(Request userRequest: userRequests) {
-            if((userRequest.getConversationId().equals(conversationId)) && (!userRequest.getConversationIntent().equals("")))
-                    return userRequest.getConversationIntent();
+        for (Request userRequest : userRequests) {
+            if ((userRequest.getConversationId().equals(conversationId)) && (!userRequest.getConversationIntent().equals("")))
+                return userRequest.getConversationIntent();
         }
         return "";
     }
@@ -57,7 +60,7 @@ public class RequestService {
     public Request setAnswerRating(Map<String, String> rating) {
         Iterable<Request> userRequests = findAllUserRequests(rating.get("username"));
         Request ratedRequest = new Request();
-        for(Request userRequest: userRequests) {
+        for (Request userRequest : userRequests) {
             if (userRequest.getId().equals(Long.parseLong(rating.get("id")))) {
                 ratedRequest = userRequest;
                 ratedRequest.setResponseRating(rating.get("rating"));
@@ -66,5 +69,21 @@ public class RequestService {
         }
 
         return ratedRequest;
+    }
+
+
+    public Iterable<Request> findNextUserRequestsPage(String username, Map<String, String> pages) {
+        int pageSize = 3;
+        int pageNumber = Integer.parseInt(pages.get("page"));
+
+        List<Request> requests = new ArrayList<>();
+        for(int i=pageNumber; i>=0; i--) {
+            Pageable page = PageRequest.of(i, pageSize, Sort.by("id").descending());
+            List<Request> requestPage = requestRepository.findAllByRequestOwner(username, page);
+            Collections.reverse(requestPage);
+            requests.addAll(requestPage);
+        }
+
+        return requests;
     }
 }

@@ -126,8 +126,11 @@ public class UserController {
 
     @GetMapping("/getIsAdmin")
     public boolean getIsAdmin(Principal principal) {
-        User currentUser = userService.getUser(principal.getName());
-        return userService.getIsAdmin(currentUser.getUsername());
+        if(principal != null) {
+            User currentUser = userService.getUser(principal.getName());
+            return userService.getIsAdmin(currentUser.getUsername());
+        }
+        return false;
     }
 
 }
