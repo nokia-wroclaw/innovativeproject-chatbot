@@ -1,4 +1,8 @@
-import { GET_REQUESTS, SET_RESPONSE_RATING } from "../actions/types";
+import {
+  GET_REQUESTS,
+  SET_RESPONSE_RATING,
+  APPEND_TEMP_REQUEST
+} from "../actions/types";
 
 const initialState = {
   requests: [],
@@ -22,6 +26,11 @@ export default function(state = initialState, action) {
             : // otherwise return original todo
               todo
         )
+      };
+    case APPEND_TEMP_REQUEST:
+      return {
+        ...state,
+        requests: [...state.requests, action.payload]
       };
     default:
       return state;

@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getRequests, createRequest } from "../actions/requestActions";
+import {
+  getRequests,
+  createRequest,
+  addTempRequest
+} from "../actions/requestActions";
 import { logout, getAvatar } from "../actions/securityActions";
 import PropTypes from "prop-types";
 import UserRequest from "./Chatbot/UserRequest";
@@ -12,9 +16,6 @@ class Chatbot extends Component {
   state = {
     question: "",
     message: "",
-    loading: false,
-    currentQuestion: "",
-    requestsLength: "",
     getRequestPages: 0
   };
 
@@ -45,7 +46,6 @@ class Chatbot extends Component {
     if (!this.props.security.validToken) {
       window.location.href = "/login";
     }
-
     // set user avatar (if not set)
     this.props.getAvatar();
   }
@@ -56,39 +56,36 @@ class Chatbot extends Component {
     }
   }
 
-  scrollToBottom = () => {
-    const scrollHeight = this.messageList.scrollHeight;
-    const height = this.messageList.clientHeight;
-    const maxScrollTop = scrollHeight - height;
-    this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-  };
-
   componentDidUpdate() {
-    
+    this.scrollToBottom();
   }
 
+  scrollToBottom = () => {
+    if (this.state.getRequestPages === 0) {
+      const scrollHeight = this.messageList.scrollHeight;
+      const height = this.messageList.clientHeight;
+      const maxScrollTop = scrollHeight - height;
+      this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
+  };
+
   onSubmit = length => e => {
+    e.preventDefault();
+
+    // save temp question in redux store
+    this.props.addTempRequest(this.state.question);
+
+    // set default number of pages to 0
     this.setState({
       getRequestPages: 0
     });
-    e.preventDefault();
-    const len = length + 1;
-    this.setState({
-      currentQuestion: this.state.question,
-      requestsLength: len
-    });
-    this.getRequest(len);
-    this.scrollToBottom();
-  };
 
-  getRequest = len => {
+    // get response from backend
     const newRequest = {
       question: this.state.question
     };
     this.props.createRequest(newRequest, this.props.history);
-    this.setState({
-      requestsLength: len
-    });
+    this.scrollToBottom();
   };
 
   logout = e => {
@@ -103,25 +100,6 @@ class Chatbot extends Component {
   render() {
     const { requests } = this.props.request;
     let length = Object.keys(requests).length;
-    //let stateLength = this.state.requestsLength;
-
-    let temporaryQuestion;
-    if (length >= this.state.requestsLength) {
-      temporaryQuestion = "";
-    } else {
-      const tempRequest = {
-        requestOwner: "User",
-        question: this.state.currentQuestion,
-        responseText: "",
-        responseType: ""
-      };
-      temporaryQuestion = (
-        <div>
-          <UserRequest key={"temp"} request={tempRequest} />
-          <BotResponse key={"tempbot"} request={tempRequest} />
-        </div>
-      );
-    }
 
     return (
       <div>
@@ -159,7 +137,6 @@ class Chatbot extends Component {
                 <BotResponse request={request} />
               </div>
             ))}
-            {temporaryQuestion}
           </div>
           <div>
             <form onSubmit={this.onSubmit(length)} className="row submit-query">
@@ -193,7 +170,8 @@ Chatbot.propTypes = {
   createRequest: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
-  getAvatar: PropTypes.func.isRequired
+  getAvatar: PropTypes.func.isRequired,
+  addTempRequest: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -204,5 +182,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getRequests, createRequest, logout, getAvatar }
+  { getRequests, createRequest, logout, getAvatar, addTempRequest }
 )(Chatbot);
