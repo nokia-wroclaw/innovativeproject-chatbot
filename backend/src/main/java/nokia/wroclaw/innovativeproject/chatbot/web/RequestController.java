@@ -183,6 +183,10 @@ public class RequestController {
         return new ResponseEntity<Request>(request, HttpStatus.OK);
     }
 
-
+    @PostMapping("/getRatedRequests")
+    public Iterable<Request> getNegativeRatedRequests(@RequestBody Map<String, String> rating, Principal principal) {
+        User currentUser = userService.getUser(principal.getName());
+        return requestService.findRatedRequests(currentUser, rating);
+    }
 
 }

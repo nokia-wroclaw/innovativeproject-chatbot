@@ -132,3 +132,16 @@ div#wave {
     -webkit-filter: drop-shadow(1px 1px 1px rgb(126, 126, 126));
     filter: drop-shadow(1px 1px 1px rgb(126, 126, 126));
   }
+
+  .tabs .tab a:hover, .tabs .tab a.active {
+    background-color: transparent;
+    color: #0d47a1;
+}
+
+.tabs .tab a {
+    color: #0d47a1;
+}
+
+.tabs .indicator {
+    background-color: #0d47a1;
+}

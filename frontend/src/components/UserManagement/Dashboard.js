@@ -4,20 +4,44 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { baseUrl } from "../../config";
 import Select from "react-select";
+import { Table, Tabs, Tab } from "react-materialize";
 
 class Dashboard extends Component {
   state = {
     usernames: {},
     selectedOption: null,
     adminAdded: false,
-    adminAddedResponse: ""
+    adminAddedResponse: "",
+    negativeRatedResponses: [],
+    positiveRatedResponses: []
   };
 
   componentDidMount() {
+    // get user list
     axios
       .get(baseUrl + "/api/users/getAllUsernames")
       .then(response => {
         this.setState({ usernames: response.data });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    // get negative & positive rated responses
+    const posRating = { rating: "1" };
+    const negRating = { rating: "-1" };
+    axios
+      .post(baseUrl + "/api/request/getRatedRequests", posRating)
+      .then(response => {
+        this.setState({ positiveRatedResponses: response.data });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    axios
+      .post(baseUrl + "/api/request/getRatedRequests", negRating)
+      .then(response => {
+        this.setState({ negativeRatedResponses: response.data });
       })
       .catch(function(error) {
         console.log(error);
@@ -96,8 +120,63 @@ class Dashboard extends Component {
               </div>
             </div>
           </div>
-          <br />
-          <br />
+          <div className="container">
+            <div className="row center">
+              <h5 className="header col s12 light">
+                Recent negative rated responses
+              </h5>
+              <div>
+                <div>
+                  <Tabs className="tab-demo z-depth-1">
+                    <Tab title="Negative rated">
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Request ID</th>
+                            <th data-field="username">User</th>
+                            <th data-field="query">Query</th>
+                            <th data-field="intent">Intent</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.negativeRatedResponses.map(request => (
+                            <tr key={request.id}>
+                              <td>{request.id}</td>
+                              <td>{request.requestOwner}</td>
+                              <td>{request.question}</td>
+                              <td>{request.questionIntent}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </Tab>
+                    <Tab title="Positive rated" active>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th data-field="id">Request ID</th>
+                            <th data-field="username">User</th>
+                            <th data-field="query">Query</th>
+                            <th data-field="intent">Intent</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.positiveRatedResponses.map(request => (
+                            <tr key={request.id}>
+                              <td>{request.id}</td>
+                              <td>{request.requestOwner}</td>
+                              <td>{request.question}</td>
+                              <td>{request.questionIntent}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </Tab>
+                  </Tabs>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
