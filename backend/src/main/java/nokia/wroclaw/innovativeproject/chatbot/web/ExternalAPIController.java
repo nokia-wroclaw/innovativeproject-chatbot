@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.IOException;
 import java.util.Map;
 
 
@@ -34,5 +35,16 @@ public class ExternalAPIController {
 
         return new ResponseEntity<Map>(forecast, HttpStatus.OK);
     }
+
+//    @PostMapping("/weather")
+//    public ResponseEntity<?> getMeme(@RequestBody Map<String, String> params, BindingResult result) throws IOException {
+//        // check for errors
+//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+//        if (errorMap != null) return errorMap;
+//
+//        Map<String, String> meme = externalAPIService.getMemeFromApi(params);
+//
+//        return new ResponseEntity<Map>(meme, HttpStatus.OK);
+//    }
 
 }
