@@ -76,44 +76,6 @@ public class ExternalAPIService {
 
         return map;
     }
-
-//    public Map<String, String> getMemeFromApi(Map<String, String> params) throws IOException {
-//        Map<String, String> response = new HashMap<>();
-//        String topText = params.get("topText");
-//        String bottomText = params.get("bottomText");
-//
-//        if(topText != null && bottomText != null) {
-//            StringBuilder getParam = new StringBuilder();
-//            getParam
-//                    .append("https://ronreiter-meme-generator.p.rapidapi.com/meme?font=Impact&font_size=50&meme=Condescending-Wonka&top=")
-//                    .append(topText)
-//                    .append("&bottom=")
-//                    .append(bottomText);
-//            String getParamStr = getParam.toString().replace(" ", "+");
-//
-//            URL url = new URL(getParamStr);
-//            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//            con.setRequestMethod("GET");
-//            con.setRequestProperty("X-RapidAPI-Host", "ronreiter-meme-generator.p.rapidapi.com");
-//            con.setRequestProperty("X-RapidAPI-Key", "a081a965a4mshf1c0e056cc36ca2p10ab90jsncdd6144f1f95");
-//
-//            int status = con.getResponseCode();
-//
-//            BufferedReader in = new BufferedReader(
-//                    new InputStreamReader(con.getInputStream()));
-//            String inputLine;
-//            StringBuffer content = new StringBuffer();
-//            while ((inputLine = in.readLine()) != null) {
-//                content.append(inputLine);
-//            }
-//            in.close();
-//            con.disconnect();
-//            String res = content.toString();
-//            System.out.println(res);
-//        }
-//
-//        return response;
-//    }z
 }
 
 // additional Weather API keys:

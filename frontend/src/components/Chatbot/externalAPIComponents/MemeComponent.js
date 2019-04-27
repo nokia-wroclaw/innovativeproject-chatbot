@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "../../styles/MemeComponent.css";
+import ModalImage from "react-modal-image";
+
 class MemeComponent extends Component {
   state = {
     topText: "",
@@ -20,7 +22,10 @@ class MemeComponent extends Component {
     let bText = this.props.params.bottom_text;
     bText = bText.replace(" ", "+");
     let url =
-      "https://ronreiter-meme-generator.p.rapidapi.com/meme?font=Impact&font_size=50&meme=Condescending-Wonka&top=" + tText + "&bottom=" + bText;
+      "https://ronreiter-meme-generator.p.rapidapi.com/meme?font=Impact&font_size=50&meme=Condescending-Wonka&top=" +
+      tText +
+      "&bottom=" +
+      bText;
 
     let config = {
       headers: {
@@ -35,7 +40,7 @@ class MemeComponent extends Component {
       .then(response => response.blob())
       .then(images => {
         outside = URL.createObjectURL(images);
-        this.setState({responseImg: outside})
+        this.setState({ responseImg: outside });
       });
   }
   render() {
@@ -44,7 +49,7 @@ class MemeComponent extends Component {
     return (
       <div>
         <div className="meme">
-          <img src={imgdata} alt="" />
+          <ModalImage small={imgdata} large={imgdata} alt="Created meme!" />
         </div>
       </div>
     );
