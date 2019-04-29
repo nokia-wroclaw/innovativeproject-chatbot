@@ -17,4 +17,6 @@ public interface RequestRepository extends PagingAndSortingRepository<Request, L
 
     List<Request> findAllByRequestOwner(String requestOwner, Pageable pageable);
 
+    List<Request> findAllByResponseRating(String responseRating);
+
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <link
+    href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/start/jquery-ui.css"
+    rel="stylesheet"
+  />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+  <script>
+    $(function() {
+      $(".resizable").resizable({
+        animate: true,
+        animateEasing: "swing",
+        animateDuration: 500
+      });
+    });
+  </script>
+
+  <style>
+    .ui-resizable-helper {
+      border: 1px dotted gray;
+    }
+    .resizable {
+      display: block;
+      width: 400px;
+      height: 400px;
+      border: 2px solid gray;
+      overflow: hidden;
+      position: relative;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <body>
+    <h2>Chatbot Iframe</h2>
+    <p>This is an example of embedding chatbot in iframe:</p>
+    <div class="resizable">
+      <iframe
+        src="http://www.localhost:3000/"
+        style="width:100%; height:100%;"
+      ></iframe>
+    </div>
+  </body>
+</html>

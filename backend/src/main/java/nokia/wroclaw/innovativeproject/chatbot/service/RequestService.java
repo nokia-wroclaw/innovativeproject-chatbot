@@ -86,4 +86,13 @@ public class RequestService {
 
         return requests;
     }
+
+    public Iterable<Request> findRatedRequests(User user, Map<String, String> rating) {
+        String ratingNumber = rating.get("rating");
+
+        if(user.getIsAdmin() && (ratingNumber != null)) {
+            return requestRepository.findAllByResponseRating(ratingNumber);
+        }
+        return new ArrayList<Request>();
+    }
 }
