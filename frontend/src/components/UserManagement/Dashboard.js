@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { baseUrl } from "../../config";
 import Select from "react-select";
-import { Table, Tabs, Tab } from "react-materialize";
+import { Table, Tabs, Tab, Button, Icon } from "react-materialize";
 
 class Dashboard extends Component {
   state = {
@@ -13,7 +13,8 @@ class Dashboard extends Component {
     adminAdded: false,
     adminAddedResponse: "",
     negativeRatedResponses: [],
-    positiveRatedResponses: []
+    positiveRatedResponses: [],
+    backupFile: ""
   };
 
   componentDidMount() {
@@ -52,6 +53,21 @@ class Dashboard extends Component {
     console.log(item);
   };
 
+  downloadBackup = () => {
+    axios({
+      url: baseUrl + "/api/request/getBackupFile",
+      method: "GET",
+      responseType: "blob" // important
+    }).then(response => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.json");
+      document.body.appendChild(link);
+      link.click();
+    });
+  };
+
   handleChange = selectedOption => {
     const toUsername = selectedOption.value;
     const toUser = {
@@ -77,6 +93,7 @@ class Dashboard extends Component {
   };
 
   render() {
+    console.log(this.state.backupFile);
     let options = [];
     const names = this.state.usernames;
 
@@ -105,6 +122,21 @@ class Dashboard extends Component {
           <h1 className="header center blue-text text-darken-4">
             Admin Dashboard
           </h1>
+          <div className="container">
+            <div className="row center">
+              <h5 className="header col s12 light">Download backup file.</h5>
+              <div>
+                <Button
+                  waves="light"
+                  className="blue darken-4"
+                  onClick={this.downloadBackup}
+                >
+                  Download data
+                  <Icon right>cloud_upload</Icon>
+                </Button>
+              </div>
+            </div>
+          </div>
           <div className="container">
             <div className="row center">
               <h5 className="header col s12 light">Add admin rights.</h5>
