@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import UserRequest from "./Chatbot/UserRequest";
 import BotResponse from "./Chatbot/BotResponse";
 import IdleTimer from "react-idle-timer";
-import { Button } from "react-materialize";
 
 class Chatbot extends Component {
   state = {
@@ -69,6 +68,13 @@ class Chatbot extends Component {
     }
   };
 
+  LoadMoreMessages = () => {
+    if(this.messageList.scrollTop === 0)
+    {
+      this.loadMoreMessagesAction();
+    }
+  }
+
   onSubmit = length => e => {
     e.preventDefault();
 
@@ -116,21 +122,11 @@ class Chatbot extends Component {
           <h4 className="center">Chatbot</h4>
           <div
             className="chat-box grey lighten-2 MessageList"
+            onScroll={this.LoadMoreMessages}
             ref={div => {
               this.messageList = div;
             }}
           >
-            <div className="col s12">
-              <div className="center">
-                <Button
-                  flat
-                  waves="light"
-                  onClick={this.loadMoreMessagesAction}
-                >
-                  load more messages...
-                </Button>
-              </div>
-            </div>
             {requests.map(request => (
               <div key={request.id}>
                 <UserRequest request={request} />
