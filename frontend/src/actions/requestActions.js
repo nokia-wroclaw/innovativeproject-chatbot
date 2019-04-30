@@ -5,6 +5,7 @@ import { baseUrl } from "../config";
 export const createRequest = (request, history) => async dispatch => {
   try {
     await axios.post(baseUrl + "/api/request", request);
+    console.log('udaloo sie');
     history.push("/login");
     dispatch({
       type: GET_ERRORS,
