@@ -145,3 +145,25 @@ div#wave {
 .tabs .indicator {
     background-color: #0d47a1;
 }
+
+.mover {
+    margin: 0 auto;
+    width: 20px;
+    height: 20px;
+    background: blue;
+    border-radius: 50%;
+    animation: move 0.5s infinite ease-in-out;
+  }
+  
+  @keyframes move {
+    20%, 100% {
+      opacity: 1;
+      transform: translate(100px, 0);
+    }
+    0% {
+      opacity: 1;
+    }
+    10% {
+      opacity: 0;
+    }
+  }
