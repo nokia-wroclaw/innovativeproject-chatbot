@@ -44,6 +44,13 @@ export const login = LoginRequest => async dispatch => {
       payload: error.response.data
     });
   }
+
+  // set admin status
+  const res = await axios.get(baseUrl + "/api/users/getIsAdmin");
+  dispatch({
+    type: GET_IS_ADMIN,
+    payload: res.data
+  });
 };
 
 export const logout = () => dispatch => {

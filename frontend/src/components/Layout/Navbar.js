@@ -20,11 +20,12 @@ class Navbar extends Component {
 
   render() {
     const { validToken, user } = this.props.security;
+    const isAdmin = this.props.security.isAdmin;
 
     const trigger = <div className="blue-text text-darken-4">New Context</div>;
 
     let dropdownLinks;
-    if (this.props.security.isAdmin) {
+    if (isAdmin) {
       dropdownLinks = (
         <Dropdown
           trigger={
