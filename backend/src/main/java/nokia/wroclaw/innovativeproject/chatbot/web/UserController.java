@@ -7,6 +7,10 @@ import nokia.wroclaw.innovativeproject.chatbot.payload.LoginRequest;
 import nokia.wroclaw.innovativeproject.chatbot.security.JwtTokenProvider;
 import nokia.wroclaw.innovativeproject.chatbot.service.MapValidationErrorService;
 import nokia.wroclaw.innovativeproject.chatbot.service.UserService;
+import nokia.wroclaw.innovativeproject.chatbot.util.LoggerUtil;
+import nokia.wroclaw.innovativeproject.chatbot.util.loggers.PermissionLogger;
+import nokia.wroclaw.innovativeproject.chatbot.util.loggers.RequestLogger;
+import nokia.wroclaw.innovativeproject.chatbot.util.loggers.UserLogger;
 import nokia.wroclaw.innovativeproject.chatbot.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +22,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.xml.ws.Response;
 
+import java.io.*;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.TOKEN_PREFIX;
 
@@ -48,6 +54,9 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    private LoggerUtil logger = new LoggerUtil("users.txt");
+    private DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -63,6 +72,9 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
 
+        // log action
+        logger.log(new UserLogger(dateFormat.format(new Date()), "INFO", "Login", loginRequest.getUsername()));
+
         return ResponseEntity.ok(new JWTLoginSucessResponse(true, jwt));
     }
 
@@ -75,6 +87,10 @@ public class UserController {
         if(errorMap != null) return errorMap;
 
         User newUser = userService.saveUser(user);
+
+        // log action
+        logger.log(new UserLogger(dateFormat.format(new Date()), "INFO", "Register", user.getUsername()));
+
         return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
     }
 
@@ -121,6 +137,9 @@ public class UserController {
             response = userService.giveAdminPermissions(fromUser, user);
         }
 
+        // log action
+        logger.log(new PermissionLogger(dateFormat.format(new Date()), "INFO", "Add Admin Permissions", principal.getName(), user.get("username")));
+
         return new ResponseEntity<Map>(response, HttpStatus.OK);
     }
 
@@ -131,6 +150,32 @@ public class UserController {
             return userService.getIsAdmin(currentUser.getUsername());
         }
         return false;
+    }
+
+    @RequestMapping(value = "/getBackupFile", method = RequestMethod.GET)
+    public void getBackupFile(HttpServletResponse response) {
+        try {
+            // get file as InputStream
+            InputStream is = new FileInputStream("./logs/users.txt");
+
+            // at JSON array characters
+            String beginning = "[";
+            String end = "]";
+            List<InputStream> streams = Arrays.asList(
+                    new ByteArrayInputStream(beginning.getBytes()),
+                    is,
+                    new ByteArrayInputStream(end.getBytes()));
+            InputStream modified = new SequenceInputStream(Collections.enumeration(streams));
+
+            // copy it to response's OutputStream
+            org.apache.commons.io.IOUtils.copy(modified, response.getOutputStream());
+            response.setContentType("application/json");
+            response.flushBuffer();
+        } catch (IOException ex) {
+            logger.log(new RequestLogger(dateFormat.format(new Date()), "INFO", "Error writing file to output stream.", null, null));
+            throw new RuntimeException("IOError writing file to output stream");
+        }
+
     }
 
 }
