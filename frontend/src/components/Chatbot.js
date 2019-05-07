@@ -71,11 +71,12 @@ class Chatbot extends Component {
   LoadMoreMessages = () => {
     if(this.messageList.scrollTop === 0){
       var element = document.getElementById("loader");
-      element.classList.add("mover");
+      element.classList.add("spinner");
       this.loadMoreMessagesAction();
       setTimeout(function() {
-        element.classList.remove("mover");
+        element.classList.remove("spinner");
     }, 500);
+    this.messageList.scrollTop = 1;
     }
   }
 
@@ -131,7 +132,7 @@ class Chatbot extends Component {
               this.messageList = div;
             }}
           >
-            <div id="loader"></div>
+            <div id="loader"><div></div><div></div><div></div><div></div></div>
             {requests.map(request => (
               <div key={request.id}>
                 <UserRequest request={request} />
