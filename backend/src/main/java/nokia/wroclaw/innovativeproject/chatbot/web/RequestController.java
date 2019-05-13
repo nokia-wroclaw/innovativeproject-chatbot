@@ -181,7 +181,7 @@ public class RequestController {
     @PostMapping("/userRequestsPagination")
     public Iterable<Request> getNextUserRequestsPage(@RequestBody Map<String, String> pages, Principal principal) {
         User currentUser = userService.getUser(principal.getName());
-        return requestService.findNextUserRequestsPage(currentUser.getUsername(), pages);
+        return requestService.findNextUserRequestsPage(currentUser.getUsername(), pages, currentUser.getLastMessageId());
     }
 
     @PostMapping("/rateAnswer")

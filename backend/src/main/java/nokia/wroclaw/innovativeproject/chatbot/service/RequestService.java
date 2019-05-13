@@ -72,14 +72,17 @@ public class RequestService {
     }
 
 
-    public Iterable<Request> findNextUserRequestsPage(String username, Map<String, String> pages) {
+    public Iterable<Request> findNextUserRequestsPage(String username, Map<String, String> pages, Long lastMessageId) {
         int pageSize = 3;
         int pageNumber = Integer.parseInt(pages.get("page"));
+
+        if(lastMessageId == null)
+            lastMessageId = Long.valueOf(-1);
 
         List<Request> requests = new ArrayList<>();
         for(int i=pageNumber; i>=0; i--) {
             Pageable page = PageRequest.of(i, pageSize, Sort.by("id").descending());
-            List<Request> requestPage = requestRepository.findAllByRequestOwner(username, page);
+            List<Request> requestPage = requestRepository.findAllByRequestOwnerAndIdGreaterThan(username, page, lastMessageId);
             Collections.reverse(requestPage);
             requests.addAll(requestPage);
         }

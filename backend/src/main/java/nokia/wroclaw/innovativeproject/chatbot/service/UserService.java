@@ -1,7 +1,9 @@
 package nokia.wroclaw.innovativeproject.chatbot.service;
 
+import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.exceptions.authentication.UsernameAlreadyExistsException;
+import nokia.wroclaw.innovativeproject.chatbot.repository.RequestRepository;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RequestRepository requestRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -119,5 +124,24 @@ public class UserService {
     public boolean getIsAdmin(String username) {
         User user = getUser(username);
         return user.getIsAdmin();
+    }
+
+    public Map<String, String> clearUserConversation(User currentUser) {
+
+        List<Request> userRequests = requestRepository.findAllByRequestOwner(currentUser.getUsername());
+        Long lastMessageId = Long.valueOf(-1);
+
+        for (Request request: userRequests) {
+            if (request.getId() > lastMessageId)
+                lastMessageId = request.getId();
+        }
+
+        currentUser.setLastMessageId(lastMessageId);
+        userRepository.save(currentUser);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "Conversation has been cleared");
+        map.put("id", lastMessageId.toString());
+        return map;
     }
 }

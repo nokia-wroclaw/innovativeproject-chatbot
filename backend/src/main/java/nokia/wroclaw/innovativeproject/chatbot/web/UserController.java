@@ -178,4 +178,16 @@ public class UserController {
 
     }
 
+    @PostMapping("/clearConversation")
+    public ResponseEntity<?> clearUserConversation(Principal principal) {
+        Map<Object, String> status = new HashMap<>();
+        if(principal != null) {
+            User currentUser = userService.getUser(principal.getName());
+            Map<String, String> response =  userService.clearUserConversation(currentUser);
+            return new ResponseEntity<Map>(response, HttpStatus.OK);
+        }
+        status.put("error", "Cannot find the user");
+        return new ResponseEntity<Map>(status, HttpStatus.BAD_REQUEST);
+    }
+
 }
