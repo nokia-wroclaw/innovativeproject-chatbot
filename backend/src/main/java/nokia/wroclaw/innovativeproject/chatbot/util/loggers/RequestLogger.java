@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class RequestLogger {
 
-    private Date date;
+    private String date;
     private String status;
     private String action;
     private Request request;
@@ -18,7 +18,7 @@ public class RequestLogger {
 
     }
 
-    public RequestLogger(Date date, String status, String action, Request request, MessageResponse messageResponse) {
+    public RequestLogger(String date, String status, String action, Request request, MessageResponse messageResponse) {
         this.date = date;
         this.status = status;
         this.action = action;
@@ -34,11 +34,11 @@ public class RequestLogger {
         this.status = status;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

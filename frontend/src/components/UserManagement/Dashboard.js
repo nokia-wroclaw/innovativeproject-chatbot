@@ -53,9 +53,9 @@ class Dashboard extends Component {
     console.log(item);
   };
 
-  downloadBackup = () => {
+  downloadBackup = type => {
     axios({
-      url: baseUrl + "/api/request/getBackupFile",
+      url: baseUrl + "/api/" + type + "/getBackupFile",
       method: "GET",
       responseType: "blob" // important
     }).then(response => {
@@ -125,13 +125,21 @@ class Dashboard extends Component {
           <div className="container">
             <div className="row center">
               <h5 className="header col s12 light">Download backup file.</h5>
-              <div>
+              <div className="row">
                 <Button
                   waves="light"
                   className="blue darken-4"
-                  onClick={this.downloadBackup}
+                  onClick={() => this.downloadBackup("request")}
                 >
-                  Download data
+                  Download requests
+                  <Icon right>cloud_upload</Icon>
+                </Button>
+                <Button
+                  waves="light"
+                  className="blue darken-4"
+                  onClick={() => this.downloadBackup("users")}
+                >
+                  Download user data
                   <Icon right>cloud_upload</Icon>
                 </Button>
               </div>

@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -56,6 +58,7 @@ public class RequestController {
     private Assistant service;
 
     private LoggerUtil logger = new LoggerUtil("requests.txt");
+    private DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
 
     private Map<String, Context> contextMap = new HashMap<>();
 
@@ -109,13 +112,13 @@ public class RequestController {
             }
 
         } catch (NotFoundException e) {
-            logger.log(new RequestLogger(new Date(), "ERROR", "NotFoundException", null, null));
+            logger.log(new RequestLogger(dateFormat.format(new Date()), "ERROR", "NotFoundException", null, null));
             throw e;
         } catch (RequestTooLargeException e) {
-            logger.log(new RequestLogger(new Date(), "ERROR", "RequestTooLargeException", null, null));
+            logger.log(new RequestLogger(dateFormat.format(new Date()), "ERROR", "RequestTooLargeException", null, null));
             throw e;
         } catch (ServiceResponseException e) {
-            logger.log(new RequestLogger(new Date(), "ERROR", "ServiceResponseException", null, null));
+            logger.log(new RequestLogger(dateFormat.format(new Date()), "ERROR", "ServiceResponseException", null, null));
             throw e;
         }
 
@@ -158,7 +161,7 @@ public class RequestController {
         Request request1 = requestService.saveOrUpdateRequest(request, principal.getName());
 
         // log response
-        logger.log(new RequestLogger(new Date(), "INFO", "Ask Chatbot", request, response));
+        logger.log(new RequestLogger(dateFormat.format(new Date()), "INFO", "Ask Chatbot", request, response));
 
         return new ResponseEntity<Request>(request1, HttpStatus.CREATED);
         //return new ResponseEntity<MessageResponse>(response, HttpStatus.CREATED);
@@ -178,7 +181,7 @@ public class RequestController {
     @PostMapping("/userRequestsPagination")
     public Iterable<Request> getNextUserRequestsPage(@RequestBody Map<String, String> pages, Principal principal) {
         User currentUser = userService.getUser(principal.getName());
-        return requestService.findNextUserRequestsPage(currentUser.getUsername(), pages);
+        return requestService.findNextUserRequestsPage(currentUser.getUsername(), pages, currentUser.getLastMessageId());
     }
 
     @PostMapping("/rateAnswer")
@@ -190,7 +193,7 @@ public class RequestController {
         Request request = requestService.setAnswerRating(rating);
 
         // log response
-        logger.log(new RequestLogger(new Date(), "INFO", "Ask Chatbot", request, null));
+        logger.log(new RequestLogger(dateFormat.format(new Date()), "INFO", "Ask Chatbot", request, null));
 
         return new ResponseEntity<Request>(request, HttpStatus.OK);
     }
@@ -221,7 +224,7 @@ public class RequestController {
             response.setContentType("application/json");
             response.flushBuffer();
         } catch (IOException ex) {
-            logger.log(new RequestLogger(new Date(), "INFO", "Error writing file to output stream.", null, null));
+            logger.log(new RequestLogger(dateFormat.format(new Date()), "INFO", "Error writing file to output stream.", null, null));
             throw new RuntimeException("IOError writing file to output stream");
         }
 

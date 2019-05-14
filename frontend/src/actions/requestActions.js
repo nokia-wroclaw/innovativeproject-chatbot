@@ -69,7 +69,7 @@ export const addTempRequest = question => async dispatch => {
 export const rateResponse = rating => async dispatch => {
   try {
     const res = await axios.post(baseUrl + "/api/request/rateAnswer", rating);
-    //console.log(res.data)
+    console.log(res.data)
     dispatch({
       type: SET_RESPONSE_RATING,
       payload: res.data

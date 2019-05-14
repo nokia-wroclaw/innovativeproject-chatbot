@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { login } from "../../actions/securityActions";
+import { login, getIsAdmin } from "../../actions/securityActions";
 import classnames from "classnames";
 import LoadingSpinner from "../LoadingSpinner";
 
@@ -23,6 +23,7 @@ class Login extends Component {
       password: this.state.password
     };
     this.props.login(loginRequest);
+    this.props.getIsAdmin();
     this.setState({
       loading: false
     })
@@ -142,5 +143,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { login }
+  { login, getIsAdmin }
 )(Login);

@@ -2,10 +2,17 @@ import React, { Component } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logout, getIsAdmin } from "../../actions/securityActions";
+import {
+  getRequests,
+} from "../../actions/requestActions";
+import {
+  logout,
+  getIsAdmin,
+  clearConversation
+} from "../../actions/securityActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
-import { Dropdown, Divider } from "react-materialize";
+import { Dropdown } from "react-materialize";
 import { Modal, Button } from "react-materialize";
 
 class Navbar extends Component {
@@ -18,13 +25,22 @@ class Navbar extends Component {
     this.props.getIsAdmin();
   }
 
+  clearUserConversation = () => {
+    this.props.clearConversation();
+    let pages = {
+      page: 0
+    };
+    this.props.getRequests(pages);
+  };
+
   render() {
     const { validToken, user } = this.props.security;
+    const isAdmin = this.props.security.isAdmin;
 
     const trigger = <div className="blue-text text-darken-4">New Context</div>;
 
     let dropdownLinks;
-    if (this.props.security.isAdmin) {
+    if (isAdmin) {
       dropdownLinks = (
         <Dropdown
           trigger={
@@ -38,18 +54,24 @@ class Navbar extends Component {
           <NavLink className="blue-text text-darken-4" to="/chatbot">
             <Modal trigger={trigger}>
               <p>Do you want to create a new conversation with IBM Watson?</p>
-              <Button>Yes</Button>
+              <Button
+                waves="light"
+                className="blue darken-4"
+                onClick={() => this.clearUserConversation()}
+              >
+                Yes
+              </Button>
             </Modal>
           </NavLink>
-          <Divider />
+
           <NavLink className="blue-text text-darken-4" to="/dashboard">
             Dashboard
           </NavLink>
-          <Divider />
+
           <NavLink className="blue-text text-darken-4" to="/settings">
             Settings
           </NavLink>
-          <Divider />
+
           <NavLink
             className="blue-text text-darken-4"
             to="/logout"
@@ -57,7 +79,6 @@ class Navbar extends Component {
           >
             Logout
           </NavLink>
-          <Divider />
         </Dropdown>
       );
     } else {
@@ -74,14 +95,20 @@ class Navbar extends Component {
           <NavLink className="blue-text text-darken-4" to="/chatbot">
             <Modal trigger={trigger}>
               <p>Do you want to create a new conversation with IBM Watson?</p>
-              <Button>Yes</Button>
+              <Button
+                waves="light"
+                className="blue darken-4"
+                onClick={() => this.clearUserConversation()}
+              >
+                Yes
+              </Button>
             </Modal>
           </NavLink>
-          <Divider />
+
           <NavLink className="blue-text text-darken-4" to="/settings">
             Settings
           </NavLink>
-          <Divider />
+
           <NavLink
             className="blue-text text-darken-4"
             to="/logout"
@@ -89,7 +116,6 @@ class Navbar extends Component {
           >
             Logout
           </NavLink>
-          <Divider />
         </Dropdown>
       );
     }
@@ -142,7 +168,9 @@ class Navbar extends Component {
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
   security: PropTypes.object.isRequired,
-  getIsAdmin: PropTypes.func.isRequired
+  getIsAdmin: PropTypes.func.isRequired,
+  clearConversation: PropTypes.func.isRequired,
+  getRequests: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -151,5 +179,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { logout, getIsAdmin }
+  { logout, getIsAdmin, clearConversation, getRequests }
 )(withRouter(Navbar));

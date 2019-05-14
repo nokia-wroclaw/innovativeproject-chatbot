@@ -1,5 +1,11 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER, GET_USER_AVATAR, GET_IS_ADMIN } from "./types";
+import { GET_REQUESTS } from "./types";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  GET_USER_AVATAR,
+  GET_IS_ADMIN
+} from "./types";
 import { baseUrl } from "../config";
 import setJWTToken from "../securityUtils/setJWTToken";
 import jwt_decode from "jwt-decode";
@@ -7,7 +13,7 @@ import jwt_decode from "jwt-decode";
 export const createNewUser = (newUser, history) => async dispatch => {
   try {
     await axios.post(baseUrl + "/api/users/register", newUser);
-    alert('Registration completed');
+    alert("Registration completed");
     history.push("/login");
     dispatch({
       type: GET_ERRORS,
@@ -44,6 +50,13 @@ export const login = LoginRequest => async dispatch => {
       payload: error.response.data
     });
   }
+
+  // set admin status
+  const res = await axios.get(baseUrl + "/api/users/getIsAdmin");
+  dispatch({
+    type: GET_IS_ADMIN,
+    payload: res.data
+  });
 };
 
 export const logout = () => dispatch => {
@@ -85,4 +98,20 @@ export const getIsAdmin = () => async dispatch => {
     type: GET_IS_ADMIN,
     payload: res.data
   });
+};
+
+export const clearConversation = base64img => async dispatch => {
+  // set last message
+  try {
+    await axios.post(baseUrl + "/api/users/clearConversation");
+    dispatch({
+      type: GET_REQUESTS,
+      payload: []
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
 };
