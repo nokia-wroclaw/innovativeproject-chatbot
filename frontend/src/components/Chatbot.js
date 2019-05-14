@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import UserRequest from "./Chatbot/UserRequest";
 import BotResponse from "./Chatbot/BotResponse";
 import IdleTimer from "react-idle-timer";
+import EmptyResponse from "./Chatbot/EmptyResponse";
 
 class Chatbot extends Component {
   state = {
@@ -69,16 +70,16 @@ class Chatbot extends Component {
   };
 
   LoadMoreMessages = () => {
-    if(this.messageList.scrollTop === 0){
+    if (this.messageList.scrollTop === 0) {
       var element = document.getElementById("loader");
       element.classList.add("spinner");
       this.loadMoreMessagesAction();
       setTimeout(function() {
         element.classList.remove("spinner");
-    }, 500);
-    this.messageList.scrollTop = 1;
+      }, 500);
+      this.messageList.scrollTop = 1;
     }
-  }
+  };
 
   onSubmit = length => e => {
     e.preventDefault();
@@ -112,6 +113,15 @@ class Chatbot extends Component {
     const { requests } = this.props.request;
     let length = Object.keys(requests).length;
 
+    let requestList = requests.map(request => (
+      <div key={request.id}>
+        <UserRequest request={request} />
+        <BotResponse request={request} />
+      </div>
+    ));
+
+    requestList.unshift(<div key="hello"><EmptyResponse /></div>);
+
     return (
       <div>
         <IdleTimer
@@ -132,13 +142,13 @@ class Chatbot extends Component {
               this.messageList = div;
             }}
           >
-            <div id="loader"><div></div><div></div><div></div><div></div></div>
-            {requests.map(request => (
-              <div key={request.id}>
-                <UserRequest request={request} />
-                <BotResponse request={request} />
-              </div>
-            ))}
+            <div id="loader">
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
+            {requestList}
           </div>
           <div>
             <form onSubmit={this.onSubmit(length)} className="row submit-query">
