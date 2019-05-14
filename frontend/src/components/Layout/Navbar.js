@@ -5,25 +5,25 @@ import { connect } from "react-redux";
 import { logout, getIsAdmin } from "../../actions/securityActions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
-import { Dropdown, Divider } from "react-materialize";
+import { Dropdown } from "react-materialize";
 import { Modal, Button } from "react-materialize";
-
+ 
 class Navbar extends Component {
   logout = e => {
     this.props.logout();
     window.location.href = "/";
   };
-
+ 
   componentDidMount() {
     this.props.getIsAdmin();
   }
-
+ 
   render() {
     const { validToken, user } = this.props.security;
     const isAdmin = this.props.security.isAdmin;
-
+ 
     const trigger = <div className="blue-text text-darken-4">New Context</div>;
-
+ 
     let dropdownLinks;
     if (isAdmin) {
       dropdownLinks = (
@@ -42,15 +42,15 @@ class Navbar extends Component {
               <Button>Yes</Button>
             </Modal>
           </NavLink>
-          <Divider />
+ 
           <NavLink className="blue-text text-darken-4" to="/dashboard">
             Dashboard
           </NavLink>
-          <Divider />
+ 
           <NavLink className="blue-text text-darken-4" to="/settings">
             Settings
           </NavLink>
-          <Divider />
+ 
           <NavLink
             className="blue-text text-darken-4"
             to="/logout"
@@ -58,7 +58,6 @@ class Navbar extends Component {
           >
             Logout
           </NavLink>
-          <Divider />
         </Dropdown>
       );
     } else {
@@ -78,11 +77,11 @@ class Navbar extends Component {
               <Button>Yes</Button>
             </Modal>
           </NavLink>
-          <Divider />
+ 
           <NavLink className="blue-text text-darken-4" to="/settings">
             Settings
           </NavLink>
-          <Divider />
+ 
           <NavLink
             className="blue-text text-darken-4"
             to="/logout"
@@ -90,11 +89,10 @@ class Navbar extends Component {
           >
             Logout
           </NavLink>
-          <Divider />
         </Dropdown>
       );
     }
-
+ 
     const userIsAuthenticated = (
       <ul className="right">
         <li>
@@ -106,7 +104,7 @@ class Navbar extends Component {
         {dropdownLinks}
       </ul>
     );
-
+ 
     const userIsNotAuthenticated = (
       <ul className="right">
         <li>
@@ -117,14 +115,14 @@ class Navbar extends Component {
         </li>
       </ul>
     );
-
+ 
     let headerLinks;
     if (validToken && user) {
       headerLinks = userIsAuthenticated;
     } else {
       headerLinks = userIsNotAuthenticated;
     }
-
+ 
     return (
       <div>
         <nav className="nav-wrapper blue darken-4">
@@ -139,17 +137,17 @@ class Navbar extends Component {
     );
   }
 }
-
+ 
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
   security: PropTypes.object.isRequired,
   getIsAdmin: PropTypes.func.isRequired
 };
-
+ 
 const mapStateToProps = state => ({
   security: state.security
 });
-
+ 
 export default connect(
   mapStateToProps,
   { logout, getIsAdmin }
