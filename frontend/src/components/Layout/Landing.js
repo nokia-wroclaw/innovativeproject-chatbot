@@ -1,8 +1,43 @@
 import React, { Component } from "react";
 import Footer from "./Footer";
 import { Link } from "react-router-dom";
+import firebase from "firebase"
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
+
+firebase.initializeApp({
+  apiKey: "AIzaSyDgtiwm65VYWDWsvoNXWKcV2lbcCTkYypY",
+  authDomain: "innovativeproject-chatbot.firebaseapp.com"
+})
 
 class Landing extends Component {
+  state = {
+    isSignedIn: false
+  } 
+  uiConfig = {
+    signInFlow: "popup",
+    signInOptions: [
+      firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    ],
+    callbacks: {
+      signInSuccessWithAuthResult: () => false
+    }
+  }
+
+  componentDidMount = () => {
+    console.log(this.state.isSignedIn);
+    firebase.auth().onAuthStateChanged(user => {
+      this.setState({isSignedIn: !!user});
+      if(this.state.isSignedIn) {
+        //  this.props.history.push("/chatbot");
+      }
+    })
+  }
+
+  firebaseSignOut = () => {
+    firebase.auth().signOut();
+  }
+
   render() {
     return (
       <div>
@@ -17,6 +52,16 @@ class Landing extends Component {
               <h5 className="header col s12 light">
                 Innovative Projects. A modern chatbot with IMB Watson.
               </h5>
+              {this.state.isSignedIn ? (
+                 <div>
+                    <button onClick={this.firebaseSignOut}>Sign out!</button>
+                </div>
+                  ) : (
+                    <StyledFirebaseAuth
+                      uiConfig={this.uiConfig}
+                      firebaseAuth={firebase.auth()}
+                    />
+              )}
             </div>
             <div className="container">
               <div className="row">

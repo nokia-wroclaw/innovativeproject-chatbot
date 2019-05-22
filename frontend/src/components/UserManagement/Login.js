@@ -10,7 +10,7 @@ class Login extends Component {
     username: "",
     password: "",
     errors: {},
-    loading: false
+    loading: false,
   };
 
   onSubmit = e => {
