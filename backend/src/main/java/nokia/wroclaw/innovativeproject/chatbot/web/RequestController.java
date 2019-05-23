@@ -256,6 +256,14 @@ public class RequestController {
         mysqlExportService.export();
 
         Map<String, String> res = new HashMap<>();
+
+        // remove old requests
+        long DAY_IN_MS = 1000 * 60 * 60 * 24;
+        Date date = new Date(System.currentTimeMillis() - (7 * DAY_IN_MS));
+        Date weekAgo = new Date(date.getTime() - (7 * DAY_IN_MS));
+
+        requestService.removeOldRequests(weekAgo);
+
         res.put("status", "ok");
         return new ResponseEntity<Map>(res, HttpStatus.OK);
     }
