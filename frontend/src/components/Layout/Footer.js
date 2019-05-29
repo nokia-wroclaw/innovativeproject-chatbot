@@ -7,7 +7,7 @@ class Footer extends Component {
         <div className="container">
           <div className="row">
             <div className="col l6 s12">
-              <h5 className="black-text">Nokia Chatbot</h5>
+              <h5 className="black-text">Innovative Chatbot</h5>
               <p className="grey-text text-darken-3">
                 The goal of the project is to create interface to available IBM
                 Watson Assitance instance. Deliver chatbot with below aspects
