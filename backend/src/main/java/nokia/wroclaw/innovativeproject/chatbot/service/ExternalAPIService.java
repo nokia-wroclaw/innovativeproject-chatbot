@@ -26,10 +26,10 @@ public class ExternalAPIService {
 
     public Map<String, String> getQRFromApi(Map<String, String> params) {
         String base = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=";
-        String message = params.get("message");
+        String message = params.get("qr_text");
 
         Map<String, String> responseData = new HashMap<>();
-        responseData.put("response", base+message);
+        responseData.put("url", base+message);
         return responseData;
     }
 
