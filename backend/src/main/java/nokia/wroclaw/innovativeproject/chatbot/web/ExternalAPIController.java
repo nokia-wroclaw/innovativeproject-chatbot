@@ -36,4 +36,14 @@ public class ExternalAPIController {
         return new ResponseEntity<Map>(forecast, HttpStatus.OK);
     }
 
+    @PostMapping("/qrcode")
+    public ResponseEntity<?> getQRCode(@RequestBody Map<String, String> params, BindingResult result) {
+        // check for errors
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Map<String, String> qrcode = externalAPIService.getQRFromApi(params);
+        return new ResponseEntity<Map>(qrcode, HttpStatus.OK);
+    }
+
 }

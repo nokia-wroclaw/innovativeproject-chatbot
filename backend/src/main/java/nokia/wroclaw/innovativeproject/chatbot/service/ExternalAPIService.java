@@ -24,6 +24,15 @@ import static nokia.wroclaw.innovativeproject.chatbot.util.JSONReader.readJsonFr
 @Service
 public class ExternalAPIService {
 
+    public Map<String, String> getQRFromApi(Map<String, String> params) {
+        String base = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=";
+        String message = params.get("message");
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("response", base+message);
+        return responseData;
+    }
+
     public Map<String, String> getForecastFromApi(Map<String, String> params) {
 
         // get date & time
