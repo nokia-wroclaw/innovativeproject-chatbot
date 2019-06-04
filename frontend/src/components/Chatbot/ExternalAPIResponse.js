@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ForecastComponent from "./externalAPIComponents/ForecastComponent";
 import MemeComponent from "./externalAPIComponents/MemeComponent";
 import RandomImageComponent from "./externalAPIComponents/RandomImageComponent";
+import QRCodeComponent from "./externalAPIComponents/QRCodeComponent";
 
 class ExternalAPIResponse extends Component {
   render() {
@@ -22,6 +23,9 @@ class ExternalAPIResponse extends Component {
       case "Random":
         console.log('Udalo sie')
         displayedComponent = <RandomImageComponent />;
+
+      case "QRcode":
+        displayedComponent = <QRCodeComponent params={request.responseParams} />
         break;
 
       default:
