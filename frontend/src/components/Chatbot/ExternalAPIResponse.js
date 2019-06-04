@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ForecastComponent from "./externalAPIComponents/ForecastComponent";
 import MemeComponent from "./externalAPIComponents/MemeComponent";
+import RandomImageComponent from "./externalAPIComponents/RandomImageComponent";
 
 class ExternalAPIResponse extends Component {
   render() {
@@ -16,6 +17,11 @@ class ExternalAPIResponse extends Component {
 
       case "Memes":
         displayedComponent = <MemeComponent params={request.responseParams} />;
+        break;
+
+      case "Random":
+        console.log('Udalo sie')
+        displayedComponent = <RandomImageComponent />;
         break;
 
       default:
