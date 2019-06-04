@@ -17,3 +17,11 @@ export const getQRFromExternalAPI = params => async dispatch => {
     payload: res.data
   });
 };
+
+export const getRandomImageFromExternalAPI = params => async dispatch => {
+  const res = await axios.post(baseUrl + "/api/services/randomimg", params);
+  dispatch({
+    type: GET_DATA_FROM_EXTERNAL_API,
+    payload: res.data
+  });
+};

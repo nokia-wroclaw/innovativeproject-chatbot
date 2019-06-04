@@ -21,8 +21,8 @@ class ExternalAPIResponse extends Component {
         break;
 
       case "Random":
-        console.log('Udalo sie')
         displayedComponent = <RandomImageComponent />;
+        break;
 
       case "QRcode":
         displayedComponent = <QRCodeComponent params={request.responseParams} />

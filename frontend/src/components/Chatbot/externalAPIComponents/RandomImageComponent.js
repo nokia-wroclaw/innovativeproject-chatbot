@@ -1,44 +1,37 @@
 import React, { Component } from "react";
-import "../../styles/RandomImageComponent.css"
 import ModalImage from "react-modal-image";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { getRandomImageFromExternalAPI } from "../../../actions/externalAPIActions";
 
 class RandomImageComponent extends Component {
-  state = {
-    //count : "",
-    //urlsBool : "",
-    allMemeImgs: [],
-    responseImg: ""
-  };
-
   componentDidMount() {
-    // this.setState({
-    //   count: "1",
-    //   urlsBool: "true"
-    // })
-
-    let url = "http://shibe.online/api/shibes?count=1&urls=true&httpsUrls=true";
-      
-    var outside;
-
-    fetch(url)
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-        outside = URL.createObjectURL(response);
-        this.setState({ responseImg: outside });
-      });
+    this.props.getRandomImageFromExternalAPI(this.props.params);
   }
+
   render() {
-    var imgdata = this.state.responseImg;
+    const randomimg = this.props.externalData.data;
 
     return (
       <div>
-        <div className="randomImg">
-          <ModalImage small={imgdata} large={imgdata} alt="Random image!" />
-        </div>
+        <ModalImage small={randomimg.url} large={randomimg.url} alt="Random image!" />
       </div>
     );
   }
 }
 
-export default RandomImageComponent;
+RandomImageComponent.propTypes = {
+  externalData: PropTypes.object.isRequired,
+  getRandomImageFromExternalAPI: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  externalData: state.externalData,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { getRandomImageFromExternalAPI }
+)(RandomImageComponent);
