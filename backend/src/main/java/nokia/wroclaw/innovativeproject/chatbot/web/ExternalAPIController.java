@@ -2,15 +2,12 @@ package nokia.wroclaw.innovativeproject.chatbot.web;
 
 import nokia.wroclaw.innovativeproject.chatbot.service.ExternalAPIService;
 import nokia.wroclaw.innovativeproject.chatbot.service.MapValidationErrorService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.io.IOException;
 import java.util.Map;
 
 
@@ -44,6 +41,12 @@ public class ExternalAPIController {
 
         Map<String, String> qrcode = externalAPIService.getQRFromApi(params);
         return new ResponseEntity<Map>(qrcode, HttpStatus.OK);
+    }
+
+    @PostMapping("/randomimg")
+    public ResponseEntity<?> getRandomImage() {
+        Map<String, String> randomimg = externalAPIService.getRandomImageFromApi();
+        return new ResponseEntity<Map>(randomimg, HttpStatus.OK);
     }
 
 }
