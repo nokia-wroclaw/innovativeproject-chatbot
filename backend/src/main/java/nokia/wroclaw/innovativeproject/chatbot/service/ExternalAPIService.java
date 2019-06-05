@@ -7,10 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -18,11 +15,40 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import static nokia.wroclaw.innovativeproject.chatbot.util.JSONReader.readJsonFromUrl;
 
 @Service
 public class ExternalAPIService {
+
+    public Map<String, String> getRandomImageFromApi() {
+        final String base = "http://shibe.online/api/shibes?count=1&urls=true&httpsUrls=true";
+        String result = new String();
+
+        try {
+            String out = new Scanner(new URL(base).openStream(), "UTF-8").useDelimiter("\\A").next();
+            out = out.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\"", "");
+            result = out;
+            // That exceptions below will be never throw until base url wouldn't be changed
+        } catch (MalformedURLException e){
+
+        } catch (IOException i) {
+
+        }
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("url", result);
+        return responseData;
+    }
+
+    public Map<String, String> getQRFromApi(Map<String, String> params) {
+        String base = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=";
+        String message = params.get("qr_text");
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("url", base+message);
+        return responseData;
+    }
 
     public Map<String, String> getForecastFromApi(Map<String, String> params) {
 
