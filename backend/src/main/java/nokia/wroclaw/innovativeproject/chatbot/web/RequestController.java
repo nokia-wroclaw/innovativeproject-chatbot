@@ -72,10 +72,13 @@ public class RequestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> askChatbot(@Valid @RequestBody Request request, BindingResult result, Principal principal) throws JsonProcessingException {
+    public ResponseEntity<?> askChatbot(@Valid @RequestBody Request request, BindingResult result, Principal principal) throws IOException, SQLException, ClassNotFoundException {
         // check for errors
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
+
+        // backup & clear conversation case
+
 
         // get answer
         Context conversationContext;
@@ -261,7 +264,7 @@ public class RequestController {
         long DAY_IN_MS = 1000 * 60 * 60 * 24;
         Date date = new Date(System.currentTimeMillis() - (7 * DAY_IN_MS));
         Date weekAgo = new Date(date.getTime() - (7 * DAY_IN_MS));
-
+        System.out.println("Week ago -> " + weekAgo.toString());
         requestService.removeOldRequests(weekAgo);
 
         res.put("status", "ok");

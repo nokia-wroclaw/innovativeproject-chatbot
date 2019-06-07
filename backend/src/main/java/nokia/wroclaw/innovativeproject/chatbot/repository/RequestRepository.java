@@ -24,6 +24,8 @@ public interface RequestRepository extends PagingAndSortingRepository<Request, L
 
     List<Request> findAllByResponseRating(String responseRating);
 
+    List<Request> findFirst1ByOrderByDateAsc();
+
     @Modifying
     @Transactional
     public void deleteByDateBefore(Date dateAgo);
