@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class RequestService {
@@ -101,5 +102,19 @@ public class RequestService {
 
     public void removeOldRequests(Date weekAgo) {
         requestRepository.deleteByDateBefore(weekAgo);
+    }
+
+    public long getDaysAgo() {
+        Date now = new Date();
+        Date lastRequestDate = new Date();
+        long days;
+        List<Request> requests = requestRepository.findFirst1ByOrderByDateAsc();
+        if(requests != null) {
+            Request request = requests.get(0);
+            lastRequestDate = request.getDate();
+        }
+        long diff = now.getTime() - lastRequestDate.getTime();
+        days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        return days;
     }
 }
