@@ -6,6 +6,7 @@ import com.ibm.watson.developer_cloud.assistant.v1.model.*;
 import com.ibm.watson.developer_cloud.service.exception.NotFoundException;
 import com.ibm.watson.developer_cloud.service.exception.RequestTooLargeException;
 import com.ibm.watson.developer_cloud.service.exception.ServiceResponseException;
+import com.smattme.MysqlExportService;
 import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.service.MapValidationErrorService;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.security.Principal;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -228,6 +230,42 @@ public class RequestController {
             throw new RuntimeException("IOError writing file to output stream");
         }
 
+    }
+
+    @GetMapping("/getSQLBackup")
+    public ResponseEntity<Map> getSQLBackup() throws SQLException, IOException, ClassNotFoundException {
+        //required properties for exporting of db
+        Properties properties = new Properties();
+        properties.setProperty(MysqlExportService.JDBC_CONNECTION_STRING, "jdbc:mysql://us-cdbr-iron-east-03.cleardb.net/heroku_555f66199199af3?reconnect=true");
+        properties.setProperty(MysqlExportService.DB_NAME, "heroku_555f66199199af3");
+        properties.setProperty(MysqlExportService.DB_USERNAME, "b56c555d260053");
+        properties.setProperty(MysqlExportService.DB_PASSWORD, "ab87394d");
+
+        //properties relating to email config
+        properties.setProperty(MysqlExportService.EMAIL_HOST, "smtp.gmail.com");
+        properties.setProperty(MysqlExportService.EMAIL_PORT, "587");
+        properties.setProperty(MysqlExportService.EMAIL_USERNAME, "chatbotwatson1@gmail.com");
+        properties.setProperty(MysqlExportService.EMAIL_PASSWORD, "NokiaChatbot1");
+        properties.setProperty(MysqlExportService.EMAIL_FROM, "chatbotwatson1@gmail.com");
+        properties.setProperty(MysqlExportService.EMAIL_TO, "thisecretninja@gmail.com");
+
+        //set the outputs temp dir
+        properties.setProperty(MysqlExportService.TEMP_DIR, new File("external").getPath());
+
+        MysqlExportService mysqlExportService = new MysqlExportService(properties);
+        mysqlExportService.export();
+
+        Map<String, String> res = new HashMap<>();
+
+        // remove old requests
+        long DAY_IN_MS = 1000 * 60 * 60 * 24;
+        Date date = new Date(System.currentTimeMillis() - (7 * DAY_IN_MS));
+        Date weekAgo = new Date(date.getTime() - (7 * DAY_IN_MS));
+
+        requestService.removeOldRequests(weekAgo);
+
+        res.put("status", "ok");
+        return new ResponseEntity<Map>(res, HttpStatus.OK);
     }
 
 }

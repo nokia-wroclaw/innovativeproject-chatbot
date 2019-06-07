@@ -41,7 +41,7 @@ class App extends Component {
               {
                 // Public Routes
               }
-              <Route exact path="/" component={Landing} />
+                <Route exact path="/" component={Landing} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route path="/chatbot" component={Chatbot} />

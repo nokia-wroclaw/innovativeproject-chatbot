@@ -98,4 +98,8 @@ public class RequestService {
         }
         return new ArrayList<Request>();
     }
+
+    public void removeOldRequests(Date weekAgo) {
+        requestRepository.deleteByDateBefore(weekAgo);
+    }
 }

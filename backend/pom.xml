@@ -46,7 +46,11 @@
 			<artifactId>logback-json-classic</artifactId>
 			<version>${logback.contrib.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.smattme</groupId>
+			<artifactId>mysql-backup4j</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 		<!-- com.fasterxml.jackson.databind.ObjectMapper -->
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
