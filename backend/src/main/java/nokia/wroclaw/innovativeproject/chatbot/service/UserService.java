@@ -6,6 +6,8 @@ import nokia.wroclaw.innovativeproject.chatbot.exceptions.authentication.Usernam
 import nokia.wroclaw.innovativeproject.chatbot.repository.RequestRepository;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    public JavaMailSender emailSender;
 
     public User saveUser(User newUser) {
 
@@ -143,5 +148,13 @@ public class UserService {
         map.put("status", "Conversation has been cleared");
         map.put("id", lastMessageId.toString());
         return map;
+    }
+
+    public void sendMessage(String user, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo("opinieoczatbocie@gmail.com");  // password: JakiesRandomoweOpinie1
+        message.setSubject(user + " send opinion about chatbot!");
+        message.setText(text);
+        emailSender.send(message);
     }
 }
