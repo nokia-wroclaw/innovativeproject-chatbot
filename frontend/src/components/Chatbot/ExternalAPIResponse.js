@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ForecastComponent from "./externalAPIComponents/ForecastComponent";
 import MemeComponent from "./externalAPIComponents/MemeComponent";
 import QRCodeComponent from "./externalAPIComponents/QRCodeComponent";
+import BtcPriceComponent from "./externalAPIComponents/BtcPriceComponent";
 
 class ExternalAPIResponse extends Component {
   render() {
@@ -22,6 +23,9 @@ class ExternalAPIResponse extends Component {
       case "QRcode":
         displayedComponent = <QRCodeComponent params={request.responseParams} />
         break;
+      case "Bitcoin":
+          displayedComponent = <BtcPriceComponent params={request.responseParams} />
+          break;
 
       default:
         displayedComponent = "";
