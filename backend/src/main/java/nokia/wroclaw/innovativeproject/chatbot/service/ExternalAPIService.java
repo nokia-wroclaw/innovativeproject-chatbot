@@ -33,6 +33,37 @@ public class ExternalAPIService {
         return responseData;
     }
 
+    public Map<String, String> getBtcFromApi(Map<String, String> params) {
+        String base = "https://www.bitstamp.net/api/ticker/";
+        String message = params.get("message");
+
+
+
+        JSONObject response = new JSONObject();
+        try {
+            response = readJsonFromUrl(base);
+            System.out.println(response);
+        } catch (JSONException | IOException e) {
+            throw new ReadJSONException("Cannot get JSON from URL 1'" + base + "'.");
+        }
+        Map<String, String> map = new HashMap<>();
+        JSONArray responseData;
+
+        try {
+                    Object last = response.get("last");
+                    map.put("last", last.toString());
+                    Object high = response.get("high");
+                    map.put("high", high.toString().substring(0,7));
+                    Object low = response.get("low");
+                    map.put("low", low.toString().substring(0,7));
+
+        } catch (JSONException e) {
+            throw new ReadJSONException("Cannot get JSON from URL 2'" + base + "'.");
+        }
+
+        return map;
+    }
+
     public Map<String, String> getForecastFromApi(Map<String, String> params) {
 
         // get date & time
