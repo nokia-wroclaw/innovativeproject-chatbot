@@ -47,7 +47,6 @@ class BotResponse extends Component {
     // like button colors
     let thumbUpClass = "";
     let thumbDownClass = "";
-    console.log(request.responseRating)
     if(request.responseRating === "0") {
       // no rating
       thumbUpClass = "btn-floating btn green";

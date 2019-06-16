@@ -1,23 +1,46 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getDataFromExternalAPI } from "../../../actions/externalAPIActions";
 import "../../styles/ForecastComponent.css";
+import { baseUrl } from "../../../config";
+import axios from "axios";
 
 class ForecastComponent extends Component {
+  state = {
+    data: null
+  };
+
+  async getForecast(params) {
+    let res = await axios.post(baseUrl + "/api/services/weather", params);
+    return await res.data;
+  }
+
   componentDidMount() {
-    this.props.getDataFromExternalAPI(this.props.params);
+    const params = this.props.params;
+    if (!this.state.data) {
+      (async () => {
+        try {
+          this.setState({ data: await this.getForecast(params) });
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    }
   }
 
   render() {
-    const forecast = this.props.externalData.data;
     const params = this.props.params;
 
+    let forecast = "";
+    if (this.state.data != null) {
+      forecast = this.state.data;
+    }
+
     let icon;
-    if(forecast.main === "Clear") {
-      icon = (<i className="large material-icons icon-sun">wb_sunny</i>)
+    if (forecast.main === "Clear") {
+      icon = <i className="large material-icons icon-sun">wb_sunny</i>;
     } else {
-      icon = (<i className="large material-icons icon-cloud">cloud</i>)
+      icon = <i className="large material-icons icon-cloud">cloud</i>;
     }
 
     let data;
@@ -27,9 +50,7 @@ class ForecastComponent extends Component {
           <div className="card-stacked">
             <div className="card-content">
               <div className="row">
-                <div className="col">
-                  {icon}
-                </div>
+                <div className="col">{icon}</div>
                 <div className="col">
                   <h5>{params.location}</h5>
                   <h3>{forecast.temperature} ℃</h3>
@@ -53,23 +74,14 @@ class ForecastComponent extends Component {
 }
 
 ForecastComponent.propTypes = {
-  externalData: PropTypes.object.isRequired,
-  getDataFromExternalAPI: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  externalData: state.externalData,
   errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
-  { getDataFromExternalAPI }
+  null
 )(ForecastComponent);
-
-// <div>
-//           city: {params.location} <br />
-//           status: {forecast.main} <br />
-//           temperature: {forecast.temperature}
-//         </div>
