@@ -1,4 +1,4 @@
-package nokia.wroclaw.innovativeproject.chatbot.security;
+package nokia.wroclaw.innovativeproject.chatbot.security.old;
 
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.service.CustomUserDetailsService;
@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.HEADER_STRING;
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.TOKEN_PREFIX;
+import static nokia.wroclaw.innovativeproject.chatbot.security.old.SecurityConstants.HEADER_STRING;
+import static nokia.wroclaw.innovativeproject.chatbot.security.old.SecurityConstants.TOKEN_PREFIX;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

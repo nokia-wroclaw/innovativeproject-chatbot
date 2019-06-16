@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -15,23 +16,35 @@ import java.util.List;
 @Entity
 public class User implements UserDetails {
 
+    // ----- OAUTH2 begin
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "Please enter your full name")
+    private String fullName;
 
     @Email(message = "Username needs to be an email")
     @NotBlank(message = "Username is required")
     @Column(unique = true)
     private String username;
 
-    @NotBlank(message = "Please enter your full name")
-    private String fullName;
+    @Column(columnDefinition = "TEXT")
+    private String avatar;
+
+    @Column(nullable = false)
+    private Boolean emailVerified = false;
 
     @NotBlank(message = "Password field is required")
     private String password;
 
-    @Column(columnDefinition = "TEXT")
-    private String avatar;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
+
+    // ----- OAUTH2 end
 
     @Transient
     private String confirmPassword;
@@ -95,14 +108,17 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long id, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, @NotBlank(message = "Please enter your full name") String fullName, @NotBlank(message = "Password field is required") String password, String avatar, String confirmPassword, boolean isAdmin, Date created_At, Date updated_At, List<Request> requests, String currentConversationId, Long lastMessageId) {
+    public User(Long id, @NotBlank(message = "Please enter your full name") String fullName, @Email(message = "Username needs to be an email") @NotBlank(message = "Username is required") String username, String avatar, Boolean emailVerified, @NotBlank(message = "Password field is required") String password, @NotNull AuthProvider provider, String providerId, String confirmPassword, boolean isAdmin, Date created_At, Date updated_At, List<Request> requests, String currentConversationId, Long lastMessageId) {
         this.id = id;
-        this.username = username;
         this.fullName = fullName;
-        this.password = password;
+        this.username = username;
         this.avatar = avatar;
+        this.emailVerified = emailVerified;
+        this.password = password;
+        this.provider = provider;
+        this.providerId = providerId;
         this.confirmPassword = confirmPassword;
-        this.isAdmin = false;
+        this.isAdmin = isAdmin;
         this.created_At = created_At;
         this.updated_At = updated_At;
         this.requests = requests;
@@ -208,5 +224,29 @@ public class User implements UserDetails {
 
     public void setLastMessageId(Long lastMessageId) {
         this.lastMessageId = lastMessageId;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 }

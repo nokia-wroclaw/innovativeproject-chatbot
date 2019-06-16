@@ -1,4 +1,4 @@
-package nokia.wroclaw.innovativeproject.chatbot.security;
+package nokia.wroclaw.innovativeproject.chatbot.security.old;
 
 import nokia.wroclaw.innovativeproject.chatbot.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.H2_URL;
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.SIGN_UP_URLS;
+import static nokia.wroclaw.innovativeproject.chatbot.security.old.SecurityConstants.H2_URL;
+import static nokia.wroclaw.innovativeproject.chatbot.security.old.SecurityConstants.SIGN_UP_URLS;
 
 @Configuration
 @EnableWebSecurity

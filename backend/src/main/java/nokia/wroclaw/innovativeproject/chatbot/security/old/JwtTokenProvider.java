@@ -1,4 +1,4 @@
-package nokia.wroclaw.innovativeproject.chatbot.security;
+package nokia.wroclaw.innovativeproject.chatbot.security.old;
 
 import io.jsonwebtoken.*;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.EXPIRATION_TIME;
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.SECRET;
+import static nokia.wroclaw.innovativeproject.chatbot.security.old.SecurityConstants.EXPIRATION_TIME;
+import static nokia.wroclaw.innovativeproject.chatbot.security.old.SecurityConstants.SECRET;
 
 @Component
 public class JwtTokenProvider {

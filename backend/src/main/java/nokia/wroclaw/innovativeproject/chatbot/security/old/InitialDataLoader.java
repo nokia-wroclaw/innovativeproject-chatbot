@@ -1,4 +1,4 @@
-package nokia.wroclaw.innovativeproject.chatbot.security;
+package nokia.wroclaw.innovativeproject.chatbot.security.old;
 
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;

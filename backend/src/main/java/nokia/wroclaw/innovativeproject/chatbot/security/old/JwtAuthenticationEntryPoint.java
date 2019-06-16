@@ -1,4 +1,4 @@
-package nokia.wroclaw.innovativeproject.chatbot.security;
+package nokia.wroclaw.innovativeproject.chatbot.security.old;
 
 import com.google.gson.Gson;
 import nokia.wroclaw.innovativeproject.chatbot.exceptions.authentication.InvalidLoginResponse;

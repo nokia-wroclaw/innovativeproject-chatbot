@@ -1,10 +1,9 @@
 package nokia.wroclaw.innovativeproject.chatbot.web;
 
-import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
 import nokia.wroclaw.innovativeproject.chatbot.payload.JWTLoginSucessResponse;
 import nokia.wroclaw.innovativeproject.chatbot.payload.LoginRequest;
-import nokia.wroclaw.innovativeproject.chatbot.security.JwtTokenProvider;
+import nokia.wroclaw.innovativeproject.chatbot.security.old.JwtTokenProvider;
 import nokia.wroclaw.innovativeproject.chatbot.service.MapValidationErrorService;
 import nokia.wroclaw.innovativeproject.chatbot.service.UserService;
 import nokia.wroclaw.innovativeproject.chatbot.util.LoggerUtil;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 
 import java.io.*;
 import java.security.Principal;
@@ -32,7 +30,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.TOKEN_PREFIX;
+import static nokia.wroclaw.innovativeproject.chatbot.security.old.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/api/users")
