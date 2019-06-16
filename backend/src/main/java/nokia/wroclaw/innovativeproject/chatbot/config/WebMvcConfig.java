@@ -1,4 +1,4 @@
-package nokia.wroclaw.innovativeproject.chatbot.security;
+package nokia.wroclaw.innovativeproject.chatbot.config;
 
 
 import org.springframework.context.annotation.Configuration;

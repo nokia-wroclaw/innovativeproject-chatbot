@@ -3,7 +3,10 @@ package nokia.wroclaw.innovativeproject.chatbot.payload;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class SignUpRequest {
+    @NotBlank
+    private String name;
+
     @NotBlank
     @Email
     private String email;
@@ -11,13 +14,22 @@ public class LoginRequest {
     @NotBlank
     private String password;
 
-    public LoginRequest() {
+    public SignUpRequest() {
 
     }
 
-    public LoginRequest(@NotBlank @Email String email, @NotBlank String password) {
+    public SignUpRequest(@NotBlank String name, @NotBlank @Email String email, @NotBlank String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {

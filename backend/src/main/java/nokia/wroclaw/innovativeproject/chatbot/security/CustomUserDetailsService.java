@@ -1,6 +1,7 @@
-package nokia.wroclaw.innovativeproject.chatbot.service;
+package nokia.wroclaw.innovativeproject.chatbot.security;
 
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
+import nokia.wroclaw.innovativeproject.chatbot.exceptions.oauth2.ResourceNotFoundException;
 import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,20 +14,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    @Transactional
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(email);
 
-        if (user == null) throw new UsernameNotFoundException("User not found.");
-        return user;
+        return UserPrincipal.create(user);
     }
 
     @Transactional
-    public User loadUserById(Long id) {
-        User user = userRepository.getById(id);
-        if (user == null) throw new UsernameNotFoundException("User not found.");
-        return user;
+    public UserDetails loadUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+
+        return UserPrincipal.create(user);
     }
 }
