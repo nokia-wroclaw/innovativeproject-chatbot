@@ -1,7 +1,8 @@
 div.chat-box {
     display:block;
-    height: calc(100vh - 220px);
+    height: calc(100vh - 170px);
     overflow:auto;
+    margin-top: 20px;
     padding: 10px 20px;
     border-radius: 15px;
   }

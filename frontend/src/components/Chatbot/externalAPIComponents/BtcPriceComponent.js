@@ -1,15 +1,37 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getBtcFromExternalAPI } from "../../../actions/externalAPIActions";
+import axios from "axios";
+import { baseUrl } from "../../../config";
 
 class BtcPriceComponent extends Component {
+  state = {
+    data: null
+  };
+
+  async getBTCPrice(params) {
+    let res = await axios.post(baseUrl + "/api/services/btcPrice", params);
+    return await res.data;
+  }
+
   componentDidMount() {
-    this.props.getBtcFromExternalAPI(this.props.params);
+    const params = this.props.params;
+    if (!this.state.data) {
+      (async () => {
+        try {
+          this.setState({ data: await this.getBTCPrice(params) });
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    }
   }
 
   render() {
-    const btcPrice = this.props.externalData.data;
+    let btcPrice = "";
+    if (this.state.data != null) {
+      btcPrice = this.state.data;
+    }
 
     let data;
     if (btcPrice.length !== 0) {
@@ -37,17 +59,14 @@ class BtcPriceComponent extends Component {
 }
 
 BtcPriceComponent.propTypes = {
-  externalData: PropTypes.object.isRequired,
-  getQRFromExternalAPI: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  externalData: state.externalData,
   errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
-  { getBtcFromExternalAPI }
+  null
 )(BtcPriceComponent);
