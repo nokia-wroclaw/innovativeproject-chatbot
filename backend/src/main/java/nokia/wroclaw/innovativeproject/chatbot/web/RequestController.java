@@ -155,6 +155,10 @@ public class RequestController {
         // get response type (if node exited)
         if (response.getContext().getSystem().containsKey("branch_exited")) {
             request.setResponseType(request.getConversationIntent());
+            if (request.getConversationIntent().equals("Send_opinion"))
+            {
+                userService.sendMessage(principal.getName(), response.getInput().getText());
+            }
         } else {
             request.setResponseType("");
         }
