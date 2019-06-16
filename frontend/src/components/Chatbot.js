@@ -40,7 +40,6 @@ class Chatbot extends Component {
 
   componentDidMount() {
     this.getUserRequestsPages(this.state.getRequestPages);
-    this.scrollToBottom();
     this.nameInput.focus();
     // if not logged in redirect to login page
     if (!this.props.security.validToken) {
@@ -48,6 +47,8 @@ class Chatbot extends Component {
     }
     // set user avatar (if not set)
     this.props.getAvatar();
+
+    this.scrollToBottom();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -120,7 +121,11 @@ class Chatbot extends Component {
       </div>
     ));
 
-    requestList.unshift(<div key="hello"><EmptyResponse /></div>);
+    requestList.unshift(
+      <div key="hello">
+        <EmptyResponse />
+      </div>
+    );
 
     return (
       <div>
@@ -134,7 +139,6 @@ class Chatbot extends Component {
           timeout={1000 * 60 * 5}
         />
         <div className="container">
-          <h4 className="center">Chatbot</h4>
           <div
             className="chat-box grey lighten-2 MessageList"
             onScroll={this.LoadMoreMessages}
@@ -148,7 +152,7 @@ class Chatbot extends Component {
               <div />
               <div />
             </div>
-            {requestList}
+            <div>{requestList}</div>
           </div>
           <div>
             <form onSubmit={this.onSubmit(length)} className="row submit-query">
