@@ -2,15 +2,38 @@ import React, { Component } from "react";
 import ModalImage from "react-modal-image";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getQRFromExternalAPI } from "../../../actions/externalAPIActions";
+import axios from "axios";
+import { baseUrl } from "../../../config";
 
 class QRCodeComponent extends Component {
+  state = {
+    data: null
+  };
+
+  async getData(params) {
+    let res = await axios.post(baseUrl + "/api/services/qrcode", params);
+    return await res.data;
+  }
+
   componentDidMount() {
-    this.props.getQRFromExternalAPI(this.props.params);
+    const params = this.props.params;
+
+    if (!this.state.data) {
+      (async () => {
+        try {
+          this.setState({ data: await this.getData(params) });
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    }
   }
 
   render() {
-    const qrcode = this.props.externalData.data;
+    let qrcode = "";
+    if (this.state.data != null) {
+      qrcode = this.state.data;
+    }
 
     return (
       <div>
@@ -21,17 +44,14 @@ class QRCodeComponent extends Component {
 }
 
 QRCodeComponent.propTypes = {
-  externalData: PropTypes.object.isRequired,
-  getQRFromExternalAPI: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  externalData: state.externalData,
   errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
-  { getQRFromExternalAPI }
+  null
 )(QRCodeComponent);

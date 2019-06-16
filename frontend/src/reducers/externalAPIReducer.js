@@ -9,7 +9,7 @@ export default function(state = initialState, action) {
     case GET_DATA_FROM_EXTERNAL_API:
       return {
         ...state,
-        data: action.payload
+        data: [...state.data, action.payload]
       };
     default:
       return state;
