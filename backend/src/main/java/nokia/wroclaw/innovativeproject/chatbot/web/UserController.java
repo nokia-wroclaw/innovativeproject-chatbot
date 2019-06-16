@@ -1,30 +1,25 @@
 package nokia.wroclaw.innovativeproject.chatbot.web;
 
-import nokia.wroclaw.innovativeproject.chatbot.domain.Request;
 import nokia.wroclaw.innovativeproject.chatbot.domain.User;
-import nokia.wroclaw.innovativeproject.chatbot.payload.JWTLoginSucessResponse;
-import nokia.wroclaw.innovativeproject.chatbot.payload.LoginRequest;
-import nokia.wroclaw.innovativeproject.chatbot.security.JwtTokenProvider;
+import nokia.wroclaw.innovativeproject.chatbot.exceptions.oauth2.ResourceNotFoundException;
+import nokia.wroclaw.innovativeproject.chatbot.repository.UserRepository;
+import nokia.wroclaw.innovativeproject.chatbot.security.CurrentUser;
+import nokia.wroclaw.innovativeproject.chatbot.security.UserPrincipal;
 import nokia.wroclaw.innovativeproject.chatbot.service.MapValidationErrorService;
 import nokia.wroclaw.innovativeproject.chatbot.service.UserService;
 import nokia.wroclaw.innovativeproject.chatbot.util.LoggerUtil;
 import nokia.wroclaw.innovativeproject.chatbot.util.loggers.PermissionLogger;
 import nokia.wroclaw.innovativeproject.chatbot.util.loggers.RequestLogger;
-import nokia.wroclaw.innovativeproject.chatbot.util.loggers.UserLogger;
 import nokia.wroclaw.innovativeproject.chatbot.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.xml.ws.Response;
 
 import java.io.*;
 import java.security.Principal;
@@ -32,7 +27,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static nokia.wroclaw.innovativeproject.chatbot.security.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/api/users")
@@ -49,7 +43,7 @@ public class UserController {
     private UserValidator userValidator;
 
     @Autowired
-    private JwtTokenProvider tokenProvider;
+    private UserRepository userRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -57,41 +51,11 @@ public class UserController {
     private LoggerUtil logger = new LoggerUtil("users.txt");
     private DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if(errorMap != null) return errorMap;
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
-
-        // log action
-        logger.log(new UserLogger(dateFormat.format(new Date()), "INFO", "Login", loginRequest.getUsername()));
-
-        return ResponseEntity.ok(new JWTLoginSucessResponse(true, jwt));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
-        // validate passwords match
-        userValidator.validate(user, result);
-
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if(errorMap != null) return errorMap;
-
-        User newUser = userService.saveUser(user);
-
-        // log action
-        logger.log(new UserLogger(dateFormat.format(new Date()), "INFO", "Register", user.getUsername()));
-
-        return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+    @GetMapping("/user/me")
+    @PreAuthorize("hasRole('USER')")
+    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+        return userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
     }
 
     @PostMapping("/setAvatar")
@@ -177,6 +141,8 @@ public class UserController {
         }
 
     }
+
+
 
     @PostMapping("/clearConversation")
     public ResponseEntity<?> clearUserConversation(Principal principal) {

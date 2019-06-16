@@ -122,7 +122,7 @@ class Navbar extends Component {
         <nav className="nav-wrapper blue darken-4">
           <div className="container">
             <NavLink to="/" className="brand-logo left">
-              Nokia Chatbot
+            Innovative Chatbot
             </NavLink>
               { this.props.authenticated ? (
                     <ul className="right">

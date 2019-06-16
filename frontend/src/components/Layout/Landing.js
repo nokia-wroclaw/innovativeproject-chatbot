@@ -11,7 +11,7 @@ class Landing extends Component {
             <br />
             <br />
             <h1 className="header center blue-text text-darken-4">
-              Nokia Chatbot
+              Innovative Chatbot
             </h1>
             <div className="row center">
               <h5 className="header col s12 light">
@@ -60,7 +60,7 @@ class Landing extends Component {
                   <h5 className="center">Based on IBM Watson</h5>
 
                   <p className="light">
-                    Innovative Nokia Chatbot uses Watson Assistant
+                    Innovative Chatbot uses Watson Assistant
                     developed and povided by IBM.
                   </p>
                 </div>
@@ -74,7 +74,7 @@ class Landing extends Component {
                   <h5 className="center">Available everywhere</h5>
 
                   <p className="light">
-                    Innovative Nokia Chatbot is available on all 
+                    Innovative Chatbot is available on all 
                     Internet-connected devices via browser. Now you
                     can use our application wherever you want!
                   </p>
@@ -89,7 +89,7 @@ class Landing extends Component {
                   <h5 className="center">AI Based</h5>
 
                   <p className="light">
-                    Innovative Nokia Chatbot uses advanced AI 
+                    Innovative Chatbot uses advanced AI 
                     algorithms and neural networks to processing
                     and understanding natural language.
                   </p>

@@ -36,4 +36,24 @@ public class ExternalAPIController {
         return new ResponseEntity<Map>(forecast, HttpStatus.OK);
     }
 
+    @PostMapping("/qrcode")
+    public ResponseEntity<?> getQRCode(@RequestBody Map<String, String> params, BindingResult result) {
+        // check for errors
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Map<String, String> qrcode = externalAPIService.getQRFromApi(params);
+        return new ResponseEntity<Map>(qrcode, HttpStatus.OK);
+    }
+
+    @PostMapping("/btcPrice")
+    public ResponseEntity<?> getBtcPrice(@RequestBody Map<String, String> params, BindingResult result) {
+        // check for errors
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Map<String, String> btcPrice = externalAPIService.getBtcFromApi(params);
+        return new ResponseEntity<Map>(btcPrice, HttpStatus.OK);
+    }
+
 }
